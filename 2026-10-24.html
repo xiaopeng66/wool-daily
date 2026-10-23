@@ -1,0 +1,1925 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f7fa">
+<title>羊毛日报 · 2026-10-24</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7fa; --surface:#fff; --text:#1c2736; --muted:#516079; --hint:#69788c;
+  --line:#e3e9f0; --primary:#4e52c9; --soft:#eff0ff; --hover:#f6f7fb;
+  --shadow:0 10px 32px rgba(25,45,80,.06); --radius:16px;
+  --good-bg:#e9f9ef; --good-fg:#177245; --good-bd:#bfe8cf;
+  --warn-bg:#fff6e6; --warn-fg:#95610b; --warn-bd:#f3d9a4;
+  --bad-bg:#fdeeee;  --bad-fg:#a32020;  --bad-bd:#f3c4c4;
+}
+html[data-theme=dark]{
+  color-scheme:dark;
+  --bg:#111827; --surface:#1b2636; --text:#f3f5f9; --muted:#b8c4d5; --hint:#9cacc0;
+  --line:#354256; --primary:#b2b5ff; --soft:#303457; --hover:#263448;
+  --shadow:0 10px 32px rgba(0,0,0,.12);
+  --good-bg:#183e34; --good-fg:#a7e9c8; --good-bd:#30684f;
+  --warn-bg:#4a3820; --warn-fg:#f6d492; --warn-bd:#775a2a;
+  --bad-bg:#49242a;  --bad-fg:#f7b4b4;  --bad-bd:#7a3a3a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.65 "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  -webkit-text-size-adjust:100%;overflow-x:hidden;
+}
+.shell{max-width:1040px;margin:0 auto;padding:0 18px 64px}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* 顶栏 */
+.top{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:0 -18px;padding:11px 18px;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+}
+.brand{display:inline-flex;align-items:center;gap:8px;color:var(--text);font-size:15px}
+.brand .logo{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(180deg,var(--primary),color-mix(in srgb,var(--primary) 70%,#000));
+  color:#fff;font-size:15px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.top-date{color:var(--hint);font-size:13px}
+.mode{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);color:var(--muted);font-size:13px;cursor:pointer}
+.mode:hover{background:var(--hover)}
+
+/* Hero + 统计带 */
+.hero{margin:28px 0 14px}
+.eyebrow{color:var(--primary);font-size:12.5px;font-weight:700;letter-spacing:.06em}
+.hero h1{font-size:clamp(1.55rem,3vw,2.05rem);line-height:1.2;letter-spacing:-.02em;margin:6px 0 8px}
+.hero p{margin:0;color:var(--muted);font-size:13.5px;max-width:680px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 20px}
+.stat{border:1px solid var(--line);border-radius:14px;background:var(--surface);
+  padding:12px 14px;box-shadow:0 3px 14px rgba(25,45,80,.035)}
+.stat strong{display:block;font-size:26px;line-height:1.15;letter-spacing:-.02em}
+.stat span{display:block;color:var(--hint);font-size:12px;margin-top:2px}
+.stat.hl strong{color:var(--primary)}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* 筛选面板 */
+.panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);
+  box-shadow:var(--shadow);padding:13px 15px;margin-bottom:22px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg);padding:0 12px;min-height:42px}
+.search span{color:var(--hint);font-size:16px}
+.search input{flex:1;border:0;background:transparent;color:var(--text);font-size:14px;outline:none;min-width:0}
+.filters{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.fname{color:var(--hint);font-size:12.5px;flex:none;width:34px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0}
+.chip{min-height:32px;padding:0 11px;border:1px solid var(--line);border-radius:9px;
+  background:var(--surface);color:var(--muted);font-size:12.5px;cursor:pointer;white-space:nowrap}
+.chip:hover{background:var(--hover)}
+.chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+html[data-theme=dark] .chip.active{color:#171d3a}
+.count{color:var(--hint);font-size:12.5px;margin-left:auto;white-space:nowrap}
+
+/* 分组 */
+.group{margin:26px 0}
+.group[hidden]{display:none}
+.group-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  padding-left:10px;border-left:4px solid var(--primary)}
+.group-head h2{margin:0;font-size:16.5px;font-weight:800;color:var(--text);white-space:nowrap}
+.group-head .line{flex:1;height:1px;background:var(--line)}
+.group-head .portion{color:var(--hint);font-size:12.5px;white-space:nowrap}
+/* 关键：不设 align-items:start，同行卡片等高；卡内 .card-foot{margin-top:auto} 才能把
+   底部信息钉在同一条线上 —— 之前的「参差不齐」就是 start + margin-top:auto 互相抵消。 */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(318px,1fr));gap:14px}
+@media (max-width:640px){.cards{grid-template-columns:1fr}}
+
+/* 卡片：结构固定五层，等高对齐 */
+.card{display:flex;flex-direction:column;gap:8px;padding:14px 16px;border:1px solid var(--line);
+  border-radius:var(--radius);background:var(--surface);box-shadow:0 3px 16px rgba(25,45,80,.035);
+  transition:border-color .14s,box-shadow .14s;min-width:0}
+.card:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--line));
+  box-shadow:0 8px 24px rgba(25,45,80,.07)}
+.card[hidden]{display:none}
+.pick-card{background:linear-gradient(180deg,var(--soft),var(--surface) 52%)}
+.card-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-badge{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--hover);
+  border:1px solid var(--line);border-radius:7px;padding:1px 8px;white-space:nowrap}
+.pick-card .cat-badge{color:var(--primary);background:var(--soft);
+  border-color:color-mix(in srgb,var(--primary) 30%,var(--line))}
+.conf{font-size:11px;padding:1px 7px;border-radius:7px;white-space:nowrap;border:1px solid transparent}
+.conf.ok{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
+.conf.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-bd)}
+.conf.bad{background:var(--bad-bg);color:var(--bad-fg);border-color:var(--bad-bd)}
+.score{margin-left:auto;flex:none;min-width:34px;text-align:center;padding:1px 8px;border-radius:8px;
+  background:var(--soft);color:var(--primary);font-size:12.5px;font-weight:800}
+.pick-card .score{background:var(--primary);color:#fff}
+html[data-theme=dark] .pick-card .score{color:#171d3a}
+.card .title{margin:0;font-size:15px;line-height:1.45;font-weight:700}
+.card .title a{color:var(--text)}
+.card .title a:hover{color:var(--primary)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11.5px;line-height:1.5;padding:2px 8px;border-radius:7px;white-space:nowrap;
+  border:1px solid var(--line);background:var(--hover);color:var(--muted)}
+.tag.good{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-bd)}
+.tag.bad{background:var(--bad-bg);color:var(--bad-fg);border-color:var(--bad-bd)}
+.tag.new{background:var(--soft);color:var(--primary);
+  border-color:color-mix(in srgb,var(--primary) 35%,var(--line));font-weight:700}
+/* 摘要最多 3 行，超长截断：卡片高度不再被超长正文撑爆 */
+.desc{margin:0;color:var(--muted);font-size:12.8px;line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* 分数构成：+25 免费可领 / −12 限地区，一眼看懂分数怎么来的 */
+.why{display:flex;flex-wrap:wrap;gap:4px}
+.why i{font-style:normal;font-size:11px;line-height:1.55;padding:1px 7px;border-radius:6px;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.why i.p{background:var(--good-bg);color:var(--good-fg)}
+.why i.n{background:var(--bad-bg);color:var(--bad-fg)}
+.card-foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.source{color:var(--primary);font-size:12px;font-weight:700}
+.time{color:var(--hint);font-size:12px}
+.go{margin-left:auto;padding:4px 10px;border-radius:8px;background:var(--primary);color:#fff;
+  font-size:12.5px;white-space:nowrap}
+html[data-theme=dark] .go{color:#171d3a}
+.go:hover{text-decoration:none;filter:brightness(1.06)}
+/* 明文 URL 收进 foot 第二行，单行截断（title 属性带完整链接可复制） */
+.urlline{flex-basis:100%;color:var(--hint);font:11px/1.5 ui-monospace,Consolas,monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+
+/* 说明 / 排除区 / 页脚 / 浮动按钮 */
+.hint{margin:26px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+  padding:10px 14px;color:var(--muted);font-size:12.5px}
+.hint summary{cursor:pointer;color:var(--primary);font-weight:600}
+.hint p{margin:7px 0}
+.exc-g{margin:10px 0 4px}
+.exc-g h4{margin:0 0 6px;font-size:12.5px;color:var(--text)}
+.exc-g h4 b{color:var(--hint);font-weight:600}
+.exc-g ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px 16px}
+.exc-g li{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exc-g li a{color:var(--muted)}
+.exc-g li a:hover{color:var(--primary)}
+.exc-g li.more{color:var(--hint);font-style:normal}
+.errbox{background:var(--bad-bg);border:1px solid var(--bad-bd);color:var(--bad-fg);
+  border-radius:12px;padding:10px 13px;font-size:12.5px;margin:0 0 16px}
+.footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
+  color:var(--hint);font-size:11.5px;line-height:1.7}
+.fab{position:fixed;right:18px;bottom:18px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:17px;
+  cursor:pointer;box-shadow:0 6px 18px rgba(25,45,80,.16);z-index:30}
+.fab[hidden]{display:none}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="#top"><span class="logo">🐑</span><strong>羊毛日报</strong></a>
+    <div class="top-actions">
+      <span class="top-date">2026-10-24</span>
+      <button class="mode" id="theme" type="button">☾ 夜间</button>
+    </div>
+  </header>
+
+  <div class="hero" id="top">
+    <div class="eyebrow">24 源聚合 · 每天 20:00 自动更新</div>
+    <h1>今天的羊毛，挑最值得写的。</h1>
+    <p>只做推荐，不代领。黄色标签是<b>有门槛</b>（限地区/银行卡/号段/满减），红色是<b>有风险</b>（含推广/概率性）；卡片上的绿/红小徽章是<b>分数构成</b>。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat hl"><strong>68</strong><span>条可写</span></div>
+    <div class="stat"><strong>164</strong><span>条已排除</span></div>
+    <div class="stat"><strong>232</strong><span>条线索（去重后）</span></div>
+    <div class="stat"><strong>24/26</strong><span>来源在线</span></div>
+  </div>
+
+  <div class="errbox">⚠️ 本期有来源抓取失败：<b>v2ex、reddit-freebies</b>，表中可能缺该来源的内容，下一轮会自动重试。</div>
+  
+
+  <section class="panel" aria-label="搜索与筛选">
+    <label class="search"><span aria-hidden="true">⌕</span>
+      <input id="q" type="search" placeholder="搜索标题 / 摘要 / 标签（如：限地区）…" autocomplete="off">
+    </label>
+    <div class="filters"><span class="fname">类别</span>
+      <div class="chips"><button class="chip active" type="button" data-cat="all">全部</button><button class="chip" type="button" data-cat="生活羊毛">生活羊毛 28</button><button class="chip" type="button" data-cat="云资源">云资源 5</button><button class="chip" type="button" data-cat="域名建站">域名建站 3</button><button class="chip" type="button" data-cat="AI 额度">AI 额度 6</button><button class="chip" type="button" data-cat="其他">其他 26</button></div></div>
+    <div class="filters"><span class="fname">排序</span>
+      <div class="chips">
+        <button class="chip active" type="button" data-sort="score">分数优先</button>
+        <button class="chip" type="button" data-sort="time">最新发布</button>
+      </div>
+      <span class="count" id="count">显示 68 / 68 条</span>
+    </div>
+  </section>
+
+  <section class="group" id="pick" data-key="今日优先">
+    <div class="group-head"><h2>🔥 今日优先</h2><div class="line"></div>
+      <span class="portion">8 条 · 分数 ≥55</span></div>
+    <div class="cards">
+      <article class="card pick-card"
+               data-cat="生活羊毛" data-score="78"
+               data-ts="2026-10-23T19:23:00+08:00" data-text="京东红包速速去领取!海量3/5/20.26亓大红包~喊上朋友 京东红包速速去领取!海量3/5/20.26亓大红包~喊上朋友
+京东红包速速去领取！ 
+https://u.jd.com/56ebqhl https://u.jd.com/56ebqhl 
+海量3/5/20.26亓大红包~ 
+喊上朋友一起领！ 生活羊毛 tg·sakurako线报 免费/可领 入口清晰 官方域名 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">78</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sakurako0818/36317" target="_blank" rel="noopener">京东红包速速去领取!海量3/5/20.26亓大红包~喊上朋友</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag good">官方域名</span></div>
+        <p class="desc">京东红包速速去领取!海量3/5/20.26亓大红包~喊上朋友
+京东红包速速去领取！ 
+https://u.jd.com/56EBQhL https://u.jd.com/56EBQhL 
+海量3/5/20.26亓大红包~ 
+喊上朋友一起领！</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·SaKurako线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sakurako0818/36317" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sakurako0818/36317">https://t.me/sakurako0818/36317</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="云资源" data-score="65"
+               data-ts="2026-10-23T15:49:00+08:00" data-text="v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。 v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。
+https://v0.app/students https://v0.app/students
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 云资源 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">☁️ 云资源</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。
+https://v0.app/students https://v0.app/students
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/981">https://t.me/sliverkiss_blog/981</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="其他" data-score="65"
+               data-ts="2026-10-24T03:36:00+08:00" data-text="森林木海 (https://t.me/yimuhd @yimuhd) 在 https://linux.do/t/topic/3067185/1 目前闲置了一台华 森林木海 (https://t.me/yimuhd @yimuhd) 在 https://linux.do/t/topic/3067185/1 目前闲置了一台华为 中发帖
+佬友知道有什么好玩的开源项目吗，或者开源软件的云端😀，虽然是白嫖的但是闲置着难受 其他 tg·linux do 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/linux_do_channel/544622" target="_blank" rel="noopener">森林木海 (https://t.me/yimuhd @yimuhd) 在 https://linux.do/t/topic/3067185/1 目前闲置了一台华</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">森林木海 (https://t.me/yimuhd @yimuhd) 在 https://linux.do/t/topic/3067185/1 目前闲置了一台华为 中发帖
+佬友知道有什么好玩的开源项目吗，或者开源软件的云端😀，虽然是白嫖的但是闲置着难受</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·LINUX DO</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/linux_do_channel/544622" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/linux_do_channel/544622">https://t.me/linux_do_channel/544622</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="其他" data-score="65"
+               data-ts="2026-10-24T03:58:00+08:00" data-text="沦陷于璐璐 (https://t.me/falltolulu @falltolulu) 在 https://linux.do/t/topic/3067192/1 沦陷于璐璐 (https://t.me/falltolulu @falltolulu) 在 https://linux.do/t/topic/3067192/1 only apple can do徽章 中发帖
+大半年没上来过了，今晚上来一看居然出客户端了，还有徽章拿，我表示严肃领取！ 
+ [image] 其他 tg·linux do 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/linux_do_channel/544626" target="_blank" rel="noopener">沦陷于璐璐 (https://t.me/falltolulu @falltolulu) 在 https://linux.do/t/topic/3067192/1</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">沦陷于璐璐 (https://t.me/falltolulu @falltolulu) 在 https://linux.do/t/topic/3067192/1 Only Apple can do徽章 中发帖
+大半年没上来过了，今晚上来一看居然出客户端了，还有徽章拿，我表示严肃领取！ 
+ [image]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·LINUX DO</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/linux_do_channel/544626" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/linux_do_channel/544626">https://t.me/linux_do_channel/544626</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="其他" data-score="65"
+               data-ts="2026-10-24T01:35:00+08:00" data-text="米家 智能电动晾衣架 智能晾衣机 2 pro 米家 智能电动晾衣架 智能晾衣机 2 pro
+目前右上角直播间活动售价1369元，官方补贴68.45元，使用88vip满1000-125元消费券，政府补贴20%，晒单返现80元，到手仅需860.44元，好价可入。返100值得买积分，补贴后低至850.44元
+价格：850.44元 
+商家：[天猫精选]
+值率：值: 16 不值: 0
+领券：[无需领券]
+------------------------------
+【https://s.click.taobao.com/ugyb0 其他 tg·真正值得买 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388056" target="_blank" rel="noopener">米家 智能电动晾衣架 智能晾衣机 2 Pro</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">米家 智能电动晾衣架 智能晾衣机 2 Pro
+目前右上角直播间活动售价1369元，官方补贴68.45元，使用88VIP满1000-125元消费券，政府补贴20%，晒单返现80元，到手仅需860.44元，好价可入。返100值得买积分，补贴后低至850.44元
+价格：850.44元 
+商家：[天猫精选]
+值率：值: 16 不值: 0
+领券：[无需领券]
+------------------------------
+【https://s.click.taobao.com/uGyB0</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388056" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388056">https://t.me/zzzdm/388056</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="AI 额度" data-score="65"
+               data-ts="2026-10-23T14:03:00+08:00" data-text="讯飞星辰maas点击即送10亿token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。 讯飞星辰maas点击即送10亿token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。
+https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/980" target="_blank" rel="noopener">讯飞星辰MaaS点击即送10亿Token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">讯飞星辰MaaS点击即送10亿Token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。
+https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/980" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/980">https://t.me/sliverkiss_blog/980</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="AI 额度" data-score="65"
+               data-ts="2026-10-22T13:01:00+08:00" data-text="qoder 白嫖 astra 模型 token，免费用户也能领。 qoder 白嫖 astra 模型 token，免费用户也能领。
+https://qoder.com/community-boost https://qoder.com/community-boost
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/977" target="_blank" rel="noopener">Qoder 白嫖 Astra 模型 Token，免费用户也能领。</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">Qoder 白嫖 Astra 模型 Token，免费用户也能领。
+https://qoder.com/community-boost https://qoder.com/community-boost
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/977" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/977">https://t.me/sliverkiss_blog/977</span>
+        </div>
+      </article>
+      <article class="card pick-card"
+               data-cat="生活羊毛" data-score="64"
+               data-ts="2026-10-21T05:26:59+00:00" data-text="中国移动网龄白嫖人人有，咪咕快游30小时云游戏月卡 10月20-22日，咪咕游戏会员月卡限量领,lv1-5领一次，lv3-5两次 可以玩原神崩铁三角洲，还有云电脑玩steam https://dev.coc.10086.cn/coc3/canvas/rightsmarket-h5-canvas/online/wlflr10y?channelcode=p000001... 生活羊毛 即刻·实时羊毛 免费/可领 入口清晰 官方域名 人人可用 昨日 -限运营商">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">64</span>
+        </div>
+        <h3 class="title"><a href="https://jike.info/topic/59333/中国移动网龄白嫖人人有-咪咕快游30小时云游戏月卡" target="_blank" rel="noopener">中国移动网龄白嫖人人有，咪咕快游30小时云游戏月卡</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">限运营商</span><span class="tag good">官方域名</span></div>
+        <p class="desc">10月20-22日，咪咕游戏会员月卡限量领,lv1-5领一次，lv3-5两次 可以玩原神崩铁三角洲，还有云电脑玩steam https://dev.coc.10086.cn/coc3/canvas/rightsmarket-h5-canvas/online/wlflr10y?channelCode=P000001...</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+12 昨日</i><i class="n">−6 限运营商</i></div>
+        <div class="card-foot">
+          <span class="source">即刻·实时羊毛</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://jike.info/topic/59333/中国移动网龄白嫖人人有-咪咕快游30小时云游戏月卡" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://jike.info/topic/59333/中国移动网龄白嫖人人有-咪咕快游30小时云游戏月卡">https://jike.info/topic/59333/中国移动网龄白嫖人人有-咪咕快游30小时云游戏月卡</span>
+        </div>
+      </article></div>
+  </section>
+
+  
+    <section class="group" data-key="生活羊毛">
+      <div class="group-head"><h2>🧧 生活羊毛</h2><div class="line"></div>
+        <span class="portion">26 条 · 另有 2 条在「今日优先」</span></div>
+      <div class="cards">
+      <article class="card"
+               data-cat="生活羊毛" data-score="63"
+               data-ts="2026-10-24T00:33:00+08:00" data-text="hbn 双a醇熊果苷护肤套装（发光水150ml+双a醇精华乳120ml+3.0晚霜 30g）拍1享12 hbn 双a醇熊果苷护肤套装（发光水150ml+双a醇精华乳120ml+3.0晚霜 30g）拍1享12
+hbn水乳霜套装！京东此款目前活动售价646元，下单领取480-60优惠券，plus券优惠券，参与立减15%优惠活动，下单1件，实付低至403.68元。拍1享12！
+价格：403.68元  (价格低于618)
+商家：[京东]
+值率：值: 8 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?key=ccm8c0sao 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">63</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388046" target="_blank" rel="noopener">HBN 双A醇熊果苷护肤套装（发光水150ml+双A醇精华乳120ml+3.0晚霜 30g）拍1享12</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag good">官方域名</span></div>
+        <p class="desc">HBN 双A醇熊果苷护肤套装（发光水150ml+双A醇精华乳120ml+3.0晚霜 30g）拍1享12
+HBN水乳霜套装！京东此款目前活动售价646元，下单领取480-60优惠券，plus券优惠券，参与立减15%优惠活动，下单1件，实付低至403.68元。拍1享12！
+价格：403.68元  (价格低于618)
+商家：[京东]
+值率：值: 8 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?key=ccm8c0sao</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388046" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388046">https://t.me/zzzdm/388046</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="63"
+               data-ts="2026-10-24T03:47:00+08:00" data-text="亮碟 洗碗机洗涤块 58颗 0.77元/颗 亮碟 洗碗机洗涤块 58颗 0.77元/颗
+京东价71.4元，下单2件，领50元券，到手价共92.8元。返35值得买积分，补贴后低至89.30元，折44.65元/件
+价格：44.65元  (36天新低)
+商家：[京东全球购]
+值率：值: 15 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?linkkey=aaroh_xipeffas_-naabefoe54iui2d0o5chyelpisvotratprbbazzj 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">63</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388063" target="_blank" rel="noopener">亮碟 洗碗机洗涤块 58颗 0.77元/颗</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag good">官方域名</span></div>
+        <p class="desc">亮碟 洗碗机洗涤块 58颗 0.77元/颗
+京东价71.4元，下单2件，领50元券，到手价共92.8元。返35值得买积分，补贴后低至89.30元，折44.65元/件
+价格：44.65元  (36天新低)
+商家：[京东全球购]
+值率：值: 15 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?linkKey=AAROH_xIpeffAs_-naABEFoe54IUI2d0O5ChYElpiSVOTRaTPrBbaZZj</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388063" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388063">https://t.me/zzzdm/388063</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="63"
+               data-ts="2026-10-24T00:43:00+08:00" data-text="今日必买：沃隆 每日坚果600g坚果星球30日装 今日必买：沃隆 每日坚果600g坚果星球30日装
+京东售价69元，领99减40元优惠券，下单2件，实付79.8元，单件低至39.9元。小编补充：返45值得买积分，补贴后低至75.30元，补贴后折37.65元/件
+价格：37.65元  (价格低于618)
+商家：[京东]
+值率：值: 14 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?key=cdm3cbs5oca04275abb87645a49508bd&amp;amp;r 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">63</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388048" target="_blank" rel="noopener">今日必买：沃隆 每日坚果600g坚果星球30日装</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag good">官方域名</span></div>
+        <p class="desc">今日必买：沃隆 每日坚果600g坚果星球30日装
+京东售价69元，领99减40元优惠券，下单2件，实付79.8元，单件低至39.9元。小编补充：返45值得买积分，补贴后低至75.30元，补贴后折37.65元/件
+价格：37.65元  (价格低于618)
+商家：[京东]
+值率：值: 14 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?key=cdm3cbs5oca04275abb87645a49508bd&amp;amp;r</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388048" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388048">https://t.me/zzzdm/388048</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="63"
+               data-ts="2026-10-24T02:06:00+08:00" data-text="以旧换新：华凌 神机系列 hr-547wuspz 风冷十字门冰箱 521l 白月光 以旧换新：华凌 神机系列 hr-547wuspz 风冷十字门冰箱 521l 白月光
+京东官旗售价2875.56元，plus立减14.38元，下单立减200元，领9折券，以旧换新补贴86元，叠加国补15%，咨询客服晒单返现100元，最终到手1844.48元，限时好价～
+价格：1844.48元  (365天新低)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/51l 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">63</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388058" target="_blank" rel="noopener">以旧换新：华凌 神机系列 HR-547WUSPZ 风冷十字门冰箱 521L 白月光</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag good">官方域名</span></div>
+        <p class="desc">以旧换新：华凌 神机系列 HR-547WUSPZ 风冷十字门冰箱 521L 白月光
+京东官旗售价2875.56元，plus立减14.38元，下单立减200元，领9折券，以旧换新补贴86元，叠加国补15%，咨询客服晒单返现100元，最终到手1844.48元，限时好价～
+价格：1844.48元  (365天新低)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/51l</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388058" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388058">https://t.me/zzzdm/388058</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-23T16:34:00+08:00" data-text="amp 给 chatgpt 登录用户送了 1 个月会员和额外额度，直接白嫖。 amp 给 chatgpt 登录用户送了 1 个月会员和额外额度，直接白嫖。
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 生活羊毛 tg·sliverkiss 免费/可领 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/982" target="_blank" rel="noopener">Amp 给 ChatGPT 登录用户送了 1 个月会员和额外额度，直接白嫖。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">Amp 给 ChatGPT 登录用户送了 1 个月会员和额外额度，直接白嫖。
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/982" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/982">https://t.me/sliverkiss_blog/982</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T00:54:00+08:00" data-text="五粮液 五粮春第二代45度浓香型白酒550ml*6瓶原箱 五粮液 五粮春第二代45度浓香型白酒550ml*6瓶原箱
+京东活动售价1219元，下午四点十分开始，商品右上角直播间领取1000-150元优惠劵，叠加plus300-40超级补贴劵，叠加黑五200-20补贴劵，充值礼金800赠40，plus立减12.19元，店铺首购礼金立减10元，到手价945.8元，比较划算，历史好价~1219-150-40-20-412.19-10=945.8
+价格：945.8元  (143天新低)
+商家：[京东]
+值率：值: 8 不值: 0
+领券：[ht 生活羊毛 tg·真正值得买 免费/可领 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388052" target="_blank" rel="noopener">五粮液 五粮春第二代45度浓香型白酒550ml*6瓶原箱</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">五粮液 五粮春第二代45度浓香型白酒550ml*6瓶原箱
+京东活动售价1219元，下午四点十分开始，商品右上角直播间领取1000-150元优惠劵，叠加plus300-40超级补贴劵，叠加黑五200-20补贴劵，充值礼金800赠40，plus立减12.19元，店铺首购礼金立减10元，到手价945.8元，比较划算，历史好价~1219-150-40-20-412.19-10=945.8
+价格：945.8元  (143天新低)
+商家：[京东]
+值率：值: 8 不值: 0
+领券：[ht</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388052" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388052">https://t.me/zzzdm/388052</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T03:36:00+08:00" data-text="今日必买：舒化 伊利舒化奶高钙型0乳糖220ml*24盒*2箱 今日必买：舒化 伊利舒化奶高钙型0乳糖220ml*24盒*2箱
+下单领满1件减30元，下单领取满90减30元优惠券，plus立减7.99元下单1件，实付低至91.91元。需要微信京东小程序下单！！小编补充：返20值得买积分，补贴后低至89.91元
+价格：89.91元  (137天新低)
+商家：[京东]
+值率：值: 6 不值: 2
+领券：[https://u.jd.com/56jtapp 满90减30]
+------------------------------
+【https 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388061" target="_blank" rel="noopener">今日必买：舒化 伊利舒化奶高钙型0乳糖220ml*24盒*2箱</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">今日必买：舒化 伊利舒化奶高钙型0乳糖220ml*24盒*2箱
+下单领满1件减30元，下单领取满90减30元优惠券，Plus立减7.99元下单1件，实付低至91.91元。需要微信京东小程序下单！！小编补充：返20值得买积分，补贴后低至89.91元
+价格：89.91元  (137天新低)
+商家：[京东]
+值率：值: 6 不值: 2
+领券：[https://u.jd.com/56JTApP 满90减30]
+------------------------------
+【https</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388061" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388061">https://t.me/zzzdm/388061</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T04:17:00+08:00" data-text="今日必买：青岛啤酒 全麦精酿白啤罐装330ml*24罐整箱+赠福禧4罐 今日必买：青岛啤酒 全麦精酿白啤罐装330ml*24罐整箱+赠福禧4罐
+下单领取满144减40元，参与满199减20优惠券，下单1件，凑单一件，plus实付低至82.33元。小编补充：返50值得买积分，补贴后低至77.33元
+价格：77.33元  (低于常卖价)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?linkkey=aaroh_xipeffas_-naabefoepao3ej 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388065" target="_blank" rel="noopener">今日必买：青岛啤酒 全麦精酿白啤罐装330mL*24罐整箱+赠福禧4罐</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">今日必买：青岛啤酒 全麦精酿白啤罐装330mL*24罐整箱+赠福禧4罐
+下单领取满144减40元，参与满199减20优惠券，下单1件，凑单一件，plus实付低至82.33元。小编补充：返50值得买积分，补贴后低至77.33元
+价格：77.33元  (低于常卖价)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[https://coupon.m.jd.com/coupons/show.action?linkKey=AAROH_xIpeffAs_-naABEFoepaO3ej</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388065" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388065">https://t.me/zzzdm/388065</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-23T09:30:58+00:00" data-text="免费 60 天虚拟主机 smarterasp.net 现开放 60 天免费试用 ， 无需绑定信用卡 ，开箱即用 核心亮点： • 多语言支持 ：完美托管 asp.net 、.net core 及 node.js 项目 • 资源无忧 ：方案承诺提供无限存储空间与带宽 • 安全省心 ：自带免费 ssl 证书，支持即时激活 • 极速部署 ：一键集成 github，代码推送自动部署 • 方便测试 ：提供免费临时域名，无需自有域名直接测 频道 立即领取试用： 点击直达官网开启试用 3 个帖子 - 3 位参与者 生活羊毛 nodeloc 免费/可领 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115130" target="_blank" rel="noopener">免费 60 天虚拟主机</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">SmarterASP.NET 现开放 60 天免费试用 ， 无需绑定信用卡 ，开箱即用 核心亮点： • 多语言支持 ：完美托管 ASP.NET 、.NET Core 及 Node.js 项目 • 资源无忧 ：方案承诺提供无限存储空间与带宽 • 安全省心 ：自带免费 SSL 证书，支持即时激活 • 极速部署 ：一键集成 GitHub，代码推送自动部署 • 方便测试 ：提供免费临时域名，无需自有域名直接测 频道 立即领取试用： 点击直达官网开启试用 3 个帖子 - 3 位参与者</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115130" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115130">https://www.nodeloc.com/t/topic/115130</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T03:36:00+08:00" data-text="狮王 科学防蛀齿力佳儿童牙膏 葡萄味 50g*1支 狮王 科学防蛀齿力佳儿童牙膏 葡萄味 50g*1支
+京东此款目前活动售价9.99元，下单领取满29元减5元、满35元减13元优惠券，下单4件，实付低至21.96元。
+价格：5.49元  (比上次发布低34%)
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[https://u.jd.com/5gjtmps 满29减5 | https://u.jd.com/5djybvz 满35减13]
+------------------------------
+【https://u.j 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388060" target="_blank" rel="noopener">狮王 科学防蛀齿力佳儿童牙膏 葡萄味 50g*1支</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">狮王 科学防蛀齿力佳儿童牙膏 葡萄味 50g*1支
+京东此款目前活动售价9.99元，下单领取满29元减5元、满35元减13元优惠券，下单4件，实付低至21.96元。
+价格：5.49元  (比上次发布低34%)
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[https://u.jd.com/5gJTMPs 满29减5 | https://u.jd.com/5DJYBvz 满35减13]
+------------------------------
+【https://u.j</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388060" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388060">https://t.me/zzzdm/388060</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T02:36:00+08:00" data-text="狮王 细洁齿晶彩系列 小头软毛牙刷 6支/装 狮王 细洁齿晶彩系列 小头软毛牙刷 6支/装
+京东此款目前活动售价34.4元，下单领取满34元减8元、再领取29元减5元优惠券，实付低至21.4元包邮，图（1），历史低价！
+价格：21.4元  (20天新低)
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[https://u.jd.com/5dlqwkr 满34减8 | https://u.jd.com/5ajkoxw 满29减5]
+------------------------------
+【https://u.jd 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388059" target="_blank" rel="noopener">狮王 细洁齿晶彩系列 小头软毛牙刷 6支/装</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">狮王 细洁齿晶彩系列 小头软毛牙刷 6支/装
+京东此款目前活动售价34.4元，下单领取满34元减8元、再领取29元减5元优惠券，实付低至21.4元包邮，图（1），历史低价！
+价格：21.4元  (20天新低)
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[https://u.jd.com/5DlQWkr 满34减8 | https://u.jd.com/5aJkOXW 满29减5]
+------------------------------
+【https://u.jd</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388059" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388059">https://t.me/zzzdm/388059</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T01:05:00+08:00" data-text="百亿补贴：石头 p30 pro扫地拖洗一体机 扫拖机器人 上下水版 百亿补贴：石头 p30 pro扫地拖洗一体机 扫拖机器人 上下水版
+拼多多此款目前活动售价3158元，下单领取3000-400元v3会员券，下单1件，实付低至2758元。
+价格：2758.0元  (低于常卖价)
+商家：[拼多多]
+值率：值: 7 不值: 0
+领券：[无需领券]
+------------------------------
+【https://p.pinduoduo.com/ykvkncma?sc=efac 🛒 立即购买】【https://m.zzzdm.com/ 生活羊毛 tg·真正值得买 免费/可领 入口清晰 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388054" target="_blank" rel="noopener">百亿补贴：石头 P30 Pro扫地拖洗一体机 扫拖机器人 上下水版</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span></div>
+        <p class="desc">百亿补贴：石头 P30 Pro扫地拖洗一体机 扫拖机器人 上下水版
+拼多多此款目前活动售价3158元，下单领取3000-400元V3会员券，下单1件，实付低至2758元。
+价格：2758.0元  (低于常卖价)
+商家：[拼多多]
+值率：值: 7 不值: 0
+领券：[无需领券]
+------------------------------
+【https://p.pinduoduo.com/ykvkncMa?sc=EFAC 🛒 立即购买】【https://m.zzzdm.com/</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388054" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388054">https://t.me/zzzdm/388054</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T04:17:00+08:00" data-text="统一 元气觉醒100%苹果汁  200ml*24盒 整箱装 统一 元气觉醒100%苹果汁  200ml*24盒 整箱装
+京东此款目前活动售价48.9元，下单领取满199元减100，满200元减20优惠券，下单3件，凑单2件凑单品，主商品实付低至58.77元。
+价格：19.59元 
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/51jtzi4 🛒 立即购买】【https://m.zzzdm.com/posts/view?s 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388064" target="_blank" rel="noopener">统一 元气觉醒100%苹果汁  200ml*24盒 整箱装</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">统一 元气觉醒100%苹果汁  200ml*24盒 整箱装
+京东此款目前活动售价48.9元，下单领取满199元减100，满200元减20优惠券，下单3件，凑单2件凑单品，主商品实付低至58.77元。
+价格：19.59元 
+商家：[京东]
+值率：值: 4 不值: 1
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/51JTzi4 🛒 立即购买】【https://m.zzzdm.com/posts/view?s</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388064" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388064">https://t.me/zzzdm/388064</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T01:04:00+08:00" data-text="舒化 伊利 舒化牛奶无乳糖 全脂 盒装  220ml 48盒 舒化 伊利 舒化牛奶无乳糖 全脂 盒装  220ml 48盒
+下单领满90-30元优惠券.plus立减7.74元，实付87.16元，需要微信京东小程序下单！！
+价格：87.16元  (138天新低)
+商家：[京东]
+值率：值: 16 不值: 1
+领券：[https://u.jd.com/5ajyyhn 满90减30]
+------------------------------
+【https://u.jd.com/5alqjtq 🛒 立即购买】【https://m.zzzdm 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388053" target="_blank" rel="noopener">舒化 伊利 舒化牛奶无乳糖 全脂 盒装  220ml 48盒</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">舒化 伊利 舒化牛奶无乳糖 全脂 盒装  220ml 48盒
+下单领满90-30元优惠券.plus立减7.74元，实付87.16元，需要微信京东小程序下单！！
+价格：87.16元  (138天新低)
+商家：[京东]
+值率：值: 16 不值: 1
+领券：[https://u.jd.com/5aJYYhN 满90减30]
+------------------------------
+【https://u.jd.com/5alQjtQ 🛒 立即购买】【https://m.zzzdm</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388053" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388053">https://t.me/zzzdm/388053</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T01:05:00+08:00" data-text="蕉下 女款白绒服外套秋冬户外保暖 锁温=800蓬锁温 蕉下 女款白绒服外套秋冬户外保暖 锁温=800蓬锁温
+京东此款目前活动售价349元，下单领取满349减65元，149-30优惠券，下单1件，实付低至254元包邮！
+价格：254.0元 
+商家：[京东]
+值率：值: 12 不值: 0
+领券：[https://u.jd.com/5djljvd 满349减65 | https://coupon.m.jd.com/coupons/show.action?key=mbc9p8t0a4c1tfi8cf23e4a5bfab18c8&amp;amp; 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388055" target="_blank" rel="noopener">蕉下 女款白绒服外套秋冬户外保暖 锁温=800蓬锁温</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">蕉下 女款白绒服外套秋冬户外保暖 锁温=800蓬锁温
+京东此款目前活动售价349元，下单领取满349减65元，149-30优惠券，下单1件，实付低至254元包邮！
+价格：254.0元 
+商家：[京东]
+值率：值: 12 不值: 0
+领券：[https://u.jd.com/5DJlJVd 满349减65 | https://coupon.m.jd.com/coupons/show.action?key=mbc9p8t0a4c1tfi8cf23e4a5bfab18c8&amp;amp;</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388055" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388055">https://t.me/zzzdm/388055</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T00:43:00+08:00" data-text="蕉下 男士蓬松白绒外套（高暖）pf001 玄武蓝 xl 蕉下 男士蓬松白绒外套（高暖）pf001 玄武蓝 xl
+京东此款目前活动售价399元，下单领取满399减100元，199-20消费券，149-30优惠券，下单1件，实付低至249元。
+价格：249.0元 
+商家：[京东]
+值率：值: 10 不值: 1
+领券：[https://u.jd.com/56jqhbo 满399减100 | https://coupon.m.jd.com/coupons/show.action?key=mbc9p8t0a4c1tfi8cf23e4a5bf 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388049" target="_blank" rel="noopener">蕉下 男士蓬松白绒外套（高暖）PF001 玄武蓝 XL</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">蕉下 男士蓬松白绒外套（高暖）PF001 玄武蓝 XL
+京东此款目前活动售价399元，下单领取满399减100元，199-20消费券，149-30优惠券，下单1件，实付低至249元。
+价格：249.0元 
+商家：[京东]
+值率：值: 10 不值: 1
+领券：[https://u.jd.com/56JQHBO 满399减100 | https://coupon.m.jd.com/coupons/show.action?key=mbc9p8t0a4c1tfi8cf23e4a5bf</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388049" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388049">https://t.me/zzzdm/388049</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="55"
+               data-ts="2026-10-24T00:53:00+08:00" data-text="雅戈尔 vldd104984bfy dp免烫 白色 41 长袖衬衫 雅戈尔 vldd104984bfy dp免烫 白色 41 长袖衬衫
+京东此款目前活动售价389元，下单领取满480减60元，满1200减120元优惠券，参与立减15%，满3件打6.4折，首购礼金减20元，plus专享95折优惠活动，下单2件，实付低至199.7元。（现在123元晚八点促销生效后价格成立）
+价格：99.85元  (价格低于618)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[http://coupon.m.jd.com/coupons/show.acti 生活羊毛 tg·真正值得买 免费/可领 入口清晰 官方域名 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">55</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388050" target="_blank" rel="noopener">雅戈尔 VLDD104984BFY DP免烫 白色 41 长袖衬衫</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span><span class="tag good">官方域名</span></div>
+        <p class="desc">雅戈尔 VLDD104984BFY DP免烫 白色 41 长袖衬衫
+京东此款目前活动售价389元，下单领取满480减60元，满1200减120元优惠券，参与立减15%，满3件打6.4折，首购礼金减20元，PLUS专享95折优惠活动，下单2件，实付低至199.7元。（现在123元晚八点促销生效后价格成立）
+价格：99.85元  (价格低于618)
+商家：[京东]
+值率：值: 6 不值: 0
+领券：[http://coupon.m.jd.com/coupons/show.acti</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388050" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388050">https://t.me/zzzdm/388050</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="53"
+               data-ts="2026-10-23T23:42:00+08:00" data-text="京东京造 通用型暖宝宝贴60片  39.8元自营包邮 赠足贴10片 *共7 京东京造 通用型暖宝宝贴60片  39.8元自营包邮 赠足贴10片 *共7
+——快暖宝宝贴来了——
+京东京造 通用型暖宝宝贴60片
+https://u.jd.com/5ajf3rh https://u.jd.com/5ajf3rh
+39.8元自营包邮 赠足贴10片
+*共70片 折0.5元/片 天冷备上 生活羊毛 tg·sakurako线报 入口清晰 官方域名 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">53</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sakurako0818/36325" target="_blank" rel="noopener">京东京造 通用型暖宝宝贴60片  39.8元自营包邮 赠足贴10片 *共7</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag good">官方域名</span></div>
+        <p class="desc">京东京造 通用型暖宝宝贴60片  39.8元自营包邮 赠足贴10片 *共7
+——快暖宝宝贴来了——
+京东京造 通用型暖宝宝贴60片
+https://u.jd.com/5aJF3rH https://u.jd.com/5aJF3rH
+39.8元自营包邮 赠足贴10片
+*共70片 折0.5元/片 天冷备上</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·SaKurako线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sakurako0818/36325" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sakurako0818/36325">https://t.me/sakurako0818/36325</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="50"
+               data-ts="2026-10-23T12:32:00+08:00" data-text="登录chatgpt网页端，右上角直接领1个月plus会员，白嫖gpt模型。 登录chatgpt网页端，右上角直接领1个月plus会员，白嫖gpt模型。
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 生活羊毛 tg·sliverkiss 免费/可领 人人可用 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/979" target="_blank" rel="noopener">登录ChatGPT网页端，右上角直接领1个月Plus会员，白嫖GPT模型。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">登录ChatGPT网页端，右上角直接领1个月Plus会员，白嫖GPT模型。
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/979" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/979">https://t.me/sliverkiss_blog/979</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="47"
+               data-ts="2026-10-24T03:36:00+08:00" data-text="lily 100%羊毛2026冬新款女装立领宽松收腰双面呢毛呢外套 lily 100%羊毛2026冬新款女装立领宽松收腰双面呢毛呢外套
+此款目前活动售价1132元，领取淘礼金139.8元，下单领取满500减150元，88vip消费券 满480减60元优惠券，参与立减170元优惠活动，下单1件，实付低至499.2元。每日淘礼金数量有限，领完即止。-淘金币+限时折扣后到手价格更低
+价格：499.2元  (低于常卖价)
+商家：[天猫精选]
+值率：值: 7 不值: 0
+领券：[https://s.click.taobao.com/szccxui 满5 生活羊毛 tg·真正值得买 免费/可领 入口清晰 人人可用 今日新增 -付费前置 -有门槛金额">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">47</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388062" target="_blank" rel="noopener">LILY 100%羊毛2026冬新款女装立领宽松收腰双面呢毛呢外套</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag warn">有满减门槛</span></div>
+        <p class="desc">LILY 100%羊毛2026冬新款女装立领宽松收腰双面呢毛呢外套
+此款目前活动售价1132元，领取淘礼金139.8元，下单领取满500减150元，88VIP消费券 满480减60元优惠券，参与立减170元优惠活动，下单1件，实付低至499.2元。每日淘礼金数量有限，领完即止。-淘金币+限时折扣后到手价格更低
+价格：499.2元  (低于常卖价)
+商家：[天猫精选]
+值率：值: 7 不值: 0
+领券：[https://s.click.taobao.com/szccxUi 满5</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i><i class="n">−8 有门槛金额</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388062" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388062">https://t.me/zzzdm/388062</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="47"
+               data-ts="2026-10-21T06:31:57+00:00" data-text="江苏老乡鸡无门槛 30 优惠券 江苏的朋友，10月23日中午吃饭可以省一笔了。 老乡鸡为了庆祝江苏省门店达到400家，搞了个免费吃饭的活动，感觉知道的人还不多。 当天11:00-14:00，只要去江苏省内的老乡鸡门店，添加店长的企业微信，就能领一张30元无门槛券。 注意只能10月23日中午11点到下午2点使用，而且必须到店堂食，不能点外卖。 生活羊毛 即刻·实时羊毛 免费/可领 人人可用 昨日">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">47</span>
+        </div>
+        <h3 class="title"><a href="https://jike.info/topic/59335/江苏老乡鸡无门槛-30-优惠券" target="_blank" rel="noopener">江苏老乡鸡无门槛 30 优惠券</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">江苏的朋友，10月23日中午吃饭可以省一笔了。 老乡鸡为了庆祝江苏省门店达到400家，搞了个免费吃饭的活动，感觉知道的人还不多。 当天11:00-14:00，只要去江苏省内的老乡鸡门店，添加店长的企业微信，就能领一张30元无门槛券。 注意只能10月23日中午11点到下午2点使用，而且必须到店堂食，不能点外卖。</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+12 昨日</i></div>
+        <div class="card-foot">
+          <span class="source">即刻·实时羊毛</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://jike.info/topic/59335/江苏老乡鸡无门槛-30-优惠券" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://jike.info/topic/59335/江苏老乡鸡无门槛-30-优惠券">https://jike.info/topic/59335/江苏老乡鸡无门槛-30-优惠券</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="45"
+               data-ts="2026-10-22T19:43:41+00:00" data-text="today，国内首个原生personal agent免费送3亿tokens today，国内首个原生personal agent免费送3亿tokens https://todayai.cn/login?utm_source=invitation&amp;utm_id=pymw7-vjbftk today拿到了2亿美元的融资了，手里有钱了也开始豪横了。 新用户注册送3亿token和3个月pro会员... 生活羊毛 即刻·实时羊毛 免费/可领 入口清晰 人人可用 今日新增 -含推广">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿tokens" target="_blank" rel="noopener">Today，国内首个原生Personal Agent免费送3亿Tokens</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <p class="desc">Today，国内首个原生Personal Agent免费送3亿Tokens https://todayai.cn/login?utm_source=invitation&amp;utm_id=PymW7-VjbfTk Today拿到了2亿美元的融资了，手里有钱了也开始豪横了。 新用户注册送3亿token和3个月Pro会员...</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i></div>
+        <div class="card-foot">
+          <span class="source">即刻·实时羊毛</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿tokens" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿tokens">https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿…</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="41"
+               data-ts="2026-10-21T12:08:28+00:00" data-text="移动咪咕会员月卡0元领，就这两天 移动这波羊毛挺实在：咪咕游戏vip会员月卡，标准价9.9元，活动期间0元拿下。时间是10月20日到22日，就三天，过了这个点就没了。 一、能领什么 1. 咪咕游戏vip会员月卡 标... 生活羊毛 爱吾线报 免费/可领 人人可用 昨日 -限运营商">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">41</span>
+        </div>
+        <h3 class="title"><a href="https://25xianbao.com/archives/29361" target="_blank" rel="noopener">移动咪咕会员月卡0元领，就这两天</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag warn">限运营商</span></div>
+        <p class="desc">移动这波羊毛挺实在：咪咕游戏VIP会员月卡，标准价9.9元，活动期间0元拿下。时间是10月20日到22日，就三天，过了这个点就没了。 一、能领什么 1. 咪咕游戏VIP会员月卡 标...</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+12 昨日</i><i class="n">−6 限运营商</i></div>
+        <div class="card-foot">
+          <span class="source">爱吾线报</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://25xianbao.com/archives/29361" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://25xianbao.com/archives/29361">https://25xianbao.com/archives/29361</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="40"
+               data-ts="2026-10-24T02:05:00+08:00" data-text="九阳 电饭煲家用晶钻内胆3l闷香柴火饭不粘涂层多功能小型电饭锅 九阳 电饭煲家用晶钻内胆3l闷香柴火饭不粘涂层多功能小型电饭锅
+此款目前活动售价259元，领取淘礼金8.75元，参与立减110元，立减23.9元优惠活动，1.商品详情领取129-15元优惠卷2.补贴频道领取69-12元优惠卷然后加购3.下单返3元超市卡，晒单返5元超市卡4.叠加首单4元然后凑单品一件下单1件，实付低至78.37元（价格已剔除淘金币）。每日淘礼金数量有限，领完即止。叠加淘金币到手65元。
+价格：78.37元  (66天新低)
+商家：[天猫超市]
+值率：值: 8 生活羊毛 tg·真正值得买 免费/可领 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">40</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388057" target="_blank" rel="noopener">九阳 电饭煲家用晶钻内胆3L闷香柴火饭不粘涂层多功能小型电饭锅</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag warn">付费前置</span></div>
+        <p class="desc">九阳 电饭煲家用晶钻内胆3L闷香柴火饭不粘涂层多功能小型电饭锅
+此款目前活动售价259元，领取淘礼金8.75元，参与立减110元，立减23.9元优惠活动，1.商品详情领取129-15元优惠卷2.补贴频道领取69-12元优惠卷然后加购3.下单返3元超市卡，晒单返5元超市卡4.叠加首单4元然后凑单品一件下单1件，实付低至78.37元（价格已剔除淘金币）。每日淘礼金数量有限，领完即止。叠加淘金币到手65元。
+价格：78.37元  (66天新低)
+商家：[天猫超市]
+值率：值: 8</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388057" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388057">https://t.me/zzzdm/388057</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="38"
+               data-ts="2026-10-24T00:33:00+08:00" data-text="mama&amp;kids 婴儿uv防晒乳液 90ml mama&amp;kids 婴儿uv防晒乳液 90ml
+京东全球购此款目前活动售价173元，如图下方换购品加购，然后条件换购，到手25.9，还可以浏览一下别的东西一起换购，下单1件，实付低至25.9元。
+价格：25.9元  (价格低于618)
+商家：[京东全球购]
+值率：值: 6 不值: 0
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/5ojtvhb 🛒 立即购买】【https://m.zzzdm.com/po 生活羊毛 tg·真正值得买 入口清晰 官方域名 人人可用 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">38</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388047" target="_blank" rel="noopener">Mama&amp;Kids 婴儿UV防晒乳液 90ml</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span><span class="tag good">官方域名</span></div>
+        <p class="desc">Mama&amp;Kids 婴儿UV防晒乳液 90ml
+京东全球购此款目前活动售价173元，如图下方换购品加购，然后条件换购，到手25.9，还可以浏览一下别的东西一起换购，下单1件，实付低至25.9元。
+价格：25.9元  (价格低于618)
+商家：[京东全球购]
+值率：值: 6 不值: 0
+领券：[无需领券]
+------------------------------
+【https://u.jd.com/5OJTvHb 🛒 立即购买】【https://m.zzzdm.com/po</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388047" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388047">https://t.me/zzzdm/388047</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="生活羊毛" data-score="20"
+               data-ts="2026-10-22T23:54:48+00:00" data-text="百度网盘svip，签到就能领 百度网盘最近有个“库库ai”活动，不用拉人、不用花钱，纯网页签到就能拿到几天svip会员。活动还剩43天，想薅的趁早。 一、活动怎么玩 进入活动页面登录后，每天点一下签到就行，不需... 生活羊毛 爱吾线报 人人可用 今日新增 -偏教程">
+        <div class="card-top">
+          <span class="cat-badge">🧧 生活羊毛</span>
+          <span class="conf ok">确定</span>
+          <span class="score">20</span>
+        </div>
+        <h3 class="title"><a href="https://25xianbao.com/archives/29373" target="_blank" rel="noopener">百度网盘SVIP，签到就能领</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span></div>
+        <p class="desc">百度网盘最近有个“库库AI”活动，不用拉人、不用花钱，纯网页签到就能拿到几天SVIP会员。活动还剩43天，想薅的趁早。 一、活动怎么玩 进入活动页面登录后，每天点一下签到就行，不需...</p>
+        <div class="why"><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−10 偏教程</i></div>
+        <div class="card-foot">
+          <span class="source">爱吾线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://25xianbao.com/archives/29373" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://25xianbao.com/archives/29373">https://25xianbao.com/archives/29373</span>
+        </div>
+      </article></div>
+    </section>
+    <section class="group" data-key="云资源">
+      <div class="group-head"><h2>☁️ 云资源</h2><div class="line"></div>
+        <span class="portion">4 条 · 另有 1 条在「今日优先」</span></div>
+      <div class="cards">
+      <article class="card"
+               data-cat="云资源" data-score="57"
+               data-ts="2026-10-21T14:47:00+08:00" data-text="开源维护者白嫖6个月chatgpt pro，价值$1200，无star数要求，有项目链接即可申请。 开源维护者白嫖6个月chatgpt pro，价值$1200，无star数要求，有项目链接即可申请。
+https://openai.com/zh-hans-cn/form/codex-for-oss https://openai.com/zh-hans-cn/form/codex-for-oss
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 云资源 tg·sliverkiss 免费/可领 入口清晰 昨日">
+        <div class="card-top">
+          <span class="cat-badge">☁️ 云资源</span>
+          <span class="conf ok">确定</span>
+          <span class="score">57</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/973" target="_blank" rel="noopener">开源维护者白嫖6个月ChatGPT Pro，价值$1200，无Star数要求，有项目链接即可申请。</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">开源维护者白嫖6个月ChatGPT Pro，价值$1200，无Star数要求，有项目链接即可申请。
+https://openai.com/zh-Hans-CN/form/codex-for-oss https://openai.com/zh-Hans-CN/form/codex-for-oss
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+12 昨日</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/973" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/973">https://t.me/sliverkiss_blog/973</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="云资源" data-score="45"
+               data-ts="2026-10-22T04:24:07+00:00" data-text="华为云3000积分领取：沙箱+ecs部署，兑换云服务代金券 前不久华为云刚送了200元代金券（历史文章没了，由于博客被黑还原了数据库）！这不新活动又来了！能兑换300元代 […] 云资源 如有乐享 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">☁️ 云资源</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://51.ruyo.net/19764.html" target="_blank" rel="noopener">华为云3000积分领取：沙箱+ECS部署，兑换云服务代金券</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">前不久华为云刚送了200元代金券（历史文章没了，由于博客被黑还原了数据库）！这不新活动又来了！能兑换300元代 […]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">如有乐享</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://51.ruyo.net/19764.html" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://51.ruyo.net/19764.html">https://51.ruyo.net/19764.html</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="云资源" data-score="45"
+               data-ts="2026-10-22T02:49:39+00:00" data-text="华为云新活动300元代金券 现在还能领么？ 云资源 即刻·实时羊毛 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">☁️ 云资源</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://jike.info/topic/59340/华为云新活动300元代金券" target="_blank" rel="noopener">华为云新活动300元代金券</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">现在还能领么？</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">即刻·实时羊毛</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://jike.info/topic/59340/华为云新活动300元代金券" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://jike.info/topic/59340/华为云新活动300元代金券">https://jike.info/topic/59340/华为云新活动300元代金券</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="云资源" data-score="20"
+               data-ts="2026-10-22T01:07:28+00:00" data-text="gpt-6每日签到10美金，日常轻量应用够用了 @pandaspa 左侧 每日福利 云资源 即刻·实时羊毛 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">☁️ 云资源</span>
+          <span class="conf ok">确定</span>
+          <span class="score">20</span>
+        </div>
+        <h3 class="title"><a href="https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了" target="_blank" rel="noopener">GPT-6每日签到10美金，日常轻量应用够用了</a></h3>
+        
+        <p class="desc">@pandaspa 左侧 每日福利</p>
+        <div class="why"><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">即刻·实时羊毛</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了">https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了</span>
+        </div>
+      </article></div>
+    </section>
+    <section class="group" data-key="域名建站">
+      <div class="group-head"><h2>🌐 域名建站</h2><div class="line"></div>
+        <span class="portion">3 条</span></div>
+      <div class="cards">
+      <article class="card"
+               data-cat="域名建站" data-score="50"
+               data-ts="2026-10-23T15:11:25+00:00" data-text="descend network开始开放用户提交自己的域名并分发！ 在这里： 在这里输入自己想分发的域名（可以是2-3级， 比如说.eu.org .pp.ua .us.kg这种免费子域名或者.com.cn .co.uk这种常见的收费二级域）和理由（需要我手动批准）就可以了 然后将该域名的ns设为： ns1.descendns.net ns2.descendns.net （没错descend network总算是拥有了自己的ns……） 并在申请页面下面的申请列表点击检测ns（ns同步需要时间，请耐心等待） 关于规定的问题呢我觉得没必要说了，大家 域名建站 nodeloc 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🌐 域名建站</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115170" target="_blank" rel="noopener">Descend Network开始开放用户提交自己的域名并分发！</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">在这里： 在这里输入自己想分发的域名（可以是2-3级， 比如说.eu.org .pp.ua .us.kg这种免费子域名或者.com.cn .co.uk这种常见的收费二级域）和理由（需要我手动批准）就可以了 然后将该域名的NS设为： ns1.descendns.net ns2.descendns.net （没错descend network总算是拥有了自己的NS……） 并在申请页面下面的申请列表点击检测NS（NS同步需要时间，请耐心等待） 关于规定的问题呢我觉得没必要说了，大家</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115170" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115170">https://www.nodeloc.com/t/topic/115170</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="域名建站" data-score="50"
+               data-ts="2026-10-23T16:04:09+00:00" data-text="muse 成品 七个免费账号 我把邮箱给删除了 所有就不出售这几个账号了 内容是免费的七个账号 登录肯定被用过介意的话就不用浪费时间了 这是给没有体验的人尝试一下muse咋样的 29 个帖子 - 19 位参与者 阅读完整话题 域名建站 nodeloc 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🌐 域名建站</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115174" target="_blank" rel="noopener">muse 成品 七个免费账号</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">我把邮箱给删除了 所有就不出售这几个账号了 内容是免费的七个账号 登录肯定被用过介意的话就不用浪费时间了 这是给没有体验的人尝试一下muse咋样的 29 个帖子 - 19 位参与者 阅读完整话题</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115174" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115174">https://www.nodeloc.com/t/topic/115174</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="域名建站" data-score="50"
+               data-ts="2026-10-23T13:47:41+00:00" data-text="这次有免费域名，还有免费主机！4种后缀的域名 这里的域名需要100积分，不过我提供了优惠码可以免费领域名， 主机需要8积分，可以用我提供的链接就有100积分。 地址和优惠码 28 个帖子 - 26 位参与者 阅读完整话题 域名建站 nodeloc 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">🌐 域名建站</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115159" target="_blank" rel="noopener">这次有免费域名，还有免费主机！4种后缀的域名</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">这里的域名需要100积分，不过我提供了优惠码可以免费领域名， 主机需要8积分，可以用我提供的链接就有100积分。 地址和优惠码 28 个帖子 - 26 位参与者 阅读完整话题</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115159" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115159">https://www.nodeloc.com/t/topic/115159</span>
+        </div>
+      </article></div>
+    </section>
+    <section class="group" data-key="AI 额度">
+      <div class="group-head"><h2>✨ AI 额度</h2><div class="line"></div>
+        <span class="portion">4 条 · 另有 2 条在「今日优先」</span></div>
+      <div class="cards">
+      <article class="card"
+               data-cat="AI 额度" data-score="50"
+               data-ts="2026-10-23T20:32:00+08:00" data-text="智谱送5亿token，包括3亿glm-5.3-flash和2亿glm-5.3，先到先得。 智谱送5亿token，包括3亿glm-5.3-flash和2亿glm-5.3，先到先得。
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/984" target="_blank" rel="noopener">智谱送5亿token，包括3亿GLM-5.3-Flash和2亿GLM-5.3，先到先得。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">智谱送5亿token，包括3亿GLM-5.3-Flash和2亿GLM-5.3，先到先得。
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/984" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/984">https://t.me/sliverkiss_blog/984</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="AI 额度" data-score="50"
+               data-ts="2026-10-23T15:17:06+00:00" data-text="赛博领鸡蛋：智谱 zcode 1024 程序员节免费送 5 亿 tokens｜现在领，周末用。 zcode 客户端登录可领，新用户也能用。glm-5.3 与 glm-5.3-flash 的 5 亿 tokens 礼包，10 月 23 日 23:00 生效，10 月 26 日 09:00 到期。 ai 额度 小众软件 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.appinn.com/zcode-1024-free-500-million-tokens/" target="_blank" rel="noopener">赛博领鸡蛋：智谱 ZCode 1024 程序员节免费送 5 亿 Tokens｜现在领，周末用。</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">ZCode 客户端登录可领，新用户也能用。GLM-5.3 与 GLM-5.3-Flash 的 5 亿 Tokens 礼包，10 月 23 日 23:00 生效，10 月 26 日 09:00 到期。</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">小众软件</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.appinn.com/zcode-1024-free-500-million-tokens/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.appinn.com/zcode-1024-free-500-million-tokens/">https://www.appinn.com/zcode-1024-free-500-million-tokens/</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="AI 额度" data-score="50"
+               data-ts="2026-10-23T11:15:52+00:00" data-text="🌶️ 海外ip赠送，免费流量兑换码，将持续更新cdk 解锁用于数据抓取、社媒运营、广告验证、ai训练的真实住宅ip 拥有覆盖全球190+城市地区的900w+ip资源 支持http、https和socks5等协议 专注提供稳定、快速、高效的海外ip代理服务 静态/动态/不限量套餐自选， 点击这里官网直达 今日cdk兑换码： 2w8w-8c9p-j87m ejv7-6kex-mxwn 7ly2-9xdy-rqbt d4ub-ka44-jrpl ssvf-ljt7-esdb ywrr-nke7-m4q8 没了尽管叫我来补 3 个帖子 ai 额度 nodeloc 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115137" target="_blank" rel="noopener">🌶️ 海外IP赠送，免费流量兑换码，将持续更新cdk</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">解锁用于数据抓取、社媒运营、广告验证、AI训练的真实住宅IP 拥有覆盖全球190+城市地区的900W+IP资源 支持HTTP、HTTPS和SOCKS5等协议 专注提供稳定、快速、高效的海外IP代理服务 静态/动态/不限量套餐自选， 点击这里官网直达 今日CDK兑换码： 2W8W-8C9P-J87M EJV7-6KEX-MXWN 7LY2-9XDY-RQBT D4UB-KA44-JRPL SSVF-LJT7-ESDB YWRR-NKE7-M4Q8 没了尽管叫我来补 3 个帖子</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115137" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115137">https://www.nodeloc.com/t/topic/115137</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="AI 额度" data-score="45"
+               data-ts="2026-10-23T20:03:00+08:00" data-text="zcode白嫖5亿token，可以用glm-5.3模型 zcode白嫖5亿token，可以用glm-5.3模型 ai 额度 tg·sliverkiss 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/983" target="_blank" rel="noopener">zcode白嫖5亿token，可以用glm-5.3模型</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">zcode白嫖5亿token，可以用glm-5.3模型</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/983" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/983">https://t.me/sliverkiss_blog/983</span>
+        </div>
+      </article></div>
+    </section>
+    <section class="group" data-key="其他">
+      <div class="group-head"><h2>📦 其他</h2><div class="line"></div>
+        <span class="portion">23 条 · 另有 3 条在「今日优先」</span></div>
+      <div class="cards">
+      <article class="card"
+               data-cat="其他" data-score="60"
+               data-ts="2026-10-23T13:16:52+00:00" data-text="ashampoo face blur - 照片脸部自动识别遮罩[终身授权][windows][$22→0] ashampoo face blur 是一款照片脸部自动识别遮罩工具，它易于操作，你只需点击一下，就可以选择用模糊效果、经典像素化处理或表情符号来使照片中的面部变得模糊。这能节省宝贵的时间，对于经常编辑和发布图片的任何人来说，这个工具都是不可或缺的。 其他 反斗限免 免费/可领 永久/长期 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">60</span>
+        </div>
+        <h3 class="title"><a href="https://free.apprcn.com/ashampoo-face-blur-6/" target="_blank" rel="noopener">Ashampoo Face Blur - 照片脸部自动识别遮罩[终身授权][Windows][$22→0]</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag good">永久/长期</span></div>
+        <p class="desc">Ashampoo Face Blur 是一款照片脸部自动识别遮罩工具，它易于操作，你只需点击一下，就可以选择用模糊效果、经典像素化处理或表情符号来使照片中的面部变得模糊。这能节省宝贵的时间，对于经常编辑和发布图片的任何人来说，这个工具都是不可或缺的。</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+10 永久/长期</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">反斗限免</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://free.apprcn.com/ashampoo-face-blur-6/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://free.apprcn.com/ashampoo-face-blur-6/">https://free.apprcn.com/ashampoo-face-blur-6/</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="60"
+               data-ts="2026-10-22T18:02:00+08:00" data-text="元宝搜索一个月6k次，直到11月31日。 元宝搜索一个月6k次，直到11月31日。
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 其他 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">60</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/978" target="_blank" rel="noopener">元宝搜索一个月6k次，直到11月31日。</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">元宝搜索一个月6k次，直到11月31日。
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/978" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/978">https://t.me/sliverkiss_blog/978</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="51"
+               data-ts="2026-10-21T14:47:00+08:00" data-text="电信teleagent注册送3000分，每月登录再送3000分，共6000分可用智能/极速/旗舰模型。 电信teleagent注册送3000分，每月登录再送3000分，共6000分可用智能/极速/旗舰模型。
+https://www.teleai.com.cn/product/teleagent https://www.teleai.com.cn/product/teleagent
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 其他 tg·sliverkiss 免费/可领 入口清晰 昨日 -限运营商">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">51</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/974" target="_blank" rel="noopener">电信TeleAgent注册送3000分，每月登录再送3000分，共6000分可用智能/极速/旗舰模型。</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag warn">限运营商</span></div>
+        <p class="desc">电信TeleAgent注册送3000分，每月登录再送3000分，共6000分可用智能/极速/旗舰模型。
+https://www.teleai.com.cn/product/teleagent https://www.teleai.com.cn/product/teleagent
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+12 昨日</i><i class="n">−6 限运营商</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/974" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/974">https://t.me/sliverkiss_blog/974</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="50"
+               data-ts="2026-10-23T03:55:23+00:00" data-text="pdfcraft，开源pdf工作台，支持压缩pdf功能 软件名称 pdfcraft 一句简介 开源pdf工作台，用 rust 从零开始编写的快速原生应用程序中读取、组织、合并、拆分和加密 pdf。无需账户，无需遥测，无需云服务。 应用平台 windows、macos、linux 推荐类型 【网友发现】 是否收费 免费 应用简介 最近我需要pdf压缩功能， 其他 小众软件 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://meta.appinn.net/t/topic/94258" target="_blank" rel="noopener">PdfCraft，开源PDF工作台，支持压缩PDF功能</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">软件名称 PdfCraft 一句简介 开源PDF工作台，用 Rust 从零开始编写的快速原生应用程序中读取、组织、合并、拆分和加密 PDF。无需账户，无需遥测，无需云服务。 应用平台 Windows、MacOS、Linux 推荐类型 【网友发现】 是否收费 免费 应用简介 最近我需要PDF压缩功能，</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">小众软件</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://meta.appinn.net/t/topic/94258" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://meta.appinn.net/t/topic/94258">https://meta.appinn.net/t/topic/94258</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="50"
+               data-ts="2026-10-23T09:10:30+00:00" data-text="strata 0.2.3 更新：聊天太长？现在会自动压缩了 strata 是什么？strata 是一款免费开源的本地大模型运行工具，支持 windows、macos 和 linux，能够让普通电脑运行大型 ai 模型，最低只需要 8gb 显存。 昨天刚刚更新多显卡支持的本地大模型推理工具 strata 0.2.2，今天又发布了 0.2.3 正式版，引擎也同步 其他 小众软件 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.appinn.com/strata-0-2-3/" target="_blank" rel="noopener">Strata 0.2.3 更新：聊天太长？现在会自动压缩了</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">Strata 是什么？Strata 是一款免费开源的本地大模型运行工具，支持 Windows、macOS 和 Linux，能够让普通电脑运行大型 AI 模型，最低只需要 8GB 显存。 昨天刚刚更新多显卡支持的本地大模型推理工具 Strata 0.2.2，今天又发布了 0.2.3 正式版，引擎也同步</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">小众软件</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.appinn.com/strata-0-2-3/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.appinn.com/strata-0-2-3/">https://www.appinn.com/strata-0-2-3/</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="50"
+               data-ts="2026-10-23T07:34:54+00:00" data-text="本周赛博领鸡蛋（10.23~10.29）：《斯盖尔仪式》《归家》 本周赛博领鸡蛋 epic 送出 2 款游戏：电脑端可领取 2 款，分别为《斯盖尔仪式 / sker ritual》、《归家 / home – a unique horror adventure》；手机端可领取 1 款，分别为《归家 / home – a unique horr 其他 小众软件 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://www.appinn.com/eggs-261023/" target="_blank" rel="noopener">本周赛博领鸡蛋（10.23~10.29）：《斯盖尔仪式》《归家》</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">本周赛博领鸡蛋 Epic 送出 2 款游戏：电脑端可领取 2 款，分别为《斯盖尔仪式 / Sker Ritual》、《归家 / Home – A Unique Horror Adventure》；手机端可领取 1 款，分别为《归家 / Home – A Unique Horr</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">小众软件</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.appinn.com/eggs-261023/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.appinn.com/eggs-261023/">https://www.appinn.com/eggs-261023/</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="50"
+               data-ts="2026-10-22T23:55:08+00:00" data-text="芝麻分800以上，一分钱拿走体脂秤 这个活动之前已经放过两次了，现在又能领，估摸着库存还没清完。价值99的体脂秤，0.01元到手，还免邮。 一、领取门槛 就一个硬条件：芝麻分得在800以上。分数够了基本就是白送，分数... 其他 爱吾线报 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">50</span>
+        </div>
+        <h3 class="title"><a href="https://25xianbao.com/archives/29376" target="_blank" rel="noopener">芝麻分800以上，一分钱拿走体脂秤</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">这个活动之前已经放过两次了，现在又能领，估摸着库存还没清完。价值99的体脂秤，0.01元到手，还免邮。 一、领取门槛 就一个硬条件：芝麻分得在800以上。分数够了基本就是白送，分数...</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">爱吾线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://25xianbao.com/archives/29376" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://25xianbao.com/archives/29376">https://25xianbao.com/archives/29376</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="48"
+               data-ts="2026-10-24T00:44:00+08:00" data-text="领173-58券  plus领200-25券   ahcb5玻尿酸水如套装 领173-58券  plus领200-25券   ahcb5玻尿酸水如套装
+领173-58券
+https://coupon.m.jd.com/coupons/show.action?key=cfmbces3o2a24f7a9696183234fb9ade&amp;roleid=3357111801 https://coupon.m.jd.com/coupons/show.action?key=cfmbces3o2a24f7a9696183234fb9ade&amp;roleid=335711 其他 tg·sakurako线报 入口清晰 官方域名 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">48</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sakurako0818/36332" target="_blank" rel="noopener">领173-58券  plus领200-25券   AHCB5玻尿酸水如套装</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag good">官方域名</span></div>
+        <p class="desc">领173-58券  plus领200-25券   AHCB5玻尿酸水如套装
+领173-58券
+https://coupon.m.jd.com/coupons/show.action?key=cfmbces3o2a24f7a9696183234fb9ade&amp;roleId=3357111801 https://coupon.m.jd.com/coupons/show.action?key=cfmbces3o2a24f7a9696183234fb9ade&amp;roleId=335711</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·SaKurako线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sakurako0818/36332" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sakurako0818/36332">https://t.me/sakurako0818/36332</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-23T15:02:31+00:00" data-text="zcode发鸡蛋啦，白嫖了5亿 2 个帖子 - 2 位参与者 阅读完整话题 其他 nodeloc 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115169" target="_blank" rel="noopener">ZCode发鸡蛋啦，白嫖了5亿</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">2 个帖子 - 2 位参与者 阅读完整话题</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/115169" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/115169">https://www.nodeloc.com/t/topic/115169</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-23T12:35:07+00:00" data-text="限时免费获取 steam 游戏 puzzles raccoons[windows] puzzles raccoons 是一款经典的益智游戏，拥有多个关卡和精美的画面。祝你玩得开心！ 其他 反斗限免 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://free.apprcn.com/limited-time-get-steam-game-puzzles-raccoons-for-free/" target="_blank" rel="noopener">限时免费获取 Steam 游戏 Puzzles Raccoons[Windows]</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">Puzzles Raccoons 是一款经典的益智游戏，拥有多个关卡和精美的画面。祝你玩得开心！</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">反斗限免</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://free.apprcn.com/limited-time-get-steam-game-puzzles-raccoons-for-free/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://free.apprcn.com/limited-time-get-steam-game-puzzles-raccoons-for-free/">https://free.apprcn.com/limited-time-get-steam-game-puzzles-r…</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-22T16:25:40+00:00" data-text="免费 pdf 工具集套装 pdfgear 3.0.1 支持 pdf 合并和格式转换 在现在数字办公中，pdf 格式已成为文件传输和保存的常用格式。然而，对于许多用户来说，处理 pdf 文件并不是 […] 其他 大眼仔 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.dayanzai.me/pdfgear.html" target="_blank" rel="noopener">免费 PDF 工具集套装 PDFgear 3.0.1 支持 PDF 合并和格式转换</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">在现在数字办公中，PDF 格式已成为文件传输和保存的常用格式。然而，对于许多用户来说，处理 PDF 文件并不是 […]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">大眼仔</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://www.dayanzai.me/pdfgear.html" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.dayanzai.me/pdfgear.html">https://www.dayanzai.me/pdfgear.html</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-22T16:33:43+00:00" data-text="开源 3d 动画建模渲染软件 blender 5.2.3 x64 中文版官方下载 blender 5.2 中文版是一款免费的开源 3d 创作套件由大眼仔旭整理发布。blender 支持整个 3 […] 其他 大眼仔 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.dayanzai.me/blender.html" target="_blank" rel="noopener">开源 3D 动画建模渲染软件 Blender 5.2.3 x64 中文版官方下载</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">Blender 5.2 中文版是一款免费的开源 3D 创作套件由大眼仔旭整理发布。Blender 支持整个 3 […]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">大眼仔</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://www.dayanzai.me/blender.html" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.dayanzai.me/blender.html">https://www.dayanzai.me/blender.html</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-22T16:26:07+00:00" data-text="开源免费文件批量重命名工具 oncepower 3.2.5 中文便携版 oncepower 中文版是一款专为简化文件和文件夹管理设计的强大工具，它不仅支持批量重命名，还增加了批量删除 […] 其他 大眼仔 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.dayanzai.me/oncepower.html" target="_blank" rel="noopener">开源免费文件批量重命名工具 OncePower 3.2.5 中文便携版</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">OncePower 中文版是一款专为简化文件和文件夹管理设计的强大工具，它不仅支持批量重命名，还增加了批量删除 […]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">大眼仔</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://www.dayanzai.me/oncepower.html" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.dayanzai.me/oncepower.html">https://www.dayanzai.me/oncepower.html</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="45"
+               data-ts="2026-10-22T16:35:59+00:00" data-text="超级图像格式转换工具 reaconverter pro 8.0.255 中文多语免费版 reaconverter pro 中文版是一个图片处理应用程序，旨在帮助您轻松转换图像文件，以及执行其他操作， […] 其他 大眼仔 免费/可领 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.dayanzai.me/reaconverter.html" target="_blank" rel="noopener">超级图像格式转换工具 reaConverter Pro 8.0.255 中文多语免费版</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">ReaConverter Pro 中文版是一个图片处理应用程序，旨在帮助您轻松转换图像文件，以及执行其他操作， […]</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">大眼仔</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://www.dayanzai.me/reaconverter.html" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.dayanzai.me/reaconverter.html">https://www.dayanzai.me/reaconverter.html</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="43"
+               data-ts="2026-10-23T19:58:00+08:00" data-text="jd日常洪包 可领三次 jd日常洪包 可领三次
+jd日常洪包 可领三次
+https://u.jd.com/5gexjhm https://u.jd.com/5gexjhm 其他 tg·sakurako线报 入口清晰 官方域名 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">43</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sakurako0818/36319" target="_blank" rel="noopener">jd日常洪包 可领三次</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag good">官方域名</span></div>
+        <p class="desc">jd日常洪包 可领三次
+jd日常洪包 可领三次
+https://u.jd.com/5gEXJHM https://u.jd.com/5gEXJHM</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+8 官方域名</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·SaKurako线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sakurako0818/36319" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sakurako0818/36319">https://t.me/sakurako0818/36319</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="42"
+               data-ts="2026-10-21T07:31:00+08:00" data-text="openrouter白嫖minimax m3.1 flash api，免密钥直接用，支持多模态、编码和网络安全任务，生成速度104tps。 openrouter白嫖minimax m3.1 flash api，免密钥直接用，支持多模态、编码和网络安全任务，生成速度104tps。
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 其他 tg·sliverkiss 免费/可领 昨日">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">42</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/972" target="_blank" rel="noopener">OpenRouter白嫖MiniMax M3.1 Flash API，免密钥直接用，支持多模态、编码和网络安全任务，生成速度104tps。</a></h3>
+        <div class="tags"><span class="tag good">免费/可领</span></div>
+        <p class="desc">OpenRouter白嫖MiniMax M3.1 Flash API，免密钥直接用，支持多模态、编码和网络安全任务，生成速度104tps。
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+12 昨日</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">2天前</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/972" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/972">https://t.me/sliverkiss_blog/972</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="40"
+               data-ts="2026-10-23T19:05:22+00:00" data-text="jcloud 9950x gold 6430 西班牙家宽补货了 百分之15优惠码：nodeseek-high限定high使用百分之10推荐码：e0qnydm3xe可重复使用续费重新填9950xnq：https://nodequality.com/r/xxi57hsgqjztzkkvaxbequud0ipg6ubbgold6430这个我没买gold6154nq:https://n 其他 nodeseek 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">40</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeseek.com/post-1004827-1" target="_blank" rel="noopener">Jcloud 9950x Gold 6430 西班牙家宽补货了</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">百分之15优惠码：NODESEEK-HIGH限定High使用百分之10推荐码：E0QNYDM3XE可重复使用续费重新填9950xNQ：https://nodequality.com/r/xxI57HSgQJzTZKKVAxBEqUud0Ipg6UBBGold6430这个我没买Gold6154NQ:https://n</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeSeek</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeseek.com/post-1004827-1" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeseek.com/post-1004827-1">https://www.nodeseek.com/post-1004827-1</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="35"
+               data-ts="2026-10-23T13:37:51+00:00" data-text="限时免费获取 steam 游戏 radiant exodus[windows] radiant exodus 是一款第一人称射击游戏，一个安静的夜晚变成了恐怖，奇异的光芒充满了天空，光辉城崩塌。扮演莎拉，一名为生存而战的退伍军人，寻找失踪的父亲，面对世界本不该看到的真相。开发者表示游戏将于 11 月 17 日转为付费，现在就赶紧先免费入库吧。 其他 反斗限免 免费/可领 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">35</span>
+        </div>
+        <h3 class="title"><a href="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/" target="_blank" rel="noopener">限时免费获取 Steam 游戏 Radiant Exodus[Windows]</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">免费/可领</span><span class="tag warn">付费前置</span></div>
+        <p class="desc">Radiant Exodus 是一款第一人称射击游戏，一个安静的夜晚变成了恐怖，奇异的光芒充满了天空，光辉城崩塌。扮演莎拉，一名为生存而战的退伍军人，寻找失踪的父亲，面对世界本不该看到的真相。开发者表示游戏将于 11 月 17 日转为付费，现在就赶紧先免费入库吧。</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">反斗限免</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/">https://free.apprcn.com/limited-time-get-steam-game-radiant-e…</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="25"
+               data-ts="2026-10-24T00:53:00+08:00" data-text="百亿补贴：中兴 巡天 be5100 千兆双频无线家用路由器 wifi7 百亿补贴：中兴 巡天 be5100 千兆双频无线家用路由器 wifi7
+拼多多此款目前活动售价204.9元，参与百亿补贴频道百亿加倍补优惠活动，下单1件，实付低至189.9元。如价格不对，先收藏一下产品，再进加倍补频道就更容易找到了！
+价格：189.9元  (69天新低)
+商家：[拼多多]
+值率：值: 24 不值: 0
+领券：[无需领券]
+------------------------------
+【https://p.pinduoduo.com/9plk2mpi?sc=e 其他 tg·真正值得买 入口清晰 今日新增 -付费前置">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">25</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/zzzdm/388051" target="_blank" rel="noopener">百亿补贴：中兴 巡天 BE5100 千兆双频无线家用路由器 WiFi7</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag warn">付费前置</span></div>
+        <p class="desc">百亿补贴：中兴 巡天 BE5100 千兆双频无线家用路由器 WiFi7
+拼多多此款目前活动售价204.9元，参与百亿补贴频道百亿加倍补优惠活动，下单1件，实付低至189.9元。如价格不对，先收藏一下产品，再进加倍补频道就更容易找到了！
+价格：189.9元  (69天新低)
+商家：[拼多多]
+值率：值: 24 不值: 0
+领券：[无需领券]
+------------------------------
+【https://p.pinduoduo.com/9plk2Mpi?sc=E</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
+        <div class="card-foot">
+          <span class="source">TG·真正值得买</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/zzzdm/388051" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/zzzdm/388051">https://t.me/zzzdm/388051</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="19"
+               data-ts="2026-10-23T21:19:00+08:00" data-text="移动的落袋为安 移动的落袋为安
+也别 10 张 5 张，就卖 3 张。深圳特别好卖，有 5 台都能卖出去，10 来个人问，都迫不及待。。。 
+赚到手才是钱，今天直营店排队体验，丐版预备起飞。祝各位好运 其他 tg·sakurako线报 今日新增 -限运营商">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">19</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sakurako0818/36322" target="_blank" rel="noopener">移动的落袋为安</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag warn">限运营商</span></div>
+        <p class="desc">移动的落袋为安
+也别 10 张 5 张，就卖 3 张。深圳特别好卖，有 5 台都能卖出去，10 来个人问，都迫不及待。。。 
+赚到手才是钱，今天直营店排队体验，丐版预备起飞。祝各位好运</p>
+        <div class="why"><i class="p">+20 今日新增</i><i class="n">−6 限运营商</i></div>
+        <div class="card-foot">
+          <span class="source">TG·SaKurako线报</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sakurako0818/36322" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sakurako0818/36322">https://t.me/sakurako0818/36322</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="15"
+               data-ts="2026-10-23T15:00:00+08:00" data-text="tds review｜oppo enco x4 降噪真无线耳机体验 放在欧加体系里，enco x4 显然是值得买的：它在千元档有着第一档的降噪综合能力且没有明显短板，有着手机厂产品里不错的素质和相对饱满、流行化但不过分两头翘的调音，同时操作和细节体验没有明显问题……&lt;a href=&quot;https://sspai.com/post/116398&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt; 其他 少数派 入口清晰 今日新增 -含推广">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">15</span>
+        </div>
+        <h3 class="title"><a href="https://sspai.com/post/116398" target="_blank" rel="noopener">TDS REVIEW｜OPPO Enco X4 降噪真无线耳机体验</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <p class="desc">放在欧加体系里，Enco X4 显然是值得买的：它在千元档有着第一档的降噪综合能力且没有明显短板，有着手机厂产品里不错的素质和相对饱满、流行化但不过分两头翘的调音，同时操作和细节体验没有明显问题……&lt;a href=&quot;https://sspai.com/post/116398&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt;</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i></div>
+        <div class="card-foot">
+          <span class="source">少数派</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://sspai.com/post/116398" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://sspai.com/post/116398">https://sspai.com/post/116398</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="15"
+               data-ts="2026-10-23T11:07:19+08:00" data-text="破与立：设计视角下的 iphone duo matrix首页推荐matrix是少数派的写作社区，我们主张分享真实的产品体验，有实用价值的经验与思考。我们会不定期挑选matrix最优质的文章，展示来自用户的最真实的体验和观点。文章代表作者个人观点 ...&lt;a href=&quot;https://sspai.com/post/116979&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt; 其他 少数派 入口清晰 今日新增 -含推广">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">15</span>
+        </div>
+        <h3 class="title"><a href="https://sspai.com/post/116979" target="_blank" rel="noopener">破与立：设计视角下的 iPhone Duo</a></h3>
+        <div class="tags"><span class="tag new">今日上新</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <p class="desc">Matrix首页推荐Matrix是少数派的写作社区，我们主张分享真实的产品体验，有实用价值的经验与思考。我们会不定期挑选Matrix最优质的文章，展示来自用户的最真实的体验和观点。文章代表作者个人观点 ...&lt;a href=&quot;https://sspai.com/post/116979&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt;</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i></div>
+        <div class="card-foot">
+          <span class="source">少数派</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://sspai.com/post/116979" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://sspai.com/post/116979">https://sspai.com/post/116979</span>
+        </div>
+      </article>
+      <article class="card"
+               data-cat="其他" data-score="15"
+               data-ts="2026-10-22T17:10:03+08:00" data-text="把 muse 装进 esp-mosaico：做一个没用的东西，证明 vibe coding 也在硬件领域快速成长 matrix首页推荐matrix是少数派的写作社区，我们主张分享真实的产品体验，有实用价值的经验与思考。我们会不定期挑选matrix最优质的文章，展示来自用户的最真实的体验和观点。文章代表作者个人观点 ...&lt;a href=&quot;https://sspai.com/post/115437&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt; 其他 少数派 入口清晰 今日新增 -含推广">
+        <div class="card-top">
+          <span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">15</span>
+        </div>
+        <h3 class="title"><a href="https://sspai.com/post/115437" target="_blank" rel="noopener">把 Muse 装进 ESP-Mosaico：做一个没用的东西，证明 Vibe Coding 也在硬件领域快速成长</a></h3>
+        <div class="tags"><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <p class="desc">Matrix首页推荐Matrix是少数派的写作社区，我们主张分享真实的产品体验，有实用价值的经验与思考。我们会不定期挑选Matrix最优质的文章，展示来自用户的最真实的体验和观点。文章代表作者个人观点 ...&lt;a href=&quot;https://sspai.com/post/115437&quot; target=&quot;_blank&quot;&gt;查看全文&lt;/a&gt;</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i></div>
+        <div class="card-foot">
+          <span class="source">少数派</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://sspai.com/post/115437" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://sspai.com/post/115437">https://sspai.com/post/115437</span>
+        </div>
+      </article></div>
+    </section>
+
+  <details class="hint">
+    <summary>说明 · 分数怎么来的 · 排除规则</summary>
+    <p>· <b>加分</b>：免费/可领 +25、入口清晰 +15、今日新增 +20、昨日 +12、永久/长期 +10、说明详细 +10（较短 +5）、官方域名 +8、生活类 +5。</p>
+    <p>· <b>减分</b>：含推广 −25、付费前置 −15、限地区 −12、偏教程 −10、满减门槛 −8、限银行卡/运营商 −6。分数只用于排序，不代表官方口径。</p>
+    <p>· <b>确定性</b>：确定 / 需满足条件（限地区·银行卡·号段·付费）/ 概率性。</p>
+    <p>· <b>排除</b>：交易帖、抽奖、新闻、讨论、无发放动作、已结束。点开下面按原因分类的清单（可点标题）核对是否误杀。</p>
+    <p>· <b>有效期</b>不做自动核验，写稿前务必点「打开原帖」确认库存与截止时间。</p>
+  </details>
+
+  <details class="hint">
+    <summary>已排除 164 条 · 点开核对是否误杀</summary>
+    <div class="exc-g"><h4>无发放动作 <b>（122）</b></h4><ul><li><a href="https://jike.info/topic/59336/开源项目的维护者领-6-个月-chatgpt-pro-价值-1200" target="_blank" rel="noopener">开源项目的维护者领 6 个月 ChatGPT Pro， 价值$1200</a></li><li><a href="https://jike.info/topic/59331/广州电信话费" target="_blank" rel="noopener">广州电信话费</a></li><li><a href="https://jike.info/topic/59323/60块630g海带魔法大流量套餐" target="_blank" rel="noopener">60块630G海带魔法大流量套餐</a></li><li><a href="https://www.dayanzai.me/ivycraft.html" target="_blank" rel="noopener">IvyCraft：把资料生成 PPT、信息图、视频、播客等多种内容</a></li><li><a href="https://www.dayanzai.me/alipay-benefits.html" target="_blank" rel="noopener">支付宝碰一碰，周五支付有礼活动来了~</a></li><li><a href="https://www.dayanzai.me/extramame.html" target="_blank" rel="noopener">想玩怀旧街机游戏？ExtraMAME 26.10 经典街机游戏模拟器你值得拥有</a></li><li><a href="https://www.dayanzai.me/calibre.html" target="_blank" rel="noopener">开源电子书管理软件 calibre 9.17.0 x64 中文官方版下载</a></li><li><a href="https://www.dayanzai.me/obsidian.html" target="_blank" rel="noopener">黑曜石 Markdown 笔记 Obsidian 1.14.5 x64 跨平台知识管理工具</a></li><li><a href="https://www.dayanzai.me/powershell.html" target="_blank" rel="noopener">Windows PowerShell 7.6.8 下载，安装，更新和简易使用指南</a></li><li><a href="https://www.appinn.com/worldtui/" target="_blank" rel="noopener">WorldTUI – 有人专门训练大模型演戏：你敲命令，它假装执行</a></li><li><a href="https://www.appinn.com/emudhra-certificate-smart-speaker-root/" target="_blank" rel="noopener">印度证书泄漏后，一台智能音箱被破解了</a></li><li><a href="https://sspai.com/post/117169" target="_blank" rel="noopener">本周看什么 | 最近值得一看的 12 部作品</a></li><li class="more">…还有 110 条，见当日 JSON</li></ul></div><div class="exc-g"><h4>新闻 <b>（18）</b></h4><ul><li><a href="https://www.appinn.com/linux-kernel-vulnerabilities-accidentally-disclosed/" target="_blank" rel="noopener">多个 Linux 内核高危漏洞疑似被误公开：最高评分 9.0，部分尚未修复</a></li><li><a href="https://www.appinn.com/chrome-sandbox-escape-cve-2026-113328/" target="_blank" rel="noopener">Chrome 曝沙箱逃逸漏洞：打开恶意网页可能导致电脑被入侵，请及时更新</a></li><li><a href="https://www.appinn.com/http3-header-accordions/" target="_blank" rel="noopener">HTTP/3 爆出严重漏洞：几百 KB 数据，就能让服务器卡死</a></li><li><a href="https://sspai.com/post/117104" target="_blank" rel="noopener">派早报：Insta360 发布 Insta360 Mic，Anthropic 推出 Claude Duet 等</a></li><li><a href="https://sspai.com/post/116923" target="_blank" rel="noopener">前瞻｜Apple 新品看点：MacBook 或将推出 OLED 触屏版本</a></li><li><a href="https://sspai.com/post/116953" target="_blank" rel="noopener">派早报：荣耀发布 WIN2 系列新品、Google 开源 TorchTPU 等</a></li><li><a href="https://www.nodeloc.com/t/topic/115177" target="_blank" rel="noopener">真掉价，Kimi 官方竟然亲自跑到 L 站发布 K3.1 Pro 了？？？</a></li><li><a href="https://www.landian.news/archives/127585.html" target="_blank" rel="noopener">亚马逊AWS部署的蜜罐在PHP2Shell漏洞公布前4天就记录到攻击尝试</a></li><li><a href="https://www.landian.news/archives/127583.html" target="_blank" rel="noopener">密码管理器1Password推出AI智能体登录功能 智能体提交申请由用户批准后登录网站</a></li><li><a href="https://www.landian.news/archives/127582.html" target="_blank" rel="noopener">日本游戏公司卡普空确认数据库泄露 涉及全球1177万条用户记录 包括各种敏感信息</a></li><li><a href="https://www.landian.news/archives/127581.html" target="_blank" rel="noopener">趋势科技不慎将多个未修复的Linux Kernel漏洞公开 疑似发邮件时出现操作失误</a></li><li><a href="https://www.landian.news/archives/127580.html" target="_blank" rel="noopener">浏览器公司宣布Arc浏览器将在2026年12月22日正式关停 用户需将数据迁移到其他浏览器</a></li><li class="more">…还有 6 条，见当日 JSON</li></ul></div><div class="exc-g"><h4>VPS/主机类 <b>（7）</b></h4><ul><li><a href="https://www.appinn.com/cloudcone-50p-26/" target="_blank" rel="noopener">CloudCone 再次开启50%赠送：充值 5.1 美元，送 2.55 美元</a></li><li><a href="https://www.nodeseek.com/post-1004839-1" target="_blank" rel="noopener">【送】有一只bagevm的hk 30.79年付的到期了~谁要自己续费 ns邮箱直接过给你~</a></li><li><a href="https://www.nodeseek.com/post-1004833-1" target="_blank" rel="noopener">wawo 补货了， 几分钟后没了。</a></li><li><a href="https://www.nodeseek.com/post-1004832-1" target="_blank" rel="noopener">+40收ciallo hk lite 首发六折 月付 年付都可</a></li><li><a href="https://www.nodeseek.com/post-1004831-1" target="_blank" rel="noopener">【NQ】HKCloudX 香港BGP优化带宽-200M</a></li><li><a href="https://www.nodeseek.com/post-1004828-1" target="_blank" rel="noopener">Ros 流量与应用审计</a></li><li><a href="https://www.nodeloc.com/t/topic/115132" target="_blank" rel="noopener">Heartbeat IT 🏷️ BLACK-FRIDAY-2025 SE 初体 🐔</a></li></ul></div><div class="exc-g"><h4>讨论帖 <b>（6）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1004836-1" target="_blank" rel="noopener">求推荐一台性价比建站机</a></li><li><a href="https://www.nodeloc.com/t/topic/115162" target="_blank" rel="noopener">有没有佬，分享个小火箭ID，借来用用</a></li><li><a href="https://www.nodeloc.com/t/topic/115144" target="_blank" rel="noopener">请问大家能用smailr邮箱注册gpt吗？</a></li><li><a href="https://t.me/linux_do_channel/544611" target="_blank" rel="noopener">anin 在 https://linux.do/t/topic/3067148/1 Qoder支持k3.1了 我试了一次 Blender建模 中发帖</a></li><li><a href="https://t.me/linux_do_channel/544613" target="_blank" rel="noopener">qian-o 在 https://linux.do/t/topic/3067163/1 这图标设计的。。。真的能表达操作吗？？？ 中发帖</a></li><li><a href="https://t.me/linux_do_channel/544616" target="_blank" rel="noopener">ErkkiErkkoFMF 在 https://linux.do/t/topic/3067174/1 Kimi K3.1 Pro番茄钟测试 中发帖</a></li></ul></div><div class="exc-g"><h4>抽奖/概率性 <b>（5）</b></h4><ul><li><a href="https://jike.info/topic/59339/10月20日中国移动灵犀口令是-霜降食秋梨" target="_blank" rel="noopener">10月20日中国移动灵犀口令是：霜降食秋梨</a></li><li><a href="https://jike.info/topic/59334/trae-1024-抽-100-万积分锦鲤-连续-6-天签到即可参与" target="_blank" rel="noopener">TRAE 1024 抽 100 万积分锦鲤：连续 6 天签到即可参与</a></li><li><a href="https://jike.info/topic/59332/周三部分羊毛" target="_blank" rel="noopener">周三部分羊毛</a></li><li><a href="https://t.me/sakurako0818/36329" target="_blank" rel="noopener">京东亲测5块红包随手试新的一天随手领京东红包每天的打卡得也记</a></li><li><a href="https://t.me/TossTF/3753" target="_blank" rel="noopener">🎁 https://b23.tv/r9hycjC Photocean × MT Photos https://b23.tv/r9hycjC 联合抽奖，送http</a></li></ul></div><div class="exc-g"><h4>交易帖 <b>（3）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1004844-1" target="_blank" rel="noopener">[出]总价80r Wawo 39/年 带v4</a></li><li><a href="https://www.nodeseek.com/post-1004835-1" target="_blank" rel="noopener">出Wawo-v6年付27机器</a></li><li><a href="https://www.nodeseek.com/post-1004829-1" target="_blank" rel="noopener">【收🐔】收一台bage lax 11.11/14.99/16.8</a></li></ul></div><div class="exc-g"><h4>往期未选 <b>（2）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1004845-1" target="_blank" rel="noopener">雷鸟免费送</a></li><li><a href="https://t.me/linux_do_channel/544628" target="_blank" rel="noopener">https://t.me/Onets @Onets 在 https://linux.do/t/topic/3067196/1 这Kimi套餐我怎么看不懂呢？越高</a></li></ul></div><div class="exc-g"><h4>已结束 <b>（1）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/114851" target="_blank" rel="noopener">[已开奖]抽三台辣鸡半年ulzix，美国28区</a></li></ul></div>
+  </details>
+
+  <footer class="footer">
+    来源：如有乐享、即刻·实时羊毛、V2EX free、爱吾线报、爱吾ii、大眼仔、反斗限免、小众软件、异次元软件、少数派、Reddit AppHookUp、NodeSeek、NodeLoc、NodeLoc福利、V2EX deals、挖站否、EpicBundle、Reddit FreeGameFindings、SharewareOnSale、Reddit freebies、TG·SaKurako线报、TG·真正值得买、TG·折腾App探索、TG·Sliverkiss、TG·LINUX DO、蓝点网<br>
+    只聚合公开信息，不保证福利仍有效；请自行甄别，勿泄露账号与人脸等敏感信息。
+  </footer>
+</div>
+<button class="fab" id="fab" type="button" title="返回顶部" aria-label="返回顶部" hidden>↑</button>
+<script>
+(() => {
+  const root = document.documentElement;
+  const tbtn = document.getElementById('theme');
+  // file:// 下部分浏览器会禁用 localStorage（opaque origin），直接访问会抛异常并
+  // 让后面的筛选/排序脚本一起挂掉。所以统一包一层容错，读不到就当没保存过。
+  const store = {
+    get() { try { return localStorage.getItem('wool-theme'); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem('wool-theme', v); } catch (e) {} }
+  };
+  const saved = store.get();
+  const apply = d => {
+    root.dataset.theme = d ? 'dark' : 'light';
+    tbtn.textContent = d ? '☀ 日间' : '☾ 夜间';
+  };
+  apply(saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
+  tbtn.addEventListener('click', () => {
+    const d = root.dataset.theme !== 'dark';
+    apply(d); store.set(d ? 'dark' : 'light');
+  });
+
+  const cards = [...document.querySelectorAll('.card')];
+  const groups = [...document.querySelectorAll('.group')];
+  const q = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const cats = [...document.querySelectorAll('.chip[data-cat]')];
+  const sorts = [...document.querySelectorAll('.chip[data-sort]')];
+  let cat = 'all', sort = 'score';
+
+  const refresh = () => {
+    const term = q.value.trim().toLowerCase();
+    cards.forEach(c => {
+      const okCat = cat === 'all' || c.dataset.cat === cat;
+      const okText = !term || c.dataset.text.includes(term);
+      c.hidden = !(okCat && okText);
+    });
+    groups.forEach(g => {
+      g.hidden = ![...g.querySelectorAll('.card')].some(c => !c.hidden);
+    });
+    countEl.textContent = `显示 ${cards.filter(c => !c.hidden).length} / ${cards.length} 条`;
+  };
+  q.addEventListener('input', refresh);
+  cats.forEach(ch => ch.addEventListener('click', () => {
+    cats.forEach(x => x.classList.toggle('active', x === ch));
+    cat = ch.dataset.cat; refresh();
+  }));
+  sorts.forEach(ch => ch.addEventListener('click', () => {
+    sorts.forEach(x => x.classList.toggle('active', x === ch));
+    sort = ch.dataset.sort;
+    document.querySelectorAll('.cards').forEach(box => {
+      [...box.children].sort((a, b) => sort === 'time'
+        ? String(b.dataset.ts || '').localeCompare(String(a.dataset.ts || ''))
+        : (Number(b.dataset.score) || 0) - (Number(a.dataset.score) || 0)
+      ).forEach(n => box.appendChild(n));
+    });
+  }));
+
+  const fab = document.getElementById('fab');
+  fab.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+  addEventListener('scroll', () => { fab.hidden = scrollY < 500; }, { passive: true });
+})();
+</script>
+</body></html>
