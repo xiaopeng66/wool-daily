@@ -62,6 +62,9 @@ a:hover{text-decoration:underline}
 .stat strong{display:block;font-size:26px;line-height:1.15;letter-spacing:-.02em}
 .stat span{display:block;color:var(--hint);font-size:12px;margin-top:2px}
 .stat.hl strong{color:var(--primary)}
+/* 「本次新增」格：绿色，和「条可写」的靛蓝区分开，一眼找到这次的新货 */
+.stat.hot strong{color:var(--good-fg)}
+.hl-num{color:var(--good-fg)}
 @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
 
 /* 筛选面板 */
@@ -101,6 +104,8 @@ html[data-theme=dark] .chip.active{color:#171d3a}
 .card:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--line));
   box-shadow:0 8px 24px rgba(25,45,80,.07)}
 .card[hidden]{display:none}
+/* 「本次新增」的卡片左边描一道绿线：滚动长列表时不用逐张看标签 */
+.card.is-new{box-shadow:inset 3px 0 0 var(--good-fg),0 3px 16px rgba(25,45,80,.035)}
 .pick-card{background:linear-gradient(180deg,var(--soft),var(--surface) 52%)}
 .card-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cat-badge{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--hover);
@@ -126,6 +131,10 @@ html[data-theme=dark] .pick-card .score{color:#171d3a}
 .tag.bad{background:var(--bad-bg);color:var(--bad-fg);border-color:var(--bad-bd)}
 .tag.new{background:var(--soft);color:var(--primary);
   border-color:color-mix(in srgb,var(--primary) 35%,var(--line));font-weight:700}
+/* 「今日首见」介于醒目与普通之间：今天第一次见，但上一轮已在榜 */
+.tag.new-soft{background:color-mix(in srgb,var(--soft) 55%,var(--surface));
+  color:color-mix(in srgb,var(--primary) 70%,var(--muted));
+  border-color:color-mix(in srgb,var(--primary) 20%,var(--line));font-weight:600}
 .tag.keep{background:var(--hover);color:var(--muted);font-weight:600}
 /* 摘要最多 3 行，超长截断：卡片高度不再被超长正文撑爆 */
 .desc{margin:0;color:var(--muted);font-size:12.8px;line-height:1.6;
@@ -183,19 +192,20 @@ html[data-theme=dark] .go{color:#171d3a}
   </header>
 
   <div class="hero" id="top">
-    <div class="eyebrow">30 源聚合 · 更新于 2026-10-24 21:21</div>
+    <div class="eyebrow">29 源聚合 · 更新于 2026-10-24 21:59</div>
     <h1>今天的羊毛，挑最值得写的。</h1>
-    <p>只做推荐，不代领。黄色标签是<b>有门槛</b>（限地区/银行卡/号段/满减），红色是<b>有风险</b>（含推广/概率性）；卡片上的绿/红小徽章是<b>分数构成</b>。</p>
+    <p><b class="hl-num">本次新增 1 条</b>（另有 23 条在榜续留，标「在榜续留」）。只做推荐，不代领。黄色标签是<b>有门槛</b>（限地区/银行卡/号段/满减），红色是<b>有风险</b>（含推广/概率性）；卡片上的绿/红小徽章是<b>分数构成</b>。</p>
   </div>
 
   <div class="stats">
-    <div class="stat hl"><strong>25</strong><span>条可写</span></div>
-    <div class="stat"><strong>285</strong><span>条已排除</span></div>
-    <div class="stat"><strong>310</strong><span>条线索（去重后）</span></div>
-    <div class="stat"><strong>30/32</strong><span>来源在线</span></div>
+    <div class="stat hl"><strong>24</strong><span>条可写</span></div>
+    <div class="stat hot"><strong>1</strong><span>本次新增</span></div>
+    <div class="stat"><strong>272</strong><span>条已排除</span></div>
+    <div class="stat"><strong>296</strong><span>条线索（去重后）</span></div>
+    <div class="stat"><strong>29/32</strong><span>来源在线</span></div>
   </div>
 
-  <div class="errbox">⚠️ 本期有来源抓取失败：<b>reddit-freebies、juemuren</b>，表中可能缺该来源的内容，下一轮会自动重试。</div>
+  <div class="errbox">⚠️ 本期有来源抓取失败：<b>reddit-fgf、reddit-deals、juemuren</b>，表中可能缺该来源的内容，下一轮会自动重试。</div>
   
 
   <section class="panel" aria-label="搜索与筛选">
@@ -203,13 +213,14 @@ html[data-theme=dark] .go{color:#171d3a}
       <input id="q" type="search" placeholder="搜索标题 / 摘要 / 标签（如：限地区）…" autocomplete="off">
     </label>
     <div class="filters"><span class="fname">类别</span>
-      <div class="chips"><button class="chip active" type="button" data-cat="all">全部</button><button class="chip" type="button" data-cat="生活羊毛">生活羊毛 2</button><button class="chip" type="button" data-cat="云资源">云资源 1</button><button class="chip" type="button" data-cat="AI 额度">AI 额度 14</button><button class="chip" type="button" data-cat="其他">其他 8</button></div></div>
+      <div class="chips"><button class="chip active" type="button" data-cat="all">全部</button><button class="chip" type="button" data-cat="生活羊毛">生活羊毛 2</button><button class="chip" type="button" data-cat="云资源">云资源 1</button><button class="chip" type="button" data-cat="AI 额度">AI 额度 13</button><button class="chip" type="button" data-cat="其他">其他 8</button></div></div>
     <div class="filters"><span class="fname">排序</span>
       <div class="chips">
         <button class="chip active" type="button" data-sort="score">分数优先</button>
         <button class="chip" type="button" data-sort="time">最新发布</button>
+        <button class="chip" type="button" id="only-new">只看本次新增 1</button>
       </div>
-      <span class="count" id="count">显示 25 / 25 条</span>
+      <span class="count" id="count">显示 24 / 24 条</span>
     </div>
   </section>
 
@@ -217,31 +228,9 @@ html[data-theme=dark] .go{color:#171d3a}
     <div class="group-head"><h2>🔥 今日优先</h2><div class="line"></div>
       <span class="portion">8 条 · 分数 Top 8（≥55 分的只有 4 条）</span></div>
     <div class="cards">
-      <article class="card pick-card"
+      <article class="card pick-card is-new"
                data-cat="AI 额度" data-score="65"
-               data-ts="2026-10-23T15:49:00+08:00" data-text="v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。 v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。
-https://v0.app/students https://v0.app/students
-?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 今日新增">
-        <div class="card-top">
-          <span class="cat-badge">✨ AI 额度</span>
-          <span class="conf ok">确定</span>
-          <span class="score">65</span>
-        </div>
-        <h3 class="title"><a href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
-        <p class="desc">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。
-https://v0.app/students https://v0.app/students
-?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
-        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
-        <div class="card-foot">
-          <span class="source">TG·Sliverkiss</span>
-          <span class="time">昨日</span>
-          <a class="go" href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">打开原帖 →</a>
-          <span class="urlline" title="https://t.me/sliverkiss_blog/981">https://t.me/sliverkiss_blog/981</span>
-        </div>
-      </article>
-      <article class="card pick-card"
-               data-cat="AI 额度" data-score="65"
+               data-new="1"
                data-ts="2026-10-23T14:03:00+08:00" data-text="讯飞星辰maas点击即送10亿token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。 讯飞星辰maas点击即送10亿token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。
 https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 今日新增">
@@ -251,7 +240,7 @@ https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
           <span class="score">65</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/980" target="_blank" rel="noopener">讯飞星辰MaaS点击即送10亿Token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <div class="tags"><span class="tag new">本次新增</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
         <p class="desc">讯飞星辰MaaS点击即送10亿Token额度，可调用相关大模型。模型实际版本存疑，但额度巨大且免费。
 https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
@@ -264,7 +253,32 @@ https://maas.xfyun.cn/overview https://maas.xfyun.cn/overview
         </div>
       </article>
       <article class="card pick-card"
+               data-cat="AI 额度" data-score="65"
+               data-new="0"
+               data-ts="2026-10-23T15:49:00+08:00" data-text="v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。 v0.app学生认证送$20，有效期一个月，能调claude和gpt全系列模型。
+https://v0.app/students https://v0.app/students
+?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。</a></h3>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">v0.app学生认证送$20，有效期一个月，能调Claude和GPT全系列模型。
+https://v0.app/students https://v0.app/students
+?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">昨日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/981" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/981">https://t.me/sliverkiss_blog/981</span>
+        </div>
+      </article>
+      <article class="card pick-card"
                data-cat="AI 额度" data-score="57"
+               data-new="0"
                data-ts="2026-10-22T13:01:00+08:00" data-text="qoder 白嫖 astra 模型 token，免费用户也能领。 qoder 白嫖 astra 模型 token，免费用户也能领。
 https://qoder.com/community-boost https://qoder.com/community-boost
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 入口清晰 昨日">
@@ -274,7 +288,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">57</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/977" target="_blank" rel="noopener">Qoder 白嫖 Astra 模型 Token，免费用户也能领。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
         <p class="desc">Qoder 白嫖 Astra 模型 Token，免费用户也能领。
 https://qoder.com/community-boost https://qoder.com/community-boost
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
@@ -288,6 +302,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card pick-card"
                data-cat="生活羊毛" data-score="55"
+               data-new="0"
                data-ts="2026-10-24T10:51:59+00:00" data-text="make专业版（pro）免费领 3 个月 无代码自动化神器，支持在可视化画布中轻松构建、连接各种 ai agent 及自动化业务工作流。 核心亮点 免费时长：3 个月 pro 订阅 门槛极低：无需绑定信用卡 / 银行卡 适用场景：api 串联、ai 自动化流程搭建、多平台数据同步 频道 领取步骤 5 个帖子 - 5 位参与者 阅读完整话题 生活羊毛 nodeloc 免费/可领 人人可用 今日新增">
         <div class="card-top">
           <span class="cat-badge">🧧 生活羊毛</span>
@@ -295,7 +310,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">55</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115273" target="_blank" rel="noopener">Make专业版（Pro）免费领 3 个月</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">无代码自动化神器，支持在可视化画布中轻松构建、连接各种 AI Agent 及自动化业务工作流。 核心亮点 免费时长：3 个月 Pro 订阅 门槛极低：无需绑定信用卡 / 银行卡 适用场景：API 串联、AI 自动化流程搭建、多平台数据同步 频道 领取步骤 5 个帖子 - 5 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -307,6 +322,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card pick-card"
                data-cat="其他" data-score="52"
+               data-new="0"
                data-ts="2026-10-22T18:02:00+08:00" data-text="元宝搜索一个月6k次，直到11月31日。 元宝搜索一个月6k次，直到11月31日。
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 其他 tg·sliverkiss 免费/可领 入口清晰 昨日">
         <div class="card-top">
@@ -315,7 +331,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">52</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/978" target="_blank" rel="noopener">元宝搜索一个月6k次，直到11月31日。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
         <p class="desc">元宝搜索一个月6k次，直到11月31日。
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+12 昨日</i></div>
@@ -328,6 +344,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card pick-card"
                data-cat="其他" data-score="50"
+               data-new="0"
                data-ts="2026-10-24T10:00:25+00:00" data-text="显卡一日一价：英伟达停产传闻搅动华强北，rtx 5090 被炒至 6 万元 &lt;p data-vmark=&quot;94f2&quot;&gt;it之家 10 月 24 日消息，虽然英伟达予以否认，但关于“rtx 5090 停产”的传闻正在华强北引发一轮价格异动。&lt;/p&gt;&lt;p data-vmark=&quot;3063&quot;&gt;据 21 财经今日报道，rtx 50 系列高端型号渠道报价“一日一价”，旗舰 rtx 5090 从官方初始零售价约 1.5 万至 1.6 万元，被炒至 5.5 万至 6 万元；rtx 5080 从初始售价约 8000 元涨至 1.7 万元。&lt;/p&gt;&lt;p data-vm 其他 it之家 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -335,7 +352,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://www.ithome.com/1/017/440.htm" target="_blank" rel="noopener">显卡一日一价：英伟达停产传闻搅动华强北，RTX 5090 被炒至 6 万元</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">&lt;p data-vmark=&quot;94f2&quot;&gt;IT之家 10 月 24 日消息，虽然英伟达予以否认，但关于“RTX 5090 停产”的传闻正在华强北引发一轮价格异动。&lt;/p&gt;&lt;p data-vmark=&quot;3063&quot;&gt;据 21 财经今日报道，RTX 50 系列高端型号渠道报价“一日一价”，旗舰 RTX 5090 从官方初始零售价约 1.5 万至 1.6 万元，被炒至 5.5 万至 6 万元；RTX 5080 从初始售价约 8000 元涨至 1.7 万元。&lt;/p&gt;&lt;p data-vm</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -347,6 +364,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card pick-card"
                data-cat="AI 额度" data-score="50"
+               data-new="0"
                data-ts="2026-10-23T15:17:06+00:00" data-text="赛博领鸡蛋：智谱 zcode 1024 程序员节免费送 5 亿 tokens｜现在领，周末用。 zcode 客户端登录可领，新用户也能用。glm-5.3 与 glm-5.3-flash 的 5 亿 tokens 礼包，10 月 23 日 23:00 生效，10 月 26 日 09:00 到期。 ai 额度 小众软件 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
@@ -354,7 +372,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://www.appinn.com/zcode-1024-free-500-million-tokens/" target="_blank" rel="noopener">赛博领鸡蛋：智谱 ZCode 1024 程序员节免费送 5 亿 Tokens｜现在领，周末用。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">ZCode 客户端登录可领，新用户也能用。GLM-5.3 与 GLM-5.3-Flash 的 5 亿 Tokens 礼包，10 月 23 日 23:00 生效，10 月 26 日 09:00 到期。</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -366,6 +384,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card pick-card"
                data-cat="AI 额度" data-score="50"
+               data-new="0"
                data-ts="2026-10-23T16:34:00+08:00" data-text="amp 给 chatgpt 登录用户送了 1 个月会员和额外额度，直接白嫖。 amp 给 chatgpt 登录用户送了 1 个月会员和额外额度，直接白嫖。
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 今日新增">
         <div class="card-top">
@@ -374,7 +393,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/982" target="_blank" rel="noopener">Amp 给 ChatGPT 登录用户送了 1 个月会员和额外额度，直接白嫖。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">Amp 给 ChatGPT 登录用户送了 1 个月会员和额外额度，直接白嫖。
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
@@ -394,6 +413,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       <div class="cards">
       <article class="card"
                data-cat="生活羊毛" data-score="20"
+               data-new="0"
                data-ts="2026-10-22T23:54:48+00:00" data-text="百度网盘svip，签到就能领 百度网盘最近有个“库库ai”活动，不用拉人、不用花钱，纯网页签到就能拿到几天svip会员。活动还剩43天，想薅的趁早。 一、活动怎么玩 进入活动页面登录后，每天点一下签到就行，不需... 生活羊毛 爱吾线报 人人可用 今日新增 -偏教程">
         <div class="card-top">
           <span class="cat-badge">🧧 生活羊毛</span>
@@ -401,7 +421,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">20</span>
         </div>
         <h3 class="title"><a href="https://25xianbao.com/archives/29373" target="_blank" rel="noopener">百度网盘SVIP，签到就能领</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span></div>
         <p class="desc">百度网盘最近有个“库库AI”活动，不用拉人、不用花钱，纯网页签到就能拿到几天SVIP会员。活动还剩43天，想薅的趁早。 一、活动怎么玩 进入活动页面登录后，每天点一下签到就行，不需...</p>
         <div class="why"><i class="p">+5 人人可用</i><i class="p">+20 今日新增</i><i class="n">−10 偏教程</i></div>
         <div class="card-foot">
@@ -418,6 +438,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       <div class="cards">
       <article class="card"
                data-cat="云资源" data-score="28"
+               data-new="0"
                data-ts="2026-10-24T06:41:22+00:00" data-text="1024腾讯轻量云秒杀 cloud.tencent.com 轻量云社群限量秒杀 轻量云社群限量秒杀 298一年的，感觉还不错。 7 个帖子 - 4 位参与者 阅读完整话题 云资源 nodeloc 官方域名 今日新增">
         <div class="card-top">
           <span class="cat-badge">☁️ 云资源</span>
@@ -425,7 +446,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">28</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115236" target="_blank" rel="noopener">1024腾讯轻量云秒杀</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">官方域名</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">官方域名</span></div>
         <p class="desc">cloud.tencent.com 轻量云社群限量秒杀 轻量云社群限量秒杀 298一年的，感觉还不错。 7 个帖子 - 4 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+8 官方域名</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -438,10 +459,11 @@ https://qoder.com/community-boost https://qoder.com/community-boost
     </section>
     <section class="group" data-key="AI 额度">
       <div class="group-head"><h2>✨ AI 额度</h2><div class="line"></div>
-        <span class="portion">9 条 · 另有 5 条在「今日优先」</span></div>
+        <span class="portion">8 条 · 另有 5 条在「今日优先」</span></div>
       <div class="cards">
       <article class="card"
                data-cat="AI 额度" data-score="50"
+               data-new="0"
                data-ts="2026-10-23T20:32:00+08:00" data-text="智谱送5亿token，包括3亿glm-5.3-flash和2亿glm-5.3，先到先得。 智谱送5亿token，包括3亿glm-5.3-flash和2亿glm-5.3，先到先得。
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 今日新增">
         <div class="card-top">
@@ -450,7 +472,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/984" target="_blank" rel="noopener">智谱送5亿token，包括3亿GLM-5.3-Flash和2亿GLM-5.3，先到先得。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">智谱送5亿token，包括3亿GLM-5.3-Flash和2亿GLM-5.3，先到先得。
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
@@ -463,6 +485,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="45"
+               data-new="0"
                data-ts="2026-10-23T20:03:00+08:00" data-text="zcode白嫖5亿token，可以用glm-5.3模型 zcode白嫖5亿token，可以用glm-5.3模型 ai 额度 tg·sliverkiss 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
@@ -470,7 +493,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">45</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/983" target="_blank" rel="noopener">zcode白嫖5亿token，可以用glm-5.3模型</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">zcode白嫖5亿token，可以用glm-5.3模型</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -482,6 +505,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="45"
+               data-new="0"
                data-ts="2026-10-23T12:32:00+08:00" data-text="登录chatgpt网页端，右上角直接领1个月plus会员，白嫖gpt模型。 登录chatgpt网页端，右上角直接领1个月plus会员，白嫖gpt模型。
 ?q=%23ai #ai ?q=%23%e7%99%bd%e5%ab%96 #白嫖 ai 额度 tg·sliverkiss 免费/可领 今日新增">
         <div class="card-top">
@@ -490,7 +514,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">45</span>
         </div>
         <h3 class="title"><a href="https://t.me/sliverkiss_blog/979" target="_blank" rel="noopener">登录ChatGPT网页端，右上角直接领1个月Plus会员，白嫖GPT模型。</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">登录ChatGPT网页端，右上角直接领1个月Plus会员，白嫖GPT模型。
 ?q=%23ai #ai ?q=%23%E7%99%BD%E5%AB%96 #白嫖</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
@@ -502,35 +526,17 @@ https://qoder.com/community-boost https://qoder.com/community-boost
         </div>
       </article>
       <article class="card"
-               data-cat="AI 额度" data-score="39"
-               data-ts="2026-10-24T13:19:03+00:00" data-text="这个免费一个月的chatgpt的plus，国内卡能开通吗？ 建行的master卡能行吗？ ai 额度 nodeseek 免费/可领 今日新增 -限银行卡">
-        <div class="card-top">
-          <span class="cat-badge">✨ AI 额度</span>
-          <span class="conf warn">需满足条件</span>
-          <span class="score">39</span>
-        </div>
-        <h3 class="title"><a href="https://www.nodeseek.com/post-1006306-1" target="_blank" rel="noopener">这个免费一个月的ChatGPT的plus，国内卡能开通吗？</a></h3>
-        <div class="tags"><span class="tag new">今日新线索</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag warn">限银行卡</span></div>
-        <p class="desc">建行的master卡能行吗？</p>
-        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i><i class="n">−6 限银行卡</i></div>
-        <div class="card-foot">
-          <span class="source">NodeSeek</span>
-          <span class="time">今日</span>
-          <a class="go" href="https://www.nodeseek.com/post-1006306-1" target="_blank" rel="noopener">打开原帖 →</a>
-          <span class="urlline" title="https://www.nodeseek.com/post-1006306-1">https://www.nodeseek.com/post-1006306-1</span>
-        </div>
-      </article>
-      <article class="card"
                data-cat="AI 额度" data-score="30"
-               data-ts="2026-10-24T12:23:45+00:00" data-text="免费用opus5.5 免费获取oxion ai pro，包含32 个ai 模型解锁对高级模型的访问权限，例如- gpt-6.1 sol opus 5.5 fable 5 kimi k3 以及更多如何领取- 访问 [ https://oxionai.com/?ref=ccuyvwhu ) 选择pro 计划- 输入代码devweek 趁着优惠活动还在，领取您的免费pro 访问权限 9 个帖子 - 8 位参与者 阅读完整话题 ai 额度 nodeloc 免费/可领 入口清晰 今日新增 -含推广 -偏教程">
+               data-new="0"
+               data-ts="2026-10-24T12:23:45+00:00" data-text="免费用opus5.5 免费获取oxion ai pro，包含32 个ai 模型解锁对高级模型的访问权限，例如- gpt-6.1 sol opus 5.5 fable 5 kimi k3 以及更多如何领取- 访问 [ https://oxionai.com/?ref=ccuyvwhu ) 选择pro 计划- 输入代码devweek 趁着优惠活动还在，领取您的免费pro 访问权限 15 个帖子 - 14 位参与者 阅读完整话题 ai 额度 nodeloc 免费/可领 入口清晰 今日新增 -含推广 -偏教程">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
           <span class="conf ok">确定</span>
           <span class="score">30</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115286" target="_blank" rel="noopener">免费用opus5.5</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
-        <p class="desc">免费获取OXION AI PRO，包含32 个AI 模型解锁对高级模型的访问权限，例如- gpt-6.1 sol opus 5.5 fable 5 kimi k3 以及更多如何领取- 访问 [ https://oxionai.com/?ref=CCUYVWHU ) 选择Pro 计划- 输入代码DEVWEEK 趁着优惠活动还在，领取您的免费Pro 访问权限 9 个帖子 - 8 位参与者 阅读完整话题</p>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <p class="desc">免费获取OXION AI PRO，包含32 个AI 模型解锁对高级模型的访问权限，例如- gpt-6.1 sol opus 5.5 fable 5 kimi k3 以及更多如何领取- 访问 [ https://oxionai.com/?ref=CCUYVWHU ) 选择Pro 计划- 输入代码DEVWEEK 趁着优惠活动还在，领取您的免费Pro 访问权限 15 个帖子 - 14 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i><i class="n">−10 偏教程</i></div>
         <div class="card-foot">
           <span class="source">NodeLoc</span>
@@ -541,15 +547,16 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="25"
-               data-ts="2026-10-24T06:56:18+00:00" data-text="1024程序员节！发1024能量 这是一份神秘的兑换码 共一百份，每份10.24能量 尽管目前无法使用部分模型（请耐心等待 ） 但是chatgpt新渠道是可用的 兑换地址 tokentokenbond · ai api 网关 42 个帖子 - 41 位参与者 阅读完整话题 ai 额度 nodeloc 今日新增">
+               data-new="0"
+               data-ts="2026-10-24T06:56:18+00:00" data-text="1024程序员节！发1024能量 这是一份神秘的兑换码 共一百份，每份10.24能量 尽管目前无法使用部分模型（请耐心等待 ） 但是chatgpt新渠道是可用的 兑换地址 tokentokenbond · ai api 网关 43 个帖子 - 42 位参与者 阅读完整话题 ai 额度 nodeloc 今日新增">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
           <span class="conf ok">确定</span>
           <span class="score">25</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115238" target="_blank" rel="noopener">1024程序员节！发1024能量</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span></div>
-        <p class="desc">这是一份神秘的兑换码 共一百份，每份10.24能量 尽管目前无法使用部分模型（请耐心等待 ） 但是chatgpt新渠道是可用的 兑换地址 TokenTokenBond · AI API 网关 42 个帖子 - 41 位参与者 阅读完整话题</p>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span></div>
+        <p class="desc">这是一份神秘的兑换码 共一百份，每份10.24能量 尽管目前无法使用部分模型（请耐心等待 ） 但是chatgpt新渠道是可用的 兑换地址 TokenTokenBond · AI API 网关 43 个帖子 - 42 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
           <span class="source">NodeLoc</span>
@@ -560,6 +567,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="25"
+               data-new="0"
                data-ts="2026-10-24T09:19:15+00:00" data-text="【pdnl公益站】开放白银注册 另外祝大家1024程序员节日快乐（兑换码已无） 精简了模型 还是和主贴一样 目前只供应gpt和国模渠道 应该不会有太大幅度涨价了 公益站点维护不易 希望各位合理使用资源 谢谢大家 用量也突破了100亿 这里放点兑换码 （50个5块） 拿到的请说一声 避免后来人兑换失败 34 个帖子 - 33 位参与者 阅读完整话题 ai 额度 nodeloc 今日新增">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
@@ -567,7 +575,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">25</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115261" target="_blank" rel="noopener">【pdnl公益站】开放白银注册 另外祝大家1024程序员节日快乐（兑换码已无）</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span></div>
         <p class="desc">精简了模型 还是和主贴一样 目前只供应gpt和国模渠道 应该不会有太大幅度涨价了 公益站点维护不易 希望各位合理使用资源 谢谢大家 用量也突破了100亿 这里放点兑换码 （50个5块） 拿到的请说一声 避免后来人兑换失败 34 个帖子 - 33 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -579,6 +587,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="15"
+               data-new="0"
                data-ts="2026-10-24T09:16:32+00:00" data-text="开发者成功为小米 8 手机刷入苹果 ios 16.5 系统，将机型伪装为 iphone x &lt;p data-vmark=&quot;99ee&quot;&gt;it之家 10 月 24 日消息，随着 ai 技术突飞猛进，许多开发者在大模型辅助加持之下对各种老旧机型进行折腾，先前便有&lt;a href=&quot;https://www.ithome.com/1/014/838.htm&quot; target=&quot;_blank&quot;&gt;开发者为小米 redmi note 12 4g 手机刷入 ios 系统，并开源了项目&lt;/a&gt;。&lt;/p&gt;&lt;p data-vmark=&quot;f079&quot;&gt;it之家注意到，目前又有开发者 yanei 发 ai 额度 it之家 入口清晰 今日新增 -含推广">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
@@ -586,7 +595,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">15</span>
         </div>
         <h3 class="title"><a href="https://www.ithome.com/1/017/429.htm" target="_blank" rel="noopener">开发者成功为小米 8 手机刷入苹果 iOS 16.5 系统，将机型伪装为 iPhone X</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">入口清晰</span><span class="tag bad">含推广/邀请</span></div>
         <p class="desc">&lt;p data-vmark=&quot;99ee&quot;&gt;IT之家 10 月 24 日消息，随着 AI 技术突飞猛进，许多开发者在大模型辅助加持之下对各种老旧机型进行折腾，先前便有&lt;a href=&quot;https://www.ithome.com/1/014/838.htm&quot; target=&quot;_blank&quot;&gt;开发者为小米 Redmi Note 12 4G 手机刷入 iOS 系统，并开源了项目&lt;/a&gt;。&lt;/p&gt;&lt;p data-vmark=&quot;f079&quot;&gt;IT之家注意到，目前又有开发者 Yanei 发</p>
         <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i><i class="n">−25 含推广</i></div>
         <div class="card-foot">
@@ -598,6 +607,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="AI 额度" data-score="15"
+               data-new="0"
                data-ts="2026-10-24T08:25:40+00:00" data-text="询问gpt team优惠码使用方式 有人知道那个gpt team优惠码怎么用吗，直接买了在他们提供的网站提长链然后用bybit卡支付就行吗，之前买过一次优惠码，以为万事达卡可以付款，结果不行，直接浪费了十几块，而且为什么说是这个价格，进去之后发现埃及的所有地区都有税 3 个帖子 - 2 位参与者 阅读完整话题 ai 额度 nodeloc 今日新增 -偏教程">
         <div class="card-top">
           <span class="cat-badge">✨ AI 额度</span>
@@ -605,7 +615,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">15</span>
         </div>
         <h3 class="title"><a href="https://www.nodeloc.com/t/topic/115248" target="_blank" rel="noopener">询问gpt team优惠码使用方式</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span></div>
         <p class="desc">有人知道那个gpt team优惠码怎么用吗，直接买了在他们提供的网站提长链然后用bybit卡支付就行吗，之前买过一次优惠码，以为万事达卡可以付款，结果不行，直接浪费了十几块，而且为什么说是这个价格，进去之后发现埃及的所有地区都有税 3 个帖子 - 2 位参与者 阅读完整话题</p>
         <div class="why"><i class="p">+20 今日新增</i><i class="n">−10 偏教程</i></div>
         <div class="card-foot">
@@ -622,6 +632,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       <div class="cards">
       <article class="card"
                data-cat="其他" data-score="50"
+               data-new="0"
                data-ts="2026-10-23T03:55:23+00:00" data-text="pdfcraft，开源pdf工作台，支持压缩pdf功能 软件名称 pdfcraft 一句简介 开源pdf工作台，用 rust 从零开始编写的快速原生应用程序中读取、组织、合并、拆分和加密 pdf。无需账户，无需遥测，无需云服务。 应用平台 windows、macos、linux 推荐类型 【网友发现】 是否收费 免费 应用简介 最近我需要pdf压缩功能， 其他 小众软件 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -629,7 +640,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://meta.appinn.net/t/topic/94258" target="_blank" rel="noopener">PdfCraft，开源PDF工作台，支持压缩PDF功能</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">软件名称 PdfCraft 一句简介 开源PDF工作台，用 Rust 从零开始编写的快速原生应用程序中读取、组织、合并、拆分和加密 PDF。无需账户，无需遥测，无需云服务。 应用平台 Windows、MacOS、Linux 推荐类型 【网友发现】 是否收费 免费 应用简介 最近我需要PDF压缩功能，</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -641,6 +652,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="其他" data-score="50"
+               data-new="0"
                data-ts="2026-10-23T07:34:54+00:00" data-text="本周赛博领鸡蛋（10.23~10.29）：《斯盖尔仪式》《归家》 本周赛博领鸡蛋 epic 送出 2 款游戏：电脑端可领取 2 款，分别为《斯盖尔仪式 / sker ritual》、《归家 / home – a unique horror adventure》；手机端可领取 1 款，分别为《归家 / home – a unique horr 其他 小众软件 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -648,7 +660,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">50</span>
         </div>
         <h3 class="title"><a href="https://www.appinn.com/eggs-261023/" target="_blank" rel="noopener">本周赛博领鸡蛋（10.23~10.29）：《斯盖尔仪式》《归家》</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span></div>
         <p class="desc">本周赛博领鸡蛋 Epic 送出 2 款游戏：电脑端可领取 2 款，分别为《斯盖尔仪式 / Sker Ritual》、《归家 / Home – A Unique Horror Adventure》；手机端可领取 1 款，分别为《归家 / Home – A Unique Horr</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -660,6 +672,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="其他" data-score="45"
+               data-new="0"
                data-ts="2026-10-23T16:20:00+00:00" data-text="免费录像工具 icecream screen recorder 7.49 x64 中文免费版 icecream screen recorder 中文版 免费录像工具由大眼仔旭与 icecream 开发团队 […] 其他 大眼仔 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -667,7 +680,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">45</span>
         </div>
         <h3 class="title"><a href="https://www.dayanzai.me/icecream-screen-recorder.html" target="_blank" rel="noopener">免费录像工具 IceCream Screen Recorder 7.49 x64 中文免费版</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">IceCream Screen Recorder 中文版 免费录像工具由大眼仔旭与 IceCream 开发团队 […]</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -679,6 +692,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="其他" data-score="45"
+               data-new="0"
                data-ts="2026-10-23T16:35:22+00:00" data-text="开源vfx、动画与图形专业审阅工具 mrv2 v1.8.4 中文免费版 mrv2 是一款开源的专业播放器和审阅工具，专为视觉特效（vfx）、动画以及计算机图形设计行业打造。它不仅继承 […] 其他 大眼仔 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -686,7 +700,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">45</span>
         </div>
         <h3 class="title"><a href="https://www.dayanzai.me/mrv2.html" target="_blank" rel="noopener">开源VFX、动画与图形专业审阅工具 mrv2 v1.8.4 中文免费版</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">mrv2 是一款开源的专业播放器和审阅工具，专为视觉特效（VFX）、动画以及计算机图形设计行业打造。它不仅继承 […]</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -698,6 +712,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="其他" data-score="45"
+               data-new="0"
                data-ts="2026-10-24T03:21:11+00:00" data-text="限时免费获取 steam 游戏 maze art: purple[windows] maze art: purple 是一款极简迷宫游戏，配有轻松的音乐。玩家控制球，球必须找到通往传送门的出口。 其他 反斗限免 免费/可领 今日新增">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -705,7 +720,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">45</span>
         </div>
         <h3 class="title"><a href="https://free.apprcn.com/limited-time-get-steam-game-maze-art-purple-for-free/" target="_blank" rel="noopener">限时免费获取 Steam 游戏 Maze Art: Purple[Windows]</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
         <p class="desc">Maze Art: Purple 是一款极简迷宫游戏，配有轻松的音乐。玩家控制球，球必须找到通往传送门的出口。</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
         <div class="card-foot">
@@ -717,6 +732,7 @@ https://qoder.com/community-boost https://qoder.com/community-boost
       </article>
       <article class="card"
                data-cat="其他" data-score="35"
+               data-new="0"
                data-ts="2026-10-23T13:37:51+00:00" data-text="限时免费获取 steam 游戏 radiant exodus[windows] radiant exodus 是一款第一人称射击游戏，一个安静的夜晚变成了恐怖，奇异的光芒充满了天空，光辉城崩塌。扮演莎拉，一名为生存而战的退伍军人，寻找失踪的父亲，面对世界本不该看到的真相。开发者表示游戏将于 11 月 17 日转为付费，现在就赶紧先免费入库吧。 其他 反斗限免 免费/可领 今日新增 -付费前置">
         <div class="card-top">
           <span class="cat-badge">📦 其他</span>
@@ -724,12 +740,12 @@ https://qoder.com/community-boost https://qoder.com/community-boost
           <span class="score">35</span>
         </div>
         <h3 class="title"><a href="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/" target="_blank" rel="noopener">限时免费获取 Steam 游戏 Radiant Exodus[Windows]</a></h3>
-        <div class="tags"><span class="tag keep">今日在榜</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag warn">付费前置</span></div>
+        <div class="tags"><span class="tag keep">在榜续留</span><span class="tag good">免费/可领</span><span class="tag warn">付费前置</span></div>
         <p class="desc">Radiant Exodus 是一款第一人称射击游戏，一个安静的夜晚变成了恐怖，奇异的光芒充满了天空，光辉城崩塌。扮演莎拉，一名为生存而战的退伍军人，寻找失踪的父亲，面对世界本不该看到的真相。开发者表示游戏将于 11 月 17 日转为付费，现在就赶紧先免费入库吧。</p>
         <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i><i class="n">−15 付费前置</i></div>
         <div class="card-foot">
           <span class="source">反斗限免</span>
-          <span class="time">今日</span>
+          <span class="time">昨日</span>
           <a class="go" href="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/" target="_blank" rel="noopener">打开原帖 →</a>
           <span class="urlline" title="https://free.apprcn.com/limited-time-get-steam-game-radiant-exodus-for-free/">https://free.apprcn.com/limited-time-get-steam-game-radiant-e…</span>
         </div>
@@ -746,14 +762,14 @@ https://qoder.com/community-boost https://qoder.com/community-boost
   </details>
 
   <details class="hint">
-    <summary>已排除 285 条 · 点开核对是否误杀</summary>
-    <div class="exc-g"><h4>非科技·无科技特征 <b>（75）</b></h4><ul><li><a href="https://jike.info/topic/59371/workbuddy-轻松过教师认证-可领积分" target="_blank" rel="noopener">Workbuddy 轻松过教师认证，可领积分</a></li><li><a href="https://25xianbao.com/archives/29378" target="_blank" rel="noopener">4299拿下Mac Mini，靠的是不停刷店铺</a></li><li><a href="https://sspai.com/post/116128" target="_blank" rel="noopener">在硅谷，遇见个人计算机历史</a></li><li><a href="https://sspai.com/post/116979" target="_blank" rel="noopener">破与立：设计视角下的 iPhone Duo</a></li><li><a href="https://sspai.com/post/115437" target="_blank" rel="noopener">把 Muse 装进 ESP-Mosaico：做一个没用的东西，证明 Vibe Coding 也在硬件领域快速成长</a></li><li><a href="https://sspai.com/post/115090" target="_blank" rel="noopener">终于吃到了那颗梦寐以求的小药丸：我的 ADHD 诊疗记</a></li><li><a href="https://www.nodeseek.com/post-1006317-1" target="_blank" rel="noopener">stash for mac拼车。28/人，差3人 年付</a></li><li><a href="https://www.nodeseek.com/post-1006310-1" target="_blank" rel="noopener">谷歌送中有人试过 IP-Sentinel 吗？</a></li><li><a href="https://www.nodeseek.com/post-1006309-1" target="_blank" rel="noopener">也算是当了一回赛博奴隶主</a></li><li><a href="https://www.nodeseek.com/post-1006307-1" target="_blank" rel="noopener">在线求一个 VPS 剩余价值计算器</a></li><li><a href="https://www.nodeloc.com/t/topic/115283" target="_blank" rel="noopener">抽一个+1 纸飞机带Premium</a></li><li><a href="https://www.nodeloc.com/t/topic/115281" target="_blank" rel="noopener">James又改论坛</a></li><li class="more">…还有 63 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>无发放动作 <b>（48）</b></h4><ul><li><a href="https://www.dayanzai.me/ivycraft.html" target="_blank" rel="noopener">IvyCraft：把资料生成 PPT、信息图、视频、播客等多种内容</a></li><li><a href="https://www.appinn.com/nvidia-gpu-ai-compute-unlock/" target="_blank" rel="noopener">英伟达显卡的 AI 算力被人为限制了？有人成功解锁，性能接近翻倍</a></li><li><a href="https://www.appinn.com/worldtui/" target="_blank" rel="noopener">WorldTUI – 有人专门训练大模型演戏：你敲命令，它假装执行</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xcl88x/multi_home_a_unique_horror_adventure_ca569_free_a/" target="_blank" rel="noopener">[MULTI] [Home - A Unique Horror Adventure] [CA$5.69 → Free] [A murder mystery with a twist – because you decide what ultimately happens in a beautifully-realized pixel world]</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xcl9pf/windows_sker_ritual_ca2899_free_4_player_coop/" target="_blank" rel="noopener">[Windows] [Sker Ritual] [CA$28.99 → Free] [4 Player co-op survival FPS and spin-off to the award-winning British horror, Maid of Sker]</a></li><li><a href="https://www.nodeseek.com/post-1006313-1" target="_blank" rel="noopener">发一个推特第三方软件Chuckle的车</a></li><li><a href="https://www.nodeseek.com/post-1006304-1" target="_blank" rel="noopener">opencode 是开他的订阅呢还是接自己api</a></li><li><a href="https://www.nodeseek.com/post-1006303-1" target="_blank" rel="noopener">gpt定时任务设置几点才能最大限度使用5小时额度</a></li><li><a href="https://www.nodeseek.com/post-1006302-1" target="_blank" rel="noopener">chatgpt team 一个月 50/位 (月抛)</a></li><li><a href="https://www.nodeseek.com/post-1006301-1" target="_blank" rel="noopener">有哪些pay as you go 的idc？</a></li><li><a href="https://www.nodeseek.com/post-1006300-1" target="_blank" rel="noopener">现在还有哪些便宜好用的gemini jio渠道</a></li><li><a href="https://www.nodeloc.com/t/topic/115287" target="_blank" rel="noopener">ai pro区别</a></li><li class="more">…还有 36 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·科技资讯 <b>（39）</b></h4><ul><li><a href="https://www.dayanzai.me/transmission.html" target="_blank" rel="noopener">开源 BT 客户端 Transmission 4.1.4 + x64 中文多语免费版</a></li><li><a href="https://www.dayanzai.me/obs-studio.html" target="_blank" rel="noopener">开源免费在线直播工具 OBS Studio 33.0.0 x64 中文版下载</a></li><li><a href="https://www.dayanzai.me/trilium-notes.html" target="_blank" rel="noopener">免费开源笔记应用程序 Trilium Notes 0.106.1 x64 官方中文免费版</a></li><li><a href="https://www.dayanzai.me/visual-studio-code.html" target="_blank" rel="noopener">微软开源免费代码编辑器 Visual Studio Code 1.143.1 + x64 中文免费版</a></li><li><a href="https://www.dayanzai.me/biniware-run.html" target="_blank" rel="noopener">Windows 应用快速启动工具 Biniware Run 7.9.0.0 中文多语免费版</a></li><li><a href="https://www.dayanzai.me/ebook-reader.html" target="_blank" rel="noopener">电子书阅读器 IceCream Ebook Reader Pro 6.57 中文多语免费版</a></li><li><a href="https://free.apprcn.com/ashampoo-face-blur-6/" target="_blank" rel="noopener">Ashampoo Face Blur - 照片脸部自动识别遮罩[终身授权][Windows][$22→0]</a></li><li><a href="https://www.appinn.com/strata-0-2-4-deepseek-v4-1-flashterminal-0-2-4-1/" target="_blank" rel="noopener">Strata 0.2.4 更新：12GB 显卡运行 DeepSeek V4.1-Flash</a></li><li><a href="https://www.appinn.com/strata-0-2-3/" target="_blank" rel="noopener">Strata 0.2.3 更新：聊天太长？现在会自动压缩了</a></li><li><a href="https://sspai.com/post/117169" target="_blank" rel="noopener">本周看什么 | 最近值得一看的 12 部作品</a></li><li><a href="https://sspai.com/post/116398" target="_blank" rel="noopener">TDS REVIEW｜OPPO Enco X4 降噪真无线耳机体验</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xdo33y/ios_three_routes_run_walk_2999_lifetime_pro_free/" target="_blank" rel="noopener">[iOS] [Three Routes: Run &amp; Walk] [$29.99 -&gt; Lifetime Pro FREE] [Running &amp; walking route planner, Apple Watch, GPX export]</a></li><li class="more">…还有 27 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>新闻 <b>（34）</b></h4><ul><li><a href="https://www.dayanzai.me/kali-linux.html" target="_blank" rel="noopener">开源渗透测试平台 Kali Linux 2026.3 + x64 官方原版镜像发布</a></li><li><a href="https://www.appinn.com/linux-kernel-vulnerabilities-accidentally-disclosed/" target="_blank" rel="noopener">多个 Linux 内核高危漏洞疑似被误公开：最高评分 9.0，部分尚未修复</a></li><li><a href="https://www.appinn.com/chrome-sandbox-escape-cve-2026-113328/" target="_blank" rel="noopener">Chrome 曝沙箱逃逸漏洞：打开恶意网页可能导致电脑被入侵，请及时更新</a></li><li><a href="https://sspai.com/post/117104" target="_blank" rel="noopener">派早报：Insta360 发布 Insta360 Mic，Anthropic 推出 Claude Duet 等</a></li><li><a href="https://sspai.com/post/116923" target="_blank" rel="noopener">前瞻｜Apple 新品看点：MacBook 或将推出 OLED 触屏版本</a></li><li><a href="https://sspai.com/post/116953" target="_blank" rel="noopener">派早报：荣耀发布 WIN2 系列新品、Google 开源 TorchTPU 等</a></li><li><a href="https://www.nodeloc.com/t/topic/115268" target="_blank" rel="noopener">Memoh免费的VPS和ai，说说使用情况吧。ai我没怎么用，多数在研究vps，还直接给他们官方发邮件了。</a></li><li><a href="https://www.ithome.com/1/017/503.htm" target="_blank" rel="noopener">利民推出 LEVITA VISION 360 ARGB V2 悠浮视界水冷散热器：磁吸悬浮裸眼 3D 曲面屏，949 元起</a></li><li><a href="https://www.ithome.com/1/017/499.htm" target="_blank" rel="noopener">爱国者推出星璨大岚智能中控机箱：配 6.5 英寸触摸屏，黑白双色均售 599 元</a></li><li><a href="https://www.ithome.com/1/017/498.htm" target="_blank" rel="noopener">小米推出 24.5 英寸 REDMI 显示器 G25 2027：1080p 300Hz，799 元</a></li><li><a href="https://www.ithome.com/1/017/496.htm" target="_blank" rel="noopener">达音科推出 PRS 5“1 圈 3 铁 1 平板五单元”Hi-Fi 耳机，999 元</a></li><li><a href="https://www.ithome.com/1/017/492.htm" target="_blank" rel="noopener">倍思为苹果 iPhone Duo 推出卡片磁吸 Air 移动电源：7.5W 无线 +25W 有线，5000mAh 售 374 元</a></li><li class="more">…还有 22 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>讨论帖 <b>（20）</b></h4><ul><li><a href="https://t.me/linux_do_channel/545256" target="_blank" rel="noopener">https://t.me/Linli123 @Linli123 在 https://linux.do/t/topic/3070045/1 佬们，招行万事达借记卡</a></li><li><a href="https://t.me/linux_do_channel/545257" target="_blank" rel="noopener">https://t.me/popoan @popoan 在 https://linux.do/t/topic/3070051/1 纸牌接龙，上班无聊来一局 中发</a></li><li><a href="https://t.me/linux_do_channel/545258" target="_blank" rel="noopener">https://t.me/guigui @guigui 在 https://linux.do/t/topic/3070055/1 有没有用虚拟机跑Claude </a></li><li><a href="https://t.me/linux_do_channel/545259" target="_blank" rel="noopener">邱比 (https://t.me/okarin @okarin) 在 https://linux.do/t/topic/3070058/1 K3.1 Pro额度</a></li><li><a href="https://t.me/linux_do_channel/545260" target="_blank" rel="noopener">ruyu 在 https://linux.do/t/topic/3070063/1 谷歌8.99刀给退了，好像pro都用不了了 中发帖</a></li><li><a href="https://t.me/linux_do_channel/545261" target="_blank" rel="noopener">𝓵𝓮𝔃𝓲𝓼𝓱𝓮𝓷 (https://t.me/lezishen @lezishen) 在 https://linux.do/t/topic/3070064/1 </a></li><li><a href="https://t.me/linux_do_channel/545262" target="_blank" rel="noopener">不可名状的食物 (https://t.me/Unspeakable @Unspeakable) 在 https://linux.do/t/topic/30700</a></li><li><a href="https://t.me/linux_do_channel/545263" target="_blank" rel="noopener">Ninestep 在 https://linux.do/t/topic/3070067/1 这还是C/吗 中发帖</a></li><li><a href="https://t.me/linux_do_channel/545264" target="_blank" rel="noopener">lpg (https://t.me/321227850 @321227850) 在 https://linux.do/t/topic/3070068/1 刚刚充</a></li><li><a href="https://t.me/linux_do_channel/545265" target="_blank" rel="noopener">Monkeypox 在 https://linux.do/t/topic/3070070/1 感觉最近出现好多L站安卓客户端 中发帖</a></li><li><a href="https://t.me/linux_do_channel/545266" target="_blank" rel="noopener">https://t.me/dmzrui @dmzrui 在 https://linux.do/t/topic/3070072/1 请求能否考虑适配一下duo和i</a></li><li><a href="https://t.me/linux_do_channel/545267" target="_blank" rel="noopener">欣雨落 (https://t.me/XingYuan @XingYuan) 在 https://linux.do/t/topic/3070079/1 vivo手</a></li><li class="more">…还有 8 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·购物券 <b>（17）</b></h4><ul><li><a href="https://jike.info/topic/59372/工行上海分行数币红包-交通卡满30减4-其他地区可自测" target="_blank" rel="noopener">工行上海分行数币红包：交通卡满30减4，其他地区可自测</a></li><li><a href="https://25xianbao.com/archives/29382" target="_blank" rel="noopener">四川移动老用户：12元100G网龄流量包能开了</a></li><li><a href="https://t.me/erqing/41674" target="_blank" rel="noopener">【盒马挑战领便签本/冰格等】</a></li><li><a href="https://www.ithome.com/1/017/446.htm" target="_blank" rel="noopener">耐克就微信客服账号“异常消息”致歉，警方已介入调查</a></li><li><a href="https://www.ithome.com/1/017/427.htm" target="_blank" rel="noopener">32 英寸 AOC OLED 雾面 4K 120Hz 显示器 U32U4D 发售，国补价 5249 元</a></li><li><a href="https://t.me/sakurako0818/36356" target="_blank" rel="noopener">108亓  芒果tv会员年卡 京东PLUS会员年卡   60亓  微博VI</a></li><li><a href="https://t.me/sakurako0818/36366" target="_blank" rel="noopener">18点jd超市-下方赚 有99汪贝兑换   美妆会场   医疗器械膨胀券</a></li><li><a href="https://t.me/zzzdm/388307" target="_blank" rel="noopener">娇兰 金钻修颜粉底液 柔雾哑光款 ?q=%230N #0N 35ml</a></li><li><a href="https://t.me/zzzdm/388308" target="_blank" rel="noopener">图益 进阶早教拼图 5阶校园生活</a></li><li><a href="https://t.me/zzzdm/388309" target="_blank" rel="noopener">国家补贴：苹果 iPhone 17 Pro 5G手机256g</a></li><li><a href="https://t.me/zzzdm/388311" target="_blank" rel="noopener">淘金币可用：鲁花 淘淘飘香 5S压榨一级花生油6.08L*1桶</a></li><li><a href="https://t.me/zzzdm/388315" target="_blank" rel="noopener">德佑 纯水湿厕纸 80抽*10包</a></li><li class="more">…还有 5 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>抽奖/概率性 <b>（11）</b></h4><ul><li><a href="https://jike.info/topic/59339/10月20日中国移动灵犀口令是-霜降食秋梨" target="_blank" rel="noopener">10月20日中国移动灵犀口令是：霜降食秋梨</a></li><li><a href="https://www.nodeloc.com/t/topic/115279" target="_blank" rel="noopener">[UlziX TG自动转发] 香港29区 · 故障说明及机房调整预案</a></li><li><a href="https://www.nodeloc.com/t/topic/115271" target="_blank" rel="noopener">来抽三个+852的tg</a></li><li><a href="https://www.nodeloc.com/t/topic/115265" target="_blank" rel="noopener">1024送额度</a></li><li><a href="https://t.me/erqing/41681" target="_blank" rel="noopener">羊毛活动试试</a></li><li><a href="https://t.me/sakurako0818/36353" target="_blank" rel="noopener">JD小程序搜标题，概率有42立减 凑后付143.7亓 欧莱雅 小金管清爽版</a></li><li><a href="https://t.me/sakurako0818/36357" target="_blank" rel="noopener">京东红包车速度有大新的一天随手领京东红包每天的打卡得也记得参</a></li><li><a href="https://t.me/sakurako0818/36358" target="_blank" rel="noopener">宝马卡龙4层无香软抽100抽30包M码，领李金   / 天猫超市首页搜索</a></li><li><a href="https://t.me/sakurako0818/36360" target="_blank" rel="noopener">红包车还在jd无门槛!新的一天随手领京东红包每天的打卡得也记</a></li><li><a href="https://t.me/sakurako0818/36361" target="_blank" rel="noopener">京东无门槛️红包车新的一天随手领京东红包每天的打卡得也记得</a></li><li><a href="https://t.me/TossTF/3753" target="_blank" rel="noopener">🎁 https://b23.tv/r9hycjC Photocean × MT Photos https://b23.tv/r9hycjC 联合抽奖，送http</a></li></ul></div><div class="exc-g"><h4>非科技·吃的 <b>（10）</b></h4><ul><li><a href="https://t.me/sakurako0818/36362" target="_blank" rel="noopener">长寿花花生油一级压榨5.43L 猫超首页-休闲零食领169-25加补券叠2</a></li><li><a href="https://t.me/sakurako0818/36364" target="_blank" rel="noopener">速度大水，工银e生活刮外卖</a></li><li><a href="https://t.me/sakurako0818/36367" target="_blank" rel="noopener">水果卖不掉</a></li><li><a href="https://t.me/zzzdm/388306" target="_blank" rel="noopener">淘金币可用、今日必买、88VIP：格力高 百醇百力滋组合装281g下午茶休闲零食</a></li><li><a href="https://t.me/zzzdm/388310" target="_blank" rel="noopener">好丽友 呀！土豆 蜂蜜黄油味 超值装 130g 量大实惠</a></li><li><a href="https://t.me/zzzdm/388312" target="_blank" rel="noopener">今日必买：蟹简史 品蟹正当季！大闸蟹 全母3.0-3.3两 6只现货礼盒（去绳足重、死蟹包赔）</a></li><li><a href="https://t.me/zzzdm/388317" target="_blank" rel="noopener">88VIP：无穷 爆香盐焗鸡蛋礼盒24颗 （300g*2盒）</a></li><li><a href="https://t.me/zzzdm/388319" target="_blank" rel="noopener">青岛啤酒 金质拉环小棕金箱啤258mL 12瓶+赠啤酒扎杯</a></li><li><a href="https://t.me/zzzdm/388320" target="_blank" rel="noopener">88VIP：可口可乐 FIFA世界杯联名 碳酸饮料330ml*20罐</a></li><li><a href="https://t.me/zzzdm/388324" target="_blank" rel="noopener">沃隆 28包*750g 加油版 每日坚果 礼盒装</a></li></ul></div><div class="exc-g"><h4>交易帖 <b>（8）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1006316-1" target="_blank" rel="noopener">溢价300 出rfc hk co mini老6折</a></li><li><a href="https://www.nodeseek.com/post-1006315-1" target="_blank" rel="noopener">【出机】31CNY出云悠yunyoo 洛杉矶C.Lite - Mini 4837 八折款</a></li><li><a href="https://www.nodeseek.com/post-1006314-1" target="_blank" rel="noopener">【出】90出100元必胜客礼品卡 发卡号+卡密</a></li><li><a href="https://www.nodeseek.com/post-1006312-1" target="_blank" rel="noopener">90收个vps.taxi出租车jp10刀</a></li><li><a href="https://www.nodeseek.com/post-1006311-1" target="_blank" rel="noopener">【收】溢价50收个RN 10刀左右 不超15刀 10T~16T流量</a></li><li><a href="https://www.nodeseek.com/post-1006305-1" target="_blank" rel="noopener">收几台未迁移的au2222</a></li><li><a href="https://www.ithome.com/1/017/437.htm" target="_blank" rel="noopener">周鸿祎拟 2.19 亿元转让奇飞翔艺 12.9% 股权，交易后将不再直接持股</a></li><li><a href="https://www.ithome.com/1/017/407.htm" target="_blank" rel="noopener">出任 XBOX 首任首席运营官仅 3 个月，微软 21 年“老将”海伦 · 蒋被曝离职</a></li></ul></div><div class="exc-g"><h4>VPS/主机类 <b>（4）</b></h4><ul><li><a href="https://www.appinn.com/cloudcone-50p-26/" target="_blank" rel="noopener">CloudCone 再次开启50%赠送：充值 5.1 美元，送 2.55 美元</a></li><li><a href="https://www.nodeseek.com/post-1006298-1" target="_blank" rel="noopener">dmit 下载速度 40m/s cpu拉满100%正常吗</a></li><li><a href="https://www.nodeloc.com/t/topic/115266" target="_blank" rel="noopener">DNSHE开通企业级免费 DNS 解析服务了，和vps8提供的服务相同，可以把不支持cf的域名绑定到pages</a></li><li><a href="https://www.nodeloc.com/t/topic/115241" target="_blank" rel="noopener">每月白送50GB的免费VPN，Firefox火狐浏览器这波福利：真香？</a></li></ul></div><div class="exc-g"><h4>非科技·服饰美妆 <b>（4）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1006318-1" target="_blank" rel="noopener">欧易走直连还是代理</a></li><li><a href="https://www.ithome.com/1/017/439.htm" target="_blank" rel="noopener">XREAL 1 Pro+ 智能眼镜国行上架：峰值亮度提升至 1200 尼特、鼻托结构重新设计，3499 元</a></li><li><a href="https://t.me/zzzdm/388313" target="_blank" rel="noopener">安踏 男女童户外四防小软壳冲锋衣 可穿至175cm 多色多款可选！</a></li><li><a href="https://t.me/zzzdm/388325" target="_blank" rel="noopener">安踏 山川系列 男女童高帮加绒防风保暖雪地靴 可穿至41码</a></li></ul></div><div class="exc-g"><h4>往期未选 <b>（3）</b><small> · 今日之前展示过、未发帖（最早沉到 2026-10-22）。今天的候选仍在榜上</small></h4><ul><li><a href="https://51.ruyo.net/19764.html" target="_blank" rel="noopener">华为云3000积分领取：沙箱+ECS部署，兑换云服务代金券</a></li><li><a href="https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿tokens" target="_blank" rel="noopener">Today，国内首个原生Personal Agent免费送3亿Tokens</a></li><li><a href="https://jike.info/topic/59340/华为云新活动300元代金券" target="_blank" rel="noopener">华为云新活动300元代金券</a></li></ul></div><div class="exc-g"><h4>非科技·影音会员 <b>（3）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/115288" target="_blank" rel="noopener">minecraft国内用户最多的第三方启动器的服务器遭遇史上最大DDoS攻击</a></li><li><a href="https://t.me/erqing/41670" target="_blank" rel="noopener">爱奇艺云包场 羊毛活动</a></li><li><a href="https://t.me/erqing/41679" target="_blank" rel="noopener">爱奇艺云包场30天内领一次</a></li></ul></div><div class="exc-g"><h4>非科技·家电 <b>（2）</b></h4><ul><li><a href="https://25xianbao.com/archives/29376" target="_blank" rel="noopener">芝麻分800以上，一分钱拿走体脂秤</a></li><li><a href="https://www.ithome.com/1/017/419.htm" target="_blank" rel="noopener">九号公司与米其林签署战略合作，店内将提供两轮轮胎销售等服务</a></li></ul></div><div class="exc-g"><h4>已结束 <b>（2）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/114851" target="_blank" rel="noopener">[已开奖]抽三台辣鸡半年ulzix，美国28区</a></li><li><a href="https://www.ithome.com/1/017/410.htm" target="_blank" rel="noopener">V 社正式为 Steam 推出“个人日历”功能：可智能推荐即将发售游戏、支持个性化定制</a></li></ul></div><div class="exc-g"><h4>昨日 <b>（1）</b></h4><ul><li><a href="https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了" target="_blank" rel="noopener">GPT-6每日签到10美金，日常轻量应用够用了</a></li></ul></div><div class="exc-g"><h4>AI中转站 <b>（1）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/115282" target="_blank" rel="noopener">我们经历过许多生产事故，结果带来了更新一代的AI网关</a></li></ul></div><div class="exc-g"><h4>非科技·购物帖 <b>（1）</b></h4><ul><li><a href="https://t.me/erqing/41667" target="_blank" rel="noopener">https://img.alicdn.com/i3/2160029782/O1CN01liWPLC2M8DNfNR0QI_&amp;#33;&amp;#33;216002978</a></li></ul></div><div class="exc-g"><h4>免费/可领 <b>（1）</b></h4><ul><li><a href="https://www.ithome.com/1/017/435.htm" target="_blank" rel="noopener">Steam 喜加一：2D 平台冒险游戏《Depths Unseen》转付费前限时免费领</a></li></ul></div><div class="exc-g"><h4>非科技·生活用品 <b>（1）</b></h4><ul><li><a href="https://t.me/zzzdm/388314" target="_blank" rel="noopener">88VIP：babycare 宝宝酵素洗衣液 2.8L</a></li></ul></div>
+    <summary>已排除 272 条 · 点开核对是否误杀</summary>
+    <div class="exc-g"><h4>非科技·无科技特征 <b>（72）</b></h4><ul><li><a href="https://jike.info/topic/59371/workbuddy-轻松过教师认证-可领积分" target="_blank" rel="noopener">Workbuddy 轻松过教师认证，可领积分</a></li><li><a href="https://25xianbao.com/archives/29378" target="_blank" rel="noopener">4299拿下Mac Mini，靠的是不停刷店铺</a></li><li><a href="https://sspai.com/post/116128" target="_blank" rel="noopener">在硅谷，遇见个人计算机历史</a></li><li><a href="https://sspai.com/post/116979" target="_blank" rel="noopener">破与立：设计视角下的 iPhone Duo</a></li><li><a href="https://sspai.com/post/115437" target="_blank" rel="noopener">把 Muse 装进 ESP-Mosaico：做一个没用的东西，证明 Vibe Coding 也在硬件领域快速成长</a></li><li><a href="https://sspai.com/post/115090" target="_blank" rel="noopener">终于吃到了那颗梦寐以求的小药丸：我的 ADHD 诊疗记</a></li><li><a href="https://www.nodeseek.com/post-1006381-1" target="_blank" rel="noopener">189出个66云的美ISP-ntt4837</a></li><li><a href="https://www.nodeseek.com/post-1006378-1" target="_blank" rel="noopener">[IP测试] 咖喱家宽</a></li><li><a href="https://www.nodeseek.com/post-1006376-1" target="_blank" rel="noopener">今晚de9929不炸了</a></li><li><a href="https://www.nodeseek.com/post-1006370-1" target="_blank" rel="noopener">【NQ】Panstar 新产品 LAX Premium DC2 测试机 测试留档</a></li><li><a href="https://www.nodeseek.com/post-1006369-1" target="_blank" rel="noopener">google pro 4.99</a></li><li><a href="https://www.nodeseek.com/post-1006368-1" target="_blank" rel="noopener">求komari的延迟检测ipv6地址</a></li><li class="more">…还有 60 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>无发放动作 <b>（43）</b></h4><ul><li><a href="https://www.dayanzai.me/ivycraft.html" target="_blank" rel="noopener">IvyCraft：把资料生成 PPT、信息图、视频、播客等多种内容</a></li><li><a href="https://www.appinn.com/nvidia-gpu-ai-compute-unlock/" target="_blank" rel="noopener">英伟达显卡的 AI 算力被人为限制了？有人成功解锁，性能接近翻倍</a></li><li><a href="https://www.appinn.com/worldtui/" target="_blank" rel="noopener">WorldTUI – 有人专门训练大模型演戏：你敲命令，它假装执行</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xcl88x/multi_home_a_unique_horror_adventure_ca569_free_a/" target="_blank" rel="noopener">[MULTI] [Home - A Unique Horror Adventure] [CA$5.69 → Free] [A murder mystery with a twist – because you decide what ultimately happens in a beautifully-realized pixel world]</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xcl9pf/windows_sker_ritual_ca2899_free_4_player_coop/" target="_blank" rel="noopener">[Windows] [Sker Ritual] [CA$28.99 → Free] [4 Player co-op survival FPS and spin-off to the award-winning British horror, Maid of Sker]</a></li><li><a href="https://www.nodeseek.com/post-1006379-1" target="_blank" rel="noopener">20出域名er.mba</a></li><li><a href="https://www.nodeseek.com/post-1006372-1" target="_blank" rel="noopener">tplink 交换机不支持多 VLAN，有 什么办法解决吗</a></li><li><a href="https://www.nodeseek.com/post-1006371-1" target="_blank" rel="noopener">[问]gpt如何避免降智</a></li><li><a href="https://www.nodeloc.com/t/topic/115287" target="_blank" rel="noopener">ai pro区别</a></li><li><a href="https://www.nodeloc.com/t/topic/115278" target="_blank" rel="noopener">GPT非常慢怎么办？ 一个 GPT PRO100账号，跑了8小时的任务，额度才用了50%</a></li><li><a href="https://www.nodeloc.com/t/topic/115277" target="_blank" rel="noopener">验证学生 GPT 聊天记录时出错。</a></li><li><a href="https://www.nodeloc.com/t/topic/115272" target="_blank" rel="noopener">claude也是过了kyc之后充值秒封了</a></li><li class="more">…还有 31 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>新闻 <b>（36）</b></h4><ul><li><a href="https://www.dayanzai.me/kali-linux.html" target="_blank" rel="noopener">开源渗透测试平台 Kali Linux 2026.3 + x64 官方原版镜像发布</a></li><li><a href="https://www.appinn.com/linux-kernel-vulnerabilities-accidentally-disclosed/" target="_blank" rel="noopener">多个 Linux 内核高危漏洞疑似被误公开：最高评分 9.0，部分尚未修复</a></li><li><a href="https://www.appinn.com/chrome-sandbox-escape-cve-2026-113328/" target="_blank" rel="noopener">Chrome 曝沙箱逃逸漏洞：打开恶意网页可能导致电脑被入侵，请及时更新</a></li><li><a href="https://sspai.com/post/117104" target="_blank" rel="noopener">派早报：Insta360 发布 Insta360 Mic，Anthropic 推出 Claude Duet 等</a></li><li><a href="https://sspai.com/post/116923" target="_blank" rel="noopener">前瞻｜Apple 新品看点：MacBook 或将推出 OLED 触屏版本</a></li><li><a href="https://sspai.com/post/116953" target="_blank" rel="noopener">派早报：荣耀发布 WIN2 系列新品、Google 开源 TorchTPU 等</a></li><li><a href="https://www.nodeseek.com/post-1006373-1" target="_blank" rel="noopener">刚买的taxi 监测报告是不是不太好？</a></li><li><a href="https://www.nodeloc.com/t/topic/115268" target="_blank" rel="noopener">Memoh免费的VPS和ai，说说使用情况吧。ai我没怎么用，多数在研究vps，还直接给他们官方发邮件了。</a></li><li><a href="https://www.ithome.com/1/017/508.htm" target="_blank" rel="noopener">Counterpoint 报告：2026 年第三季度全球 PC 出货量 5700 万台，同比下降 21%</a></li><li><a href="https://www.ithome.com/1/017/503.htm" target="_blank" rel="noopener">利民推出 LEVITA VISION 360 ARGB V2 悠浮视界水冷散热器：磁吸悬浮裸眼 3D 曲面屏，949 元起</a></li><li><a href="https://www.ithome.com/1/017/499.htm" target="_blank" rel="noopener">爱国者推出星璨大岚智能中控机箱：配 6.5 英寸触摸屏，黑白双色均售 599 元</a></li><li><a href="https://www.ithome.com/1/017/498.htm" target="_blank" rel="noopener">小米推出 24.5 英寸 REDMI 显示器 G25 2027：1080p 300Hz，799 元</a></li><li class="more">…还有 24 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·科技资讯 <b>（34）</b></h4><ul><li><a href="https://www.dayanzai.me/transmission.html" target="_blank" rel="noopener">开源 BT 客户端 Transmission 4.1.4 + x64 中文多语免费版</a></li><li><a href="https://www.dayanzai.me/obs-studio.html" target="_blank" rel="noopener">开源免费在线直播工具 OBS Studio 33.0.0 x64 中文版下载</a></li><li><a href="https://www.dayanzai.me/trilium-notes.html" target="_blank" rel="noopener">免费开源笔记应用程序 Trilium Notes 0.106.1 x64 官方中文免费版</a></li><li><a href="https://www.dayanzai.me/visual-studio-code.html" target="_blank" rel="noopener">微软开源免费代码编辑器 Visual Studio Code 1.143.1 + x64 中文免费版</a></li><li><a href="https://www.dayanzai.me/biniware-run.html" target="_blank" rel="noopener">Windows 应用快速启动工具 Biniware Run 7.9.0.0 中文多语免费版</a></li><li><a href="https://www.dayanzai.me/ebook-reader.html" target="_blank" rel="noopener">电子书阅读器 IceCream Ebook Reader Pro 6.57 中文多语免费版</a></li><li><a href="https://free.apprcn.com/ashampoo-face-blur-6/" target="_blank" rel="noopener">Ashampoo Face Blur - 照片脸部自动识别遮罩[终身授权][Windows][$22→0]</a></li><li><a href="https://www.appinn.com/strata-0-2-4-deepseek-v4-1-flashterminal-0-2-4-1/" target="_blank" rel="noopener">Strata 0.2.4 更新：12GB 显卡运行 DeepSeek V4.1-Flash</a></li><li><a href="https://www.appinn.com/strata-0-2-3/" target="_blank" rel="noopener">Strata 0.2.3 更新：聊天太长？现在会自动压缩了</a></li><li><a href="https://sspai.com/post/117169" target="_blank" rel="noopener">本周看什么 | 最近值得一看的 12 部作品</a></li><li><a href="https://sspai.com/post/116398" target="_blank" rel="noopener">TDS REVIEW｜OPPO Enco X4 降噪真无线耳机体验</a></li><li><a href="https://www.reddit.com/r/AppHookup/comments/1xdo33y/ios_three_routes_run_walk_2999_lifetime_pro_free/" target="_blank" rel="noopener">[iOS] [Three Routes: Run &amp; Walk] [$29.99 -&gt; Lifetime Pro FREE] [Running &amp; walking route planner, Apple Watch, GPX export]</a></li><li class="more">…还有 22 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>讨论帖 <b>（23）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1006377-1" target="_blank" rel="noopener">绿云的澳大利亚机器是哪个上游，有没有卖一样线路的商家</a></li><li><a href="https://www.nodeseek.com/post-1006374-1" target="_blank" rel="noopener">甲骨文是不是放水了</a></li><li><a href="https://www.nodeseek.com/post-1006366-1" target="_blank" rel="noopener">claude的免费号如何统一管理，有这一类的工具吗</a></li><li><a href="https://t.me/linux_do_channel/545285" target="_blank" rel="noopener">dataflow 在 https://linux.do/t/topic/3070178/1 billion-context 真的有用吗? 中发帖</a></li><li><a href="https://t.me/linux_do_channel/545286" target="_blank" rel="noopener">https://t.me/claude_openai @claude_openai 在 https://linux.do/t/topic/3070192/1 今</a></li><li><a href="https://t.me/linux_do_channel/545287" target="_blank" rel="noopener">Junglecola (https://t.me/Notch @Notch) 在 https://linux.do/t/topic/3070202/1 记得以前</a></li><li><a href="https://t.me/linux_do_channel/545288" target="_blank" rel="noopener">勇往直前 (https://t.me/codeshuai001 @codeshuai001) 在 https://linux.do/t/topic/307020</a></li><li><a href="https://t.me/linux_do_channel/545289" target="_blank" rel="noopener">亦失 (@521) 在 https://linux.do/t/topic/3070210/1 老马三合一订阅 中发帖</a></li><li><a href="https://t.me/linux_do_channel/545290" target="_blank" rel="noopener">StaringF (https://t.me/Kiraspark @Kiraspark) 在 https://linux.do/t/topic/3070211/</a></li><li><a href="https://t.me/linux_do_channel/545291" target="_blank" rel="noopener">biedupinyin (https://t.me/yangjuna @yangjuna) 在 https://linux.do/t/topic/3070213</a></li><li><a href="https://t.me/linux_do_channel/545292" target="_blank" rel="noopener">叮咚 (https://t.me/honest @honest) 在 https://linux.do/t/topic/3070214/1 哈人 我让deeps</a></li><li><a href="https://t.me/linux_do_channel/545293" target="_blank" rel="noopener">1in 在 https://linux.do/t/topic/3070217/1 【HyxAPI公益站】关于取消强制绑定邮箱 中发帖</a></li><li class="more">…还有 11 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·购物券 <b>（18）</b></h4><ul><li><a href="https://jike.info/topic/59372/工行上海分行数币红包-交通卡满30减4-其他地区可自测" target="_blank" rel="noopener">工行上海分行数币红包：交通卡满30减4，其他地区可自测</a></li><li><a href="https://25xianbao.com/archives/29382" target="_blank" rel="noopener">四川移动老用户：12元100G网龄流量包能开了</a></li><li><a href="https://t.me/erqing/41674" target="_blank" rel="noopener">【盒马挑战领便签本/冰格等】</a></li><li><a href="https://www.ithome.com/1/017/446.htm" target="_blank" rel="noopener">耐克就微信客服账号“异常消息”致歉，警方已介入调查</a></li><li><a href="https://www.ithome.com/1/017/427.htm" target="_blank" rel="noopener">32 英寸 AOC OLED 雾面 4K 120Hz 显示器 U32U4D 发售，国补价 5249 元</a></li><li><a href="https://t.me/sakurako0818/36356" target="_blank" rel="noopener">108亓  芒果tv会员年卡 京东PLUS会员年卡   60亓  微博VI</a></li><li><a href="https://t.me/sakurako0818/36366" target="_blank" rel="noopener">18点jd超市-下方赚 有99汪贝兑换   美妆会场   医疗器械膨胀券</a></li><li><a href="https://t.me/zzzdm/388321" target="_blank" rel="noopener">好丽友 好友趣 薯片 超值嗨享装 韩国泡菜味 125g</a></li><li><a href="https://t.me/zzzdm/388322" target="_blank" rel="noopener">万新 高清极薄1.74折射率非球面镜片*2+钛金属框 来框免费加工 1500度内</a></li><li><a href="https://t.me/zzzdm/388323" target="_blank" rel="noopener">柯诗曼 春秋超好看半高领针织衫 女款针织半高-任选2件</a></li><li><a href="https://t.me/zzzdm/388327" target="_blank" rel="noopener">88VIP：洁云 5包*80抽 加大加厚湿厕纸</a></li><li><a href="https://t.me/zzzdm/388328" target="_blank" rel="noopener">芙丝 饮用天然矿泉水  500ml*24瓶</a></li><li class="more">…还有 6 条，完整清单见 data/2026-10-24.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>抽奖/概率性 <b>（10）</b></h4><ul><li><a href="https://jike.info/topic/59339/10月20日中国移动灵犀口令是-霜降食秋梨" target="_blank" rel="noopener">10月20日中国移动灵犀口令是：霜降食秋梨</a></li><li><a href="https://www.nodeloc.com/t/topic/115279" target="_blank" rel="noopener">[UlziX TG自动转发] 香港29区 · 故障说明及机房调整预案</a></li><li><a href="https://www.nodeloc.com/t/topic/115271" target="_blank" rel="noopener">来抽三个+852的tg</a></li><li><a href="https://www.nodeloc.com/t/topic/115265" target="_blank" rel="noopener">1024送额度</a></li><li><a href="https://t.me/erqing/41681" target="_blank" rel="noopener">羊毛活动试试</a></li><li><a href="https://t.me/sakurako0818/36357" target="_blank" rel="noopener">京东红包车速度有大新的一天随手领京东红包每天的打卡得也记得参</a></li><li><a href="https://t.me/sakurako0818/36358" target="_blank" rel="noopener">宝马卡龙4层无香软抽100抽30包M码，领李金   / 天猫超市首页搜索</a></li><li><a href="https://t.me/sakurako0818/36360" target="_blank" rel="noopener">红包车还在jd无门槛!新的一天随手领京东红包每天的打卡得也记</a></li><li><a href="https://t.me/sakurako0818/36361" target="_blank" rel="noopener">京东无门槛️红包车新的一天随手领京东红包每天的打卡得也记得</a></li><li><a href="https://t.me/TossTF/3753" target="_blank" rel="noopener">🎁 https://b23.tv/r9hycjC Photocean × MT Photos https://b23.tv/r9hycjC 联合抽奖，送http</a></li></ul></div><div class="exc-g"><h4>非科技·吃的 <b>（8）</b></h4><ul><li><a href="https://t.me/sakurako0818/36362" target="_blank" rel="noopener">长寿花花生油一级压榨5.43L 猫超首页-休闲零食领169-25加补券叠2</a></li><li><a href="https://t.me/sakurako0818/36364" target="_blank" rel="noopener">速度大水，工银e生活刮外卖</a></li><li><a href="https://t.me/sakurako0818/36367" target="_blank" rel="noopener">水果卖不掉</a></li><li><a href="https://t.me/zzzdm/388324" target="_blank" rel="noopener">沃隆 28包*750g 加油版 每日坚果 礼盒装</a></li><li><a href="https://t.me/zzzdm/388334" target="_blank" rel="noopener">特仑苏 有机纯牛奶200ml*24盒</a></li><li><a href="https://t.me/zzzdm/388335" target="_blank" rel="noopener">百亿补贴：佳沃 泰国香水椰青 9个装 椰子</a></li><li><a href="https://t.me/zzzdm/388336" target="_blank" rel="noopener">今日必买：虎邦 经典牌子 鲜辣牛肉200g*2+麻辣牛肉200g*2 实惠装800g</a></li><li><a href="https://t.me/zzzdm/388340" target="_blank" rel="noopener">沃隆 每日坚果礼盒 530g（买一送一，到手2盒）</a></li></ul></div><div class="exc-g"><h4>交易帖 <b>（6）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1006380-1" target="_blank" rel="noopener">收legend SG 56/3年 18刀 2t 明盘溢价+88收</a></li><li><a href="https://www.nodeseek.com/post-1006367-1" target="_blank" rel="noopener">【出域名】perhz.com</a></li><li><a href="https://www.nodeseek.com/post-1006365-1" target="_blank" rel="noopener">【出】出一台美西落地机 ZgoCloud Global Special Starter 15刀/年 2TB流量</a></li><li><a href="https://www.ithome.com/1/017/437.htm" target="_blank" rel="noopener">周鸿祎拟 2.19 亿元转让奇飞翔艺 12.9% 股权，交易后将不再直接持股</a></li><li><a href="https://www.ithome.com/1/017/407.htm" target="_blank" rel="noopener">出任 XBOX 首任首席运营官仅 3 个月，微软 21 年“老将”海伦 · 蒋被曝离职</a></li><li><a href="https://t.me/sakurako0818/36373" target="_blank" rel="noopener">移动网龄电影票，刚刚在平台上出了，20元一张，40两张</a></li></ul></div><div class="exc-g"><h4>往期未选 <b>（3）</b><small> · 今日之前展示过、未发帖（最早沉到 2026-10-22）。今天的候选仍在榜上</small></h4><ul><li><a href="https://51.ruyo.net/19764.html" target="_blank" rel="noopener">华为云3000积分领取：沙箱+ECS部署，兑换云服务代金券</a></li><li><a href="https://jike.info/topic/59350/today-国内首个原生personal-agent免费送3亿tokens" target="_blank" rel="noopener">Today，国内首个原生Personal Agent免费送3亿Tokens</a></li><li><a href="https://jike.info/topic/59340/华为云新活动300元代金券" target="_blank" rel="noopener">华为云新活动300元代金券</a></li></ul></div><div class="exc-g"><h4>VPS/主机类 <b>（3）</b></h4><ul><li><a href="https://www.appinn.com/cloudcone-50p-26/" target="_blank" rel="noopener">CloudCone 再次开启50%赠送：充值 5.1 美元，送 2.55 美元</a></li><li><a href="https://www.nodeloc.com/t/topic/115266" target="_blank" rel="noopener">DNSHE开通企业级免费 DNS 解析服务了，和vps8提供的服务相同，可以把不支持cf的域名绑定到pages</a></li><li><a href="https://www.nodeloc.com/t/topic/115241" target="_blank" rel="noopener">每月白送50GB的免费VPN，Firefox火狐浏览器这波福利：真香？</a></li></ul></div><div class="exc-g"><h4>非科技·影音会员 <b>（3）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/115288" target="_blank" rel="noopener">minecraft国内用户最多的第三方启动器的服务器遭遇史上最大DDoS攻击</a></li><li><a href="https://t.me/erqing/41670" target="_blank" rel="noopener">爱奇艺云包场 羊毛活动</a></li><li><a href="https://t.me/erqing/41679" target="_blank" rel="noopener">爱奇艺云包场30天内领一次</a></li></ul></div><div class="exc-g"><h4>非科技·服饰美妆 <b>（3）</b></h4><ul><li><a href="https://www.ithome.com/1/017/439.htm" target="_blank" rel="noopener">XREAL 1 Pro+ 智能眼镜国行上架：峰值亮度提升至 1200 尼特、鼻托结构重新设计，3499 元</a></li><li><a href="https://t.me/zzzdm/388325" target="_blank" rel="noopener">安踏 山川系列 男女童高帮加绒防风保暖雪地靴 可穿至41码</a></li><li><a href="https://t.me/zzzdm/388333" target="_blank" rel="noopener">PLUS会员：安德玛 Select 275g超高充绒高蓬松情侣款连帽羽绒服</a></li></ul></div><div class="exc-g"><h4>非科技·家电 <b>（2）</b></h4><ul><li><a href="https://25xianbao.com/archives/29376" target="_blank" rel="noopener">芝麻分800以上，一分钱拿走体脂秤</a></li><li><a href="https://www.ithome.com/1/017/419.htm" target="_blank" rel="noopener">九号公司与米其林签署战略合作，店内将提供两轮轮胎销售等服务</a></li></ul></div><div class="exc-g"><h4>已结束 <b>（2）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/114851" target="_blank" rel="noopener">[已开奖]抽三台辣鸡半年ulzix，美国28区</a></li><li><a href="https://www.ithome.com/1/017/410.htm" target="_blank" rel="noopener">V 社正式为 Steam 推出“个人日历”功能：可智能推荐即将发售游戏、支持个性化定制</a></li></ul></div><div class="exc-g"><h4>非科技·生活用品 <b>（2）</b></h4><ul><li><a href="https://t.me/zzzdm/388326" target="_blank" rel="noopener">SOBOM H1pro扫振一体电动牙刷</a></li><li><a href="https://t.me/zzzdm/388332" target="_blank" rel="noopener">88VIP：薇尔 亲肌棉卫生巾 280mm*40片</a></li></ul></div><div class="exc-g"><h4>昨日 <b>（1）</b></h4><ul><li><a href="https://jike.info/topic/59338/gpt-6每日签到10美金-日常轻量应用够用了" target="_blank" rel="noopener">GPT-6每日签到10美金，日常轻量应用够用了</a></li></ul></div><div class="exc-g"><h4>AI中转站 <b>（1）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/115282" target="_blank" rel="noopener">我们经历过许多生产事故，结果带来了更新一代的AI网关</a></li></ul></div><div class="exc-g"><h4>非科技·购物帖 <b>（1）</b></h4><ul><li><a href="https://t.me/erqing/41667" target="_blank" rel="noopener">https://img.alicdn.com/i3/2160029782/O1CN01liWPLC2M8DNfNR0QI_&amp;#33;&amp;#33;216002978</a></li></ul></div><div class="exc-g"><h4>免费/可领 <b>（1）</b></h4><ul><li><a href="https://www.ithome.com/1/017/435.htm" target="_blank" rel="noopener">Steam 喜加一：2D 平台冒险游戏《Depths Unseen》转付费前限时免费领</a></li></ul></div>
   </details>
 
   <footer class="footer">
     来源：如有乐享、即刻·实时羊毛、V2EX free、爱吾线报、爱吾ii、大眼仔、反斗限免、小众软件、异次元软件、少数派、Reddit AppHookUp、NodeSeek、NodeLoc、NodeLoc福利、V2EX deals、挖站否、EpicBundle、Reddit FreeGameFindings、SharewareOnSale、Reddit freebies、Reddit deals、GiveawayOfTheDay、ILoveFreeSoftware、TG·二庆薅羊毛、IT之家、掘墓人博客、TG·SaKurako线报、TG·真正值得买、TG·折腾App探索、TG·Sliverkiss、TG·LINUX DO、蓝点网<br>
     只聚合公开信息，不保证福利仍有效；请自行甄别，勿泄露账号与人脸等敏感信息。<br>
-    本期生成于 2026-10-24 21:21:45（每日 9/15/21 点各更新一次，以页面时间为准）。
+    本期生成于 2026-10-24 21:59:36（每日 9/15/21 点各更新一次，以页面时间为准）。
   </footer>
 </div>
 <button class="fab" id="fab" type="button" title="返回顶部" aria-label="返回顶部" hidden>↑</button>
@@ -784,14 +800,15 @@ https://qoder.com/community-boost https://qoder.com/community-boost
   const countEl = document.getElementById('count');
   const cats = [...document.querySelectorAll('.chip[data-cat]')];
   const sorts = [...document.querySelectorAll('.chip[data-sort]')];
-  let cat = 'all', sort = 'score';
+  let cat = 'all', sort = 'score', onlyNew = false;
 
   const refresh = () => {
     const term = q.value.trim().toLowerCase();
     cards.forEach(c => {
       const okCat = cat === 'all' || c.dataset.cat === cat;
       const okText = !term || c.dataset.text.includes(term);
-      c.hidden = !(okCat && okText);
+      const okNew = !onlyNew || c.dataset.new === '1';
+      c.hidden = !(okCat && okText && okNew);
     });
     groups.forEach(g => {
       g.hidden = ![...g.querySelectorAll('.card')].some(c => !c.hidden);
@@ -803,6 +820,13 @@ https://qoder.com/community-boost https://qoder.com/community-boost
     cats.forEach(x => x.classList.toggle('active', x === ch));
     cat = ch.dataset.cat; refresh();
   }));
+  // 「只看本次新增」：和类别/搜索叠加，不是互斥
+  const onlyNewBtn = document.getElementById('only-new');
+  if (onlyNewBtn) onlyNewBtn.addEventListener('click', () => {
+    onlyNew = !onlyNew;
+    onlyNewBtn.classList.toggle('active', onlyNew);
+    refresh();
+  });
   sorts.forEach(ch => ch.addEventListener('click', () => {
     sorts.forEach(x => x.classList.toggle('active', x === ch));
     sort = ch.dataset.sort;
