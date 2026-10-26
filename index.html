@@ -108,6 +108,16 @@ html[data-theme=dark] .chip.active{color:#171d3a}
 .card.is-new{box-shadow:inset 3px 0 0 var(--good-fg),0 3px 16px rgba(25,45,80,.035)}
 .pick-card{background:linear-gradient(180deg,var(--soft),var(--surface) 52%)}
 .card-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* 帖子编号（点击复制）：一帖一号，由来源 URL 哈希得到，跨天不变 */
+.card-no{font:inherit;font-size:11.5px;font-weight:800;line-height:1.5;cursor:pointer;
+  padding:1px 7px;border-radius:7px;white-space:nowrap;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  color:var(--primary);background:var(--soft);
+  border:1px solid color-mix(in srgb,var(--primary) 32%,var(--line));
+  transition:opacity .14s,background .14s,color .14s}
+.card-no:hover{opacity:.68}
+.card-no:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.card-no.copied{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
 .cat-badge{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--hover);
   border:1px solid var(--line);border-radius:7px;padding:1px 8px;white-space:nowrap}
 .pick-card .cat-badge{color:var(--primary);background:var(--soft);
@@ -181,7 +191,7 @@ html[data-theme=dark] .go{color:#171d3a}
 .fab[hidden]{display:none}
 </style>
 </head>
-<body>
+<body data-day="2026-10-26">
 <div class="shell">
   <header class="top">
     <a class="brand" href="#top"><span class="logo">🐑</span><strong>羊毛日报</strong></a>
@@ -229,11 +239,11 @@ html[data-theme=dark] .go{color:#171d3a}
       <span class="portion">8 条 · 分数 Top 8（≥55 分的只有 0 条）</span></div>
     <div class="cards">
       <article class="card pick-card is-new"
-               data-cat="其他" data-score="50"
+               data-pid="TUMQ54" data-cat="其他" data-score="50"
                data-new="1"
                data-ts="2026-10-26T06:37:23+00:00" data-text="epic 喜加一：狼人杀推理游戏《mafia hotel》免费领 &lt;p data-vmark=&quot;9f64&quot;&gt;it之家 10 月 26 日消息，由独立开发商 almnhali 开发并发行的狼人杀推理游戏《mafia hotel》即日起在 epic games store 开放限时免费领取“喜加一”活动，&lt;strong&gt;本作在 epic 国区定价为 6 元，玩家可以在北京时间 11 月 2 日 01:02 前免费领取&lt;/strong&gt;。&lt;/p&gt;&lt;p data-vmark=&quot;057d&quot;&gt;需要注意的是，本次限免并非 epic 官方活动，而是由开发团 其他 it之家 免费/可领 今日新增">
         <div class="card-top">
-          <span class="cat-badge">📦 其他</span>
+          <button class="card-no" type="button" data-pid="TUMQ54" title="点击复制帖子编号、标题和链接">#TUMQ54</button><span class="cat-badge">📦 其他</span>
           <span class="conf ok">确定</span>
           <span class="score">50</span>
         </div>
@@ -249,11 +259,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="其他" data-score="50"
+               data-pid="JKZS6T" data-cat="其他" data-score="50"
                data-new="1"
                data-ts="2026-10-26T04:53:01+00:00" data-text="小米开源硬件 hachimodock 亮相，150 元就能复刻万能 ai 桌宠 &lt;p data-vmark=&quot;2c9e&quot;&gt;10 月 26 日中午消息，2026 观猹大会期间，由小米技术委创新产品团队孵化的开源 ai 硬件 &lt;strong&gt;hachimodock&lt;/strong&gt; 亮相 —— 这是一台可由用户按个人喜好自由改造的桌面 ai 设备，小巧机身集成了个性化桌宠、语音操控电脑端 agent、智能家居联动、自定义组件创作等能力。&lt;/p&gt;&lt;p data-vmark=&quot;abd9&quot; style=&quot;text-align: center;&quot;&gt;&lt;img src= 其他 it之家 免费/可领 今日新增">
         <div class="card-top">
-          <span class="cat-badge">📦 其他</span>
+          <button class="card-no" type="button" data-pid="JKZS6T" title="点击复制帖子编号、标题和链接">#JKZS6T</button><span class="cat-badge">📦 其他</span>
           <span class="conf ok">确定</span>
           <span class="score">50</span>
         </div>
@@ -269,11 +279,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="域名建站" data-score="45"
+               data-pid="HQ7STR" data-cat="域名建站" data-score="45"
                data-new="1"
                data-ts="2026-10-26T07:00:17+00:00" data-text="zone.id转向收费了，免费的已经无法修改记录 为了应对日益严重的服务滥用（钓鱼和垃圾邮件），并确保网络的长期稳定和安全，zone.id 正在从免费服务转向付费模式。 有什么变化？ 一次性付款（终身访问）：无定期订阅或年度续费。一次性付费，域名/区域永久保持活跃。 完整的dns记录访问：所有对dns记录类型的限制已被移除。你现在可以设置 records records（名称服务器）和其他所有记录，没有任何限制。 为什么要改变？ 这一障碍有助于消除自动滥用和垃圾账号，使我们能够将资源集中在安全、服务器可靠性以及为合法用户打造 域名建站 nodeloc 免费/可领 永久/长期 今日新增 -付费前置">
         <div class="card-top">
-          <span class="cat-badge">🌐 域名建站</span>
+          <button class="card-no" type="button" data-pid="HQ7STR" title="点击复制帖子编号、标题和链接">#HQ7STR</button><span class="cat-badge">🌐 域名建站</span>
           <span class="conf warn">需满足条件</span>
           <span class="score">45</span>
         </div>
@@ -289,11 +299,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="域名建站" data-score="45"
+               data-pid="RMA6PC" data-cat="域名建站" data-score="45"
                data-new="1"
                data-ts="2026-10-25T16:38:52+00:00" data-text="开源免费全能下载工具 motrix 2.0.1 x64 中文多语免费版 motrix 中文版是一款全能的下载工具，支持下载 http、ftp、bt、磁力链、百度网盘等资源。虽然现在网 […] 域名建站 大眼仔 免费/可领 今日新增">
         <div class="card-top">
-          <span class="cat-badge">🌐 域名建站</span>
+          <button class="card-no" type="button" data-pid="RMA6PC" title="点击复制帖子编号、标题和链接">#RMA6PC</button><span class="cat-badge">🌐 域名建站</span>
           <span class="conf ok">确定</span>
           <span class="score">45</span>
         </div>
@@ -309,11 +319,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="其他" data-score="45"
+               data-pid="U5KEHZ" data-cat="其他" data-score="45"
                data-new="1"
                data-ts="2026-10-25T16:16:42+00:00" data-text="开源免费图像压缩工具 imagine plus 0.10.5 中文多语免费版 可能当您看到 imagine 这个名字的时候会想到的是一款免费的图像浏览器，没错，有款软件它也叫 imagin […] 其他 大眼仔 免费/可领 今日新增">
         <div class="card-top">
-          <span class="cat-badge">📦 其他</span>
+          <button class="card-no" type="button" data-pid="U5KEHZ" title="点击复制帖子编号、标题和链接">#U5KEHZ</button><span class="cat-badge">📦 其他</span>
           <span class="conf ok">确定</span>
           <span class="score">45</span>
         </div>
@@ -329,11 +339,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="其他" data-score="45"
+               data-pid="H7RCAV" data-cat="其他" data-score="45"
                data-new="1"
                data-ts="2026-10-25T16:21:38+00:00" data-text="开源多功能的文档扫描工具 naps2 v8.6.0 免费好用的文档扫描软件 naps2（not another pdf scanner 2）是一款多功能的文档扫描工具，设计用于简化扫描文 […] 其他 大眼仔 免费/可领 今日新增">
         <div class="card-top">
-          <span class="cat-badge">📦 其他</span>
+          <button class="card-no" type="button" data-pid="H7RCAV" title="点击复制帖子编号、标题和链接">#H7RCAV</button><span class="cat-badge">📦 其他</span>
           <span class="conf ok">确定</span>
           <span class="score">45</span>
         </div>
@@ -349,11 +359,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="域名建站" data-score="40"
+               data-pid="CSGAAY" data-cat="域名建站" data-score="40"
                data-new="1"
                data-ts="2026-10-26T03:51:01+00:00" data-text="loc.cc域名使用问题求助 起因是这样，因为看到那个dnshe新的企业级免费dns解析服务的帖子，想尝试一下，于是把本站申请的loc.cc域名托管过去，然后在dnshe界面创建@默认域名cname，虽然界面是成功创建了，但是实际根本查询不到，当然pages验证也就无法通过。 既然不好用，于是把loc.cc改回来，不用外部托管了，结果似乎ns1.nodelook.com内部程序有问题，soa记录变成invalid了。这下可好，放在哪边都没法正常工作，这个要怎么修复呀？难道这个域名就这样废了？ 5 个帖子 域名建站 nodeloc 免费/可领 今日新增 -偏教程">
         <div class="card-top">
-          <span class="cat-badge">🌐 域名建站</span>
+          <button class="card-no" type="button" data-pid="CSGAAY" title="点击复制帖子编号、标题和链接">#CSGAAY</button><span class="cat-badge">🌐 域名建站</span>
           <span class="conf ok">确定</span>
           <span class="score">40</span>
         </div>
@@ -369,11 +379,11 @@ html[data-theme=dark] .go{color:#171d3a}
         </div>
       </article>
       <article class="card pick-card is-new"
-               data-cat="AI 额度" data-score="25"
+               data-pid="4LKM67" data-cat="AI 额度" data-score="25"
                data-new="1"
                data-ts="2026-10-26T05:40:46+00:00" data-text="求一个 linux.do 邀请链接 大家好，我想加入 linux.do 学习 ai 资源（免费 api 站、gemini/claude/gpt 优惠、ai 编程工具），但注册需要 premium 会员的邀请链接，而且还要管理员审核。如果有朋友有多余的邀请名额，能免费分享一个链接给我吗？非常感谢。我会用 gmail 注册，遵守论坛规则，不买卖账号。如果愿意帮忙请私信我，谢谢！ 10 个帖子 - 9 位参与者 阅读完整话题 ai 额度 nodeloc 免费/可领 今日新增 -含推广">
         <div class="card-top">
-          <span class="cat-badge">✨ AI 额度</span>
+          <button class="card-no" type="button" data-pid="4LKM67" title="点击复制帖子编号、标题和链接">#4LKM67</button><span class="cat-badge">✨ AI 额度</span>
           <span class="conf ok">确定</span>
           <span class="score">25</span>
         </div>
@@ -477,6 +487,50 @@ html[data-theme=dark] .go{color:#171d3a}
       ).forEach(n => box.appendChild(n));
     });
   }));
+
+  // —— 编号复制：点卡片左上角的数字，复制「羊毛日报 日期 #编号 标题 + 链接」 ——
+  // navigator.clipboard 在 file:// 下可能被禁用（需安全上下文/用户手势），失败时
+  // 自动退回临时 textarea + execCommand；两条路都不通才提示，绝不弹阻塞对话框。
+  const legacyCopy = txt => new Promise((ok, bad) => {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, txt.length);
+    try { document.execCommand('copy') ? ok() : bad(new Error('copy failed')); }
+    catch (err) { bad(err); }
+    finally { ta.remove(); }
+  });
+  const copyText = txt => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(txt).catch(() => legacyCopy(txt));
+    }
+    return legacyCopy(txt);
+  };
+  const issueDay = document.body.dataset.day || '';
+  document.querySelectorAll('.card-no').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const card = btn.closest('.card');
+      const pid = btn.dataset.pid || '';
+      const titleEl = card.querySelector('.title');
+      const title = titleEl ? titleEl.textContent.trim() : '';
+      const link = card.querySelector('.title a');
+      const txt = `羊毛日报 ${issueDay} #${pid} ${title}
+${link ? link.href : ''}`;
+      copyText(txt).then(() => {
+        const old = btn.textContent;
+        btn.textContent = '✓';
+        btn.classList.add('copied');
+        btn.title = '已复制：' + txt;
+        setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1400);
+      }).catch(() => {
+        btn.title = '复制失败，请手动选中复制：' + txt;
+      });
+    });
+  });
 
   const fab = document.getElementById('fab');
   fab.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
