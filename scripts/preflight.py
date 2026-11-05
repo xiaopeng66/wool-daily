@@ -8,6 +8,7 @@
   ③ 部署      ~/.hermes/scripts/wool-daily.sh 与仓库版逐字节一致（cron 跑的是这份）
   ④ 测试      tests/ 三套（round / policy / wiring）
   ⑤ 产物      index.html 与 out/<今天>.html 同源（发布后才发现不一致就晚了）
+  ⑥ 隐私      版本库文件里不得出现带用户名的本机目录路径（Windows 用户目录 / Linux home）
 
 用法：
   python scripts/preflight.py          # 全检
@@ -156,6 +157,24 @@ def check_artifacts() -> None:
         bad("index.html 与 out/今天.html 不一致 —— 发布步骤没跑或只更新了一半")
 
 
+def check_privacy() -> None:
+    """⑥ 隐私：版本库里的文件不得出现本机用户名路径（公开仓库会泄露账号名）。"""
+    print("⑥ 隐私（本机用户路径）")
+    if not (PROJ / ".git").exists():
+        skip("不是 git 仓库，跳过")
+        return
+    # 分段拼接：避免检查脚本自己的正则/提示语被 grep 命中（否则永远报红）
+    pattern = "C:" + r"/Users/[^/\s\"']+|" + "/home/" + r"[a-z][a-z0-9_-]*/"
+    rc, out = run(["git", "-C", str(PROJ), "grep", "-n", "-I", "-E", pattern])
+    if rc == 1:
+        ok("未发现本机用户目录路径")
+    elif rc == 0:
+        hits = "\n        ".join(out.strip().splitlines()[:5])
+        bad(f"版本库里出现本机用户路径（改成 os.path.expanduser / Path.home()）：\n        {hits}")
+    else:
+        skip(f"git grep 失败（{out.strip()[:60]}）")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true", help="跳过测试套件")
@@ -168,6 +187,7 @@ def main() -> int:
     if not args.quick:
         check_tests()
     check_artifacts()
+    check_privacy()
 
     print(f"\n通过 {len(OK)} · 失败 {len(BAD)} · 跳过 {len(SKIP)}")
     if BAD:

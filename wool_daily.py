@@ -1070,13 +1070,35 @@ def build_html(items: list[dict], excluded: list[dict], day: str, days: int,
 
 
 # ------------------------------------------------------------------ PDF
+def _win_path(p: Path) -> str:
+    """本地路径 → msedge 能用的 Windows 路径。
+
+    WSL 下 /mnt/<盘>/... 直接映射成 <盘>:/...；其他形态（网络盘等）用 wslpath -w。
+    Windows 下就是 as_posix()。这样代码里不再钉死项目所在盘符。
+    """
+    p = p.resolve()
+    if os.name == "nt":
+        return p.as_posix()
+    m = re.match(r"^/mnt/([A-Za-z])/(.*)$", p.as_posix())
+    if m:
+        return f"{m.group(1).upper()}:/{m.group(2)}"
+    try:
+        out = subprocess.run(["wslpath", "-w", str(p)], capture_output=True,
+                             text=True, encoding="utf-8", errors="replace", timeout=10)
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.strip().replace("\\", "/")
+    except Exception:
+        pass
+    return p.as_posix()
+
+
 def to_pdf(html_path: Path, pdf_path: Path) -> bool:
     edge = "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
     if not os.path.exists(edge):
         print("[warn] Edge not found, skip PDF", file=sys.stderr)
         return False
-    win_html = "E:/AI/Zcode/projects/wool-daily/out/" + html_path.name
-    win_pdf = "E:/AI/Zcode/projects/wool-daily/out/" + pdf_path.name
+    win_html = _win_path(html_path)
+    win_pdf = _win_path(pdf_path)
     profile = os.path.expandvars(r"%LOCALAPPDATA%\Temp\wool-edge").replace("\\", "/")
     if "%" in profile:
         # WSL 的 posixpath.expandvars 不认 %VAR%（只有 Windows 的 ntpath 认），
@@ -1287,9 +1309,9 @@ def main() -> int:
     # stdout：给 cron agent 的简报（不打印全文，避免吃满上下文）
     print(f"DATE={day}")
     print(f"ITEMS={len(items)} EXCLUDED={len(excluded)}")
-    print(f"HTML=E:/AI/Zcode/projects/wool-daily/out/{target_day}.html")
+    print(f"HTML={html_path}")
     if pdf_ok:
-        print(f"PDF=E:/AI/Zcode/projects/wool-daily/out/{target_day}.pdf")
+        print(f"PDF={pdf_path}")
     print("")
     print("TOP:")
     for it in items[: args.top]:
