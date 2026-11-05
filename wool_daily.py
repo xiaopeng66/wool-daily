@@ -1078,6 +1078,11 @@ def to_pdf(html_path: Path, pdf_path: Path) -> bool:
     win_html = "E:/AI/Zcode/projects/wool-daily/out/" + html_path.name
     win_pdf = "E:/AI/Zcode/projects/wool-daily/out/" + pdf_path.name
     profile = os.path.expandvars(r"%LOCALAPPDATA%\Temp\wool-edge").replace("\\", "/")
+    if "%" in profile:
+        # WSL 的 posixpath.expandvars 不认 %VAR%（只有 Windows 的 ntpath 认），
+        # 原样传给 msedge 会以 rc=21 失败、PDF 不生成。退到 Windows 系统 Temp，
+        # 实测 Edge 从 WSL 调起时对 C:/Windows/Temp 可写。
+        profile = "C:/Windows/Temp/wool-edge"
     cmd = [edge, "--headless=new", "--disable-gpu", "--no-first-run",
            f"--user-data-dir={profile}", f"--print-to-pdf={win_pdf}",
            "--no-pdf-header-footer", f"file:///{win_html}"]
