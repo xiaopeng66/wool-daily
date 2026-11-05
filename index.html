@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f7fa">
+<title>羊毛日报 · 2026-11-05</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7fa; --surface:#fff; --text:#1c2736; --muted:#516079; --hint:#69788c;
+  --line:#e3e9f0; --primary:#4e52c9; --soft:#eff0ff; --hover:#f6f7fb;
+  --shadow:0 10px 32px rgba(25,45,80,.06); --radius:16px;
+  --good-bg:#e9f9ef; --good-fg:#177245; --good-bd:#bfe8cf;
+  --warn-bg:#fff6e6; --warn-fg:#95610b; --warn-bd:#f3d9a4;
+  --bad-bg:#fdeeee;  --bad-fg:#a32020;  --bad-bd:#f3c4c4;
+}
+html[data-theme=dark]{
+  color-scheme:dark;
+  --bg:#111827; --surface:#1b2636; --text:#f3f5f9; --muted:#b8c4d5; --hint:#9cacc0;
+  --line:#354256; --primary:#b2b5ff; --soft:#303457; --hover:#263448;
+  --shadow:0 10px 32px rgba(0,0,0,.12);
+  --good-bg:#183e34; --good-fg:#a7e9c8; --good-bd:#30684f;
+  --warn-bg:#4a3820; --warn-fg:#f6d492; --warn-bd:#775a2a;
+  --bad-bg:#49242a;  --bad-fg:#f7b4b4;  --bad-bd:#7a3a3a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.65 "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  -webkit-text-size-adjust:100%;overflow-x:hidden;
+}
+.shell{max-width:1040px;margin:0 auto;padding:0 18px 64px}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* 顶栏 */
+.top{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:0 -18px;padding:11px 18px;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+}
+.brand{display:inline-flex;align-items:center;gap:8px;color:var(--text);font-size:15px}
+.brand .logo{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(180deg,var(--primary),color-mix(in srgb,var(--primary) 70%,#000));
+  color:#fff;font-size:15px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.top-date{color:var(--hint);font-size:13px}
+.mode{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);color:var(--muted);font-size:13px;cursor:pointer}
+.mode:hover{background:var(--hover)}
+
+/* Hero + 统计带 */
+.hero{margin:28px 0 14px}
+.eyebrow{color:var(--primary);font-size:12.5px;font-weight:700;letter-spacing:.06em}
+.hero h1{font-size:clamp(1.55rem,3vw,2.05rem);line-height:1.2;letter-spacing:-.02em;margin:6px 0 8px}
+.hero p{margin:0;color:var(--muted);font-size:13.5px;max-width:680px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 20px}
+.stat{border:1px solid var(--line);border-radius:14px;background:var(--surface);
+  padding:12px 14px;box-shadow:0 3px 14px rgba(25,45,80,.035)}
+.stat strong{display:block;font-size:26px;line-height:1.15;letter-spacing:-.02em}
+.stat span{display:block;color:var(--hint);font-size:12px;margin-top:2px}
+.stat.hl strong{color:var(--primary)}
+/* 「本次新增」格：绿色，和「条可写」的靛蓝区分开，一眼找到这次的新货 */
+.stat.hot strong{color:var(--good-fg)}
+.hl-num{color:var(--good-fg)}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}
+  .stats .stat:last-child{grid-column:span 2}}
+
+/* 筛选面板 */
+.panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);
+  box-shadow:var(--shadow);padding:13px 15px;margin-bottom:22px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg);padding:0 12px;min-height:42px}
+.search span{color:var(--hint);font-size:16px}
+.search input{flex:1;border:0;background:transparent;color:var(--text);font-size:14px;outline:none;min-width:0}
+.filters{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.fname{color:var(--hint);font-size:12.5px;flex:none;width:34px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0}
+.chip{min-height:32px;padding:0 11px;border:1px solid var(--line);border-radius:9px;
+  background:var(--surface);color:var(--muted);font-size:12.5px;cursor:pointer;white-space:nowrap}
+.chip:hover{background:var(--hover)}
+.chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+html[data-theme=dark] .chip.active{color:#171d3a}
+.count{color:var(--hint);font-size:12.5px;margin-left:auto;white-space:nowrap}
+
+/* 分组 */
+.group{margin:26px 0}
+.group[hidden]{display:none}
+.group-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  padding-left:10px;border-left:4px solid var(--primary)}
+.group-head h2{margin:0;font-size:16.5px;font-weight:800;color:var(--text);white-space:nowrap}
+.group-head .line{flex:1;height:1px;background:var(--line)}
+.group-head .portion{color:var(--hint);font-size:12.5px;white-space:nowrap}
+@media (max-width:640px){.group-head{flex-wrap:wrap}
+  .group-head .portion{white-space:normal}}
+/* 关键：不设 align-items:start，同行卡片等高；卡内 .card-foot{margin-top:auto} 才能把
+   底部信息钉在同一条线上 —— 之前的「参差不齐」就是 start + margin-top:auto 互相抵消。 */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(318px,1fr));gap:14px}
+@media (max-width:640px){.cards{grid-template-columns:1fr}}
+
+/* 卡片：结构固定五层，等高对齐 */
+.card{display:flex;flex-direction:column;gap:8px;padding:14px 16px;border:1px solid var(--line);
+  border-radius:var(--radius);background:var(--surface);box-shadow:0 3px 16px rgba(25,45,80,.035);
+  transition:border-color .14s,box-shadow .14s;min-width:0}
+.card:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--line));
+  box-shadow:0 8px 24px rgba(25,45,80,.07)}
+.card[hidden]{display:none}
+/* 「本次新增」的卡片左边描一道绿线：滚动长列表时不用逐张看标签 */
+.card.is-new{box-shadow:inset 3px 0 0 var(--good-fg),0 3px 16px rgba(25,45,80,.035)}
+.pick-card{background:linear-gradient(180deg,var(--soft),var(--surface) 52%)}
+.card-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* 帖子编号（点击复制）：一帖一号，由来源 URL 哈希得到，跨天不变 */
+.card-no{font:inherit;font-size:11.5px;font-weight:800;line-height:1.5;cursor:pointer;
+  padding:1px 7px;border-radius:7px;white-space:nowrap;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  color:var(--primary);background:var(--soft);
+  border:1px solid color-mix(in srgb,var(--primary) 32%,var(--line));
+  transition:opacity .14s,background .14s,color .14s}
+.card-no:hover{opacity:.68}
+.card-no:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.card-no.copied{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
+.cat-badge{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--hover);
+  border:1px solid var(--line);border-radius:7px;padding:1px 8px;white-space:nowrap}
+.pick-card .cat-badge{color:var(--primary);background:var(--soft);
+  border-color:color-mix(in srgb,var(--primary) 30%,var(--line))}
+.conf{font-size:11px;padding:1px 7px;border-radius:7px;white-space:nowrap;border:1px solid transparent}
+.conf.ok{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
+.conf.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-bd)}
+.conf.bad{background:var(--bad-bg);color:var(--bad-fg);border-color:var(--bad-bd)}
+.score{margin-left:auto;flex:none;min-width:34px;text-align:center;padding:1px 8px;border-radius:8px;
+  background:var(--soft);color:var(--primary);font-size:12.5px;font-weight:800}
+.pick-card .score{background:var(--primary);color:#fff}
+html[data-theme=dark] .pick-card .score{color:#171d3a}
+.card .title{margin:0;font-size:15px;line-height:1.45;font-weight:700}
+.card .title a{color:var(--text)}
+.card .title a:hover{color:var(--primary)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11.5px;line-height:1.5;padding:2px 8px;border-radius:7px;white-space:nowrap;
+  border:1px solid var(--line);background:var(--hover);color:var(--muted)}
+.tag.good{background:var(--good-bg);color:var(--good-fg);border-color:var(--good-bd)}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-bd)}
+.tag.bad{background:var(--bad-bg);color:var(--bad-fg);border-color:var(--bad-bd)}
+.tag.new{background:var(--soft);color:var(--primary);
+  border-color:color-mix(in srgb,var(--primary) 35%,var(--line));font-weight:700}
+/* 「今日首见」介于醒目与普通之间：今天第一次见，但上一轮已在榜 */
+.tag.new-soft{background:color-mix(in srgb,var(--soft) 55%,var(--surface));
+  color:color-mix(in srgb,var(--primary) 70%,var(--muted));
+  border-color:color-mix(in srgb,var(--primary) 20%,var(--line));font-weight:600}
+.tag.keep{background:var(--hover);color:var(--muted);font-weight:600}
+/* 摘要最多 3 行，超长截断：卡片高度不再被超长正文撑爆 */
+.desc{margin:0;color:var(--muted);font-size:12.8px;line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* 分数构成：+25 免费可领 / −12 限地区，一眼看懂分数怎么来的 */
+.why{display:flex;flex-wrap:wrap;gap:4px}
+.why i{font-style:normal;font-size:11px;line-height:1.55;padding:1px 7px;border-radius:6px;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.why i.p{background:var(--good-bg);color:var(--good-fg)}
+.why i.n{background:var(--bad-bg);color:var(--bad-fg)}
+.card-foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.source{color:var(--primary);font-size:12px;font-weight:700}
+.time{color:var(--hint);font-size:12px}
+.go{margin-left:auto;padding:8px 12px;border-radius:8px;background:var(--primary);color:#fff;
+  font-size:12.5px;white-space:nowrap}
+html[data-theme=dark] .go{color:#171d3a}
+.go:hover{text-decoration:none;filter:brightness(1.06)}
+/* 明文 URL 收进 foot 第二行，单行截断（title 属性带完整链接可复制） */
+.urlline{flex-basis:100%;color:var(--hint);font:11px/1.5 ui-monospace,Consolas,monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+
+/* 说明 / 排除区 / 页脚 / 浮动按钮 */
+.hint{margin:26px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+  padding:10px 14px;color:var(--muted);font-size:12.5px}
+.hint summary{cursor:pointer;color:var(--primary);font-weight:600}
+.hint p{margin:7px 0}
+.exc-g{margin:10px 0 4px}
+.exc-g h4{margin:0 0 6px;font-size:12.5px;color:var(--text)}
+.exc-g h4 b{color:var(--hint);font-weight:600}
+.exc-g h4 small{color:var(--hint);font-weight:400;margin-left:8px}
+.exc-g ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:2px 16px}
+.exc-g li{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.exc-g li a{color:var(--muted)}
+.exc-g li a:hover{color:var(--primary)}
+.exc-g li.more{color:var(--hint);font-style:normal}
+.errbox{background:var(--bad-bg);border:1px solid var(--bad-bd);color:var(--bad-fg);
+  border-radius:12px;padding:10px 13px;font-size:12.5px;margin:0 0 16px}
+.footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
+  color:var(--hint);font-size:11.5px;line-height:1.7}
+.fab{position:fixed;right:18px;bottom:18px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:17px;
+  cursor:pointer;box-shadow:0 6px 18px rgba(25,45,80,.16);z-index:30}
+.fab[hidden]{display:none}
+</style>
+</head>
+<body data-day="2026-11-05">
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="#top"><span class="logo">🐑</span><strong>羊毛日报</strong></a>
+    <div class="top-actions">
+      <span class="top-date">2026-11-05</span>
+      <button class="mode" id="theme" type="button">☾ 夜间</button>
+    </div>
+  </header>
+
+  <div class="hero" id="top">
+    <div class="eyebrow">22 源聚合 · 本轮更新于 2026-11-05 09:00</div>
+    <h1>本轮新增的羊毛，挑最值得写的。</h1>
+    <p><b class="hl-num">本次新增 4 条</b> · 补抓 1 条（另有 0 条在榜续留，标「在榜续留」）。页面默认<b>只显示本轮新增</b>；补抓与在榜续留用上方「范围」切换查看。黄色标签是<b>有门槛</b>（限地区/银行卡/号段/满减），红色是<b>有风险</b>（含推广/概率性）。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat hot"><strong>4</strong><span>本轮新增</span></div>
+    <div class="stat hl"><strong>4</strong><span>本轮可写</span></div>
+    <div class="stat"><strong>1</strong><span>补抓</span></div>
+    <div class="stat"><strong>0</strong><span>在榜续留</span></div>
+    <div class="stat"><strong>22/23</strong><span>来源在线</span></div>
+  </div>
+
+  <div class="errbox">⚠️ 本期有来源抓取失败：<b>linux.do 福利</b>，表中可能缺该来源的内容，下一轮会自动重试。</div>
+  
+
+  <section class="panel" aria-label="搜索与筛选">
+    <label class="search"><span aria-hidden="true">⌕</span>
+      <input id="q" type="search" placeholder="搜索标题 / 摘要 / 标签（如：限地区）…" autocomplete="off">
+    </label>
+    <div class="filters"><span class="fname">范围</span>
+      <div class="chips">
+        <button class="chip active" type="button" data-scope="new">本轮新增 4</button>
+        <button class="chip" type="button" data-scope="catchup">补抓 1</button>
+        <button class="chip" type="button" data-scope="keep">在榜续留 0</button>
+        <button class="chip" type="button" data-scope="all">全部 5</button>
+      </div>
+    </div>
+    <div class="filters"><span class="fname">类别</span>
+      <div class="chips"><button class="chip active" type="button" data-cat="all">全部</button><button class="chip" type="button" data-cat="AI 额度">AI 额度 2</button><button class="chip" type="button" data-cat="服务器 VPS">服务器 VPS 1</button><button class="chip" type="button" data-cat="其他">其他 2</button></div></div>
+    <div class="filters"><span class="fname">排序</span>
+      <div class="chips">
+        <button class="chip active" type="button" data-sort="score">分数优先</button>
+        <button class="chip" type="button" data-sort="time">最新发布</button>
+      </div>
+      <span class="count" id="count">显示 0 / 5 条</span>
+    </div>
+  </section>
+
+  <section class="group" id="pick" data-key="今日优先">
+    <div class="group-head"><h2>🔥 今日优先</h2><div class="line"></div>
+      <span class="portion">4 条 · 本轮新增 · 分数 Top 4（≥55 分的只有 0 条） · 同源最多 3 条</span></div>
+    <div class="cards">
+      <article class="card pick-card is-new"
+               data-pid="7FRX72" data-cat="AI 额度" data-score="45"
+               data-new="1" data-scope="new"
+               data-ts="2026-11-05T00:57:03+00:00" data-text="【慢讯】work buddy国际国内 版 hy4可以免费登了到14号了 讲真hy4之前预览版用起来还是可以的反正不要钱登吧不过有额度限制 ai 额度 nodeseek 免费/可领 今日新增">
+        <div class="card-top">
+          <button class="card-no" type="button" data-pid="7FRX72" title="点击复制帖子编号、标题和链接">#7FRX72</button><span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">45</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeseek.com/post-1032497-1" target="_blank" rel="noopener">【慢讯】work Buddy国际国内 版 HY4可以免费登了到14号了</a></h3>
+        <div class="tags"><span class="tag new" title="发布于上轮之后（11-05 00:57）">本次新增</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">讲真HY4之前预览版用起来还是可以的反正不要钱登吧不过有额度限制</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">NodeSeek</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeseek.com/post-1032497-1" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeseek.com/post-1032497-1">https://www.nodeseek.com/post-1032497-1</span>
+        </div>
+      </article>
+      <article class="card pick-card is-new"
+               data-pid="5DPVW6" data-cat="服务器 VPS" data-score="44"
+               data-new="1" data-scope="new"
+               data-ts="2026-11-05T00:52:22+00:00" data-text="20元 [出] hkcloudx miniv6 0.6刀 月付款 我买了2台，自己用一台，出一台，20元出。机子只能用vip6，没有vip4.移动快乐鸡带宽500m-流量1t续费0.6刀一个月，你可以自己年付，我买的是月付，移动快乐鸡。zfb口令，20元push出 服务器 vps nodeseek 免费/可领 今日新增 -限运营商">
+        <div class="card-top">
+          <button class="card-no" type="button" data-pid="5DPVW6" title="点击复制帖子编号、标题和链接">#5DPVW6</button><span class="cat-badge">🖥️ 服务器 VPS</span>
+          <span class="conf warn">需满足条件</span>
+          <span class="score">44</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeseek.com/post-1032491-1" target="_blank" rel="noopener">20元 [出] HKcloudx miniv6 0.6刀 月付款</a></h3>
+        <div class="tags"><span class="tag new" title="发布于上轮之后（11-05 00:52）">本次新增</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag warn">限运营商</span></div>
+        <p class="desc">我买了2台，自己用一台，出一台，20元出。机子只能用VIP6，没有VIP4.移动快乐鸡带宽500M-流量1T续费0.6刀一个月，你可以自己年付，我买的是月付，移动快乐鸡。ZFB口令，20元push出</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i><i class="n">−6 限运营商</i></div>
+        <div class="card-foot">
+          <span class="source">NodeSeek</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeseek.com/post-1032491-1" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeseek.com/post-1032491-1">https://www.nodeseek.com/post-1032491-1</span>
+        </div>
+      </article>
+      <article class="card pick-card is-new"
+               data-pid="UZECTN" data-cat="AI 额度" data-score="40"
+               data-new="1" data-scope="new"
+               data-ts="2026-11-04T21:58:30+00:00" data-text="免费2年google ai pro领取教程，100%成功，抓紧时间领取，不容错过 # gemini # ai 免费2年google ai pro领取教程，100%成功，抓紧时间领取，不容错过 # gemini # ai 同步自 youtube 频道 佬王 3 个帖子 - 3 位参与者 阅读完整话题 ai 额度 nodeloc 免费/可领 今日新增 -偏教程">
+        <div class="card-top">
+          <button class="card-no" type="button" data-pid="UZECTN" title="点击复制帖子编号、标题和链接">#UZECTN</button><span class="cat-badge">✨ AI 额度</span>
+          <span class="conf ok">确定</span>
+          <span class="score">40</span>
+        </div>
+        <h3 class="title"><a href="https://www.nodeloc.com/t/topic/116594" target="_blank" rel="noopener">免费2年Google AI Pro领取教程，100%成功，抓紧时间领取，不容错过 # gemini # AI</a></h3>
+        <div class="tags"><span class="tag new" title="发布于上轮之后（11-04 21:58）">本次新增</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span></div>
+        <p class="desc">免费2年Google AI Pro领取教程，100%成功，抓紧时间领取，不容错过 # gemini # AI 同步自 YouTube 频道 佬王 3 个帖子 - 3 位参与者 阅读完整话题</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+20 今日新增</i><i class="n">−10 偏教程</i></div>
+        <div class="card-foot">
+          <span class="source">NodeLoc</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://www.nodeloc.com/t/topic/116594" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://www.nodeloc.com/t/topic/116594">https://www.nodeloc.com/t/topic/116594</span>
+        </div>
+      </article>
+      <article class="card pick-card is-new"
+               data-pid="NLBK89" data-cat="其他" data-score="40"
+               data-new="1" data-scope="new"
+               data-ts="2026-11-05T00:34:00+08:00" data-text="🚦 部分首页搜标题得9限时券 https://wsrv.nl/?url=https://cdn4.telesco.pe/file/prx9p-sl-pmrthslh_-jx2-lijwxtohmto71y4cntpbp7lpfvl-pvet1f-zi77qkfglcwbut8gwf81b42i5mu_nmzh8yo-6n34-ntbxxtlzrth96t9w_pmbfvmxxmfzuehfcvbcoxwl7z2fs7cqpk5fm5xe55ihovifwto1dmojmokeeo5h_xih0c2o_h_ 其他 tg·二庆薅羊毛 入口清晰 今日新增">
+        <div class="card-top">
+          <button class="card-no" type="button" data-pid="NLBK89" title="点击复制帖子编号、标题和链接">#NLBK89</button><span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">40</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/erqing/42194" target="_blank" rel="noopener">🚦 部分首页搜标题得9限时券</a></h3>
+        <div class="tags"><span class="tag new" title="发布于上轮之后（11-05 00:34）">本次新增</span><span class="tag good">帖子今日发布</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">https://wsrv.nl/?url=https://cdn4.telesco.pe/file/PRX9P-sl-PmRtHslh_-JX2-LijwxToHMto71Y4CntpBp7LPFVL-pvet1f-ZI77QKfGLcwbuT8GwF81b42I5Mu_nMzH8yo-6n34-NtBxxtlzrth96t9w_pmbfvmXxmfZuEhFcVBCOXwl7z2Fs7CqpK5fM5Xe55IhovifWTO1dMOjMoKEEo5h_xIh0C2O_H_</p>
+        <div class="why"><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·二庆薅羊毛</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/erqing/42194" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/erqing/42194">https://t.me/erqing/42194</span>
+        </div>
+      </article></div>
+  </section>
+
+  
+    <section class="group" data-key="其他" data-scope="catchup">
+      <div class="group-head"><h2>📦 其他</h2><div class="line"></div>
+        <span class="portion">1 条</span></div>
+      <div class="cards">
+      <article class="card"
+               data-pid="BXAMBL" data-cat="其他" data-score="65"
+               data-new="0" data-scope="catchup"
+               data-ts="2026-11-04T15:33:00+08:00" data-text="hermes 官方提供免费模型包含stealth/crouton-alpha hermes 官方提供免费模型包含stealth/crouton-alpha
+https://t.me/fuckgfw_newbie1/163 https://t.me/fuckgfw_newbie1/163 其他 tg·sliverkiss 免费/可领 入口清晰 今日新增">
+        <div class="card-top">
+          <button class="card-no" type="button" data-pid="BXAMBL" title="点击复制帖子编号、标题和链接">#BXAMBL</button><span class="cat-badge">📦 其他</span>
+          <span class="conf ok">确定</span>
+          <span class="score">65</span>
+        </div>
+        <h3 class="title"><a href="https://t.me/sliverkiss_blog/1024" target="_blank" rel="noopener">Hermes 官方提供免费模型包含stealth/crouton-alpha</a></h3>
+        <div class="tags"><span class="tag keep" title="发布于上轮之前（11-04 15:33），上轮未抓到">补抓</span><span class="tag new-soft">今日首见</span><span class="tag good">帖子今日发布</span><span class="tag good">免费/可领</span><span class="tag good">入口清晰</span></div>
+        <p class="desc">Hermes 官方提供免费模型包含stealth/crouton-alpha
+https://t.me/FuckGFW_Newbie1/163 https://t.me/FuckGFW_Newbie1/163</p>
+        <div class="why"><i class="p">+25 免费/可领</i><i class="p">+15 入口清晰</i><i class="p">+20 今日新增</i></div>
+        <div class="card-foot">
+          <span class="source">TG·Sliverkiss</span>
+          <span class="time">今日</span>
+          <a class="go" href="https://t.me/sliverkiss_blog/1024" target="_blank" rel="noopener">打开原帖 →</a>
+          <span class="urlline" title="https://t.me/sliverkiss_blog/1024">https://t.me/sliverkiss_blog/1024</span>
+        </div>
+      </article></div>
+    </section>
+
+  <details class="hint">
+    <summary>说明 · 分数怎么来的 · 排除规则</summary>
+    <p>· <b>加分</b>：免费/可领 +25、入口清晰 +15、今日新增 +20、昨日 +12、永久/长期 +10、说明详细 +10（较短 +5）、官方域名 +8、生活类 +5。</p>
+    <p>· <b>减分</b>：含推广 −25、付费前置 −15、限地区 −12、偏教程 −10、满减门槛 −8、限银行卡/运营商 −6。分数只用于排序，不代表官方口径。</p>
+    <p>· <b>确定性</b>：确定 / 需满足条件（限地区·银行卡·号段·付费）/ 概率性。</p>
+    <p>· <b>排除</b>：交易帖、抽奖、新闻、讨论、无发放动作、已结束。点开下面按原因分类的清单（可点标题）核对是否误杀。</p>
+    <p>· <b>有效期</b>不做自动核验，写稿前务必点「打开原帖」确认库存与截止时间。</p>
+  </details>
+
+  <details class="hint">
+    <summary>已排除 321 条 · 点开核对是否误杀</summary>
+    <div class="exc-g"><h4>非科技·无科技特征 <b>（52）</b></h4><ul><li><a href="https://jike.info/topic/59662/美团福利-有建行卡的可以看下" target="_blank" rel="noopener">美团福利，有建行卡的可以看下</a></li><li><a href="https://jike.info/topic/59661/农行5元立减金" target="_blank" rel="noopener">农行5元立减金</a></li><li><a href="https://jike.info/topic/59659/京东惠农券-上海工行卡60.01减60" target="_blank" rel="noopener">京东惠农券：上海工行卡60.01减60</a></li><li><a href="https://jike.info/topic/59633/工行visa权益-1元购15元京东e卡" target="_blank" rel="noopener">工行Visa权益：1元购15元京东E卡</a></li><li><a href="https://jike.info/topic/59625/中国移动-100gb流量畅快用-广东移动" target="_blank" rel="noopener">【中国移动】100GB流量畅快用！广东移动</a></li><li><a href="https://jike.info/topic/59589/南京银行app滚动横幅可领5元微信立减金" target="_blank" rel="noopener">南京银行APP滚动横幅可领5元微信立减金</a></li><li><a href="https://www.nodeseek.com/post-1032499-1" target="_blank" rel="noopener">人怎么能同时存在睡不着睡不醒睡不够的</a></li><li><a href="https://www.nodeseek.com/post-1032498-1" target="_blank" rel="noopener">搞了甲骨文机子,搭建什么能赚点钱吗</a></li><li><a href="https://www.nodeloc.com/t/topic/116599" target="_blank" rel="noopener">【IP测试】学长 免费 HK</a></li><li><a href="https://www.nodeloc.com/t/topic/116595" target="_blank" rel="noopener">抽个TG双向号</a></li><li><a href="https://www.nodeloc.com/t/topic/116581" target="_blank" rel="noopener">workbuddy的hy4正式版限时免费，之前是预览版</a></li><li><a href="https://www.nodeloc.com/t/topic/116550" target="_blank" rel="noopener">看到有佬在发免费网易云会员，想到我也有</a></li><li class="more">…还有 40 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>论坛闲聊·标题无发放动作 <b>（35）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1032501-1" target="_blank" rel="noopener">OAI马上上架新模型，6.2Astra以及额外的Sol</a></li><li><a href="https://www.nodeseek.com/post-1032482-1" target="_blank" rel="noopener">gemini ultra20x 两人车，来一个佬和我拼</a></li><li><a href="https://www.nodeloc.com/t/topic/116593" target="_blank" rel="noopener">Google AI Pro 24个月订阅</a></li><li><a href="https://www.nodeloc.com/t/topic/116591" target="_blank" rel="noopener">抽一個Gemini Ai plus 12個月連結</a></li><li><a href="https://www.nodeloc.com/t/topic/116588" target="_blank" rel="noopener">Gemini AI Plus 12M</a></li><li><a href="https://www.nodeloc.com/t/topic/116586" target="_blank" rel="noopener">谷歌被封号了，谷歌究竟需要什么样的环境</a></li><li><a href="https://www.nodeloc.com/t/topic/116576" target="_blank" rel="noopener">学校的机房尽然可以无网打开被cf加速的网站</a></li><li><a href="https://www.nodeloc.com/t/topic/116575" target="_blank" rel="noopener">使用 Astra 制作的游戏 + 源代码 + 在线游戏</a></li><li><a href="https://www.nodeloc.com/t/topic/116541" target="_blank" rel="noopener">Raffling 2 Cocaapi $2 redemption codes cuz i bought more than 1</a></li><li><a href="https://www.v2ex.com/t/1254586" target="_blank" rel="noopener">群晖 NAS 被勒索后从 SSD 缓存恢复文件</a></li><li><a href="https://www.v2ex.com/t/1254518" target="_blank" rel="noopener">最新版 Postman 会在后台静默篡改 Codex 和 Claude Code 配置，强行植入插件与 Hook</a></li><li><a href="https://www.v2ex.com/t/1254558" target="_blank" rel="noopener">gpt 已经听不懂人话了</a></li><li class="more">…还有 23 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>讨论帖 <b>（32）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1032502-1" target="_blank" rel="noopener">有没有在用ppflight glide的，值得入手吗？</a></li><li><a href="https://www.nodeloc.com/t/topic/116571" target="_blank" rel="noopener">大家觉得这个项目有没有搞头</a></li><li><a href="https://www.nodeloc.com/t/topic/116555" target="_blank" rel="noopener">想求一个 BTSCHOOL 的💊，寻一些教育资源</a></li><li><a href="https://www.nodeloc.com/t/topic/116536" target="_blank" rel="noopener">想问下谁那么想要我的号啊？？？</a></li><li><a href="https://t.me/linux_do_channel/555925" target="_blank" rel="noopener">changeyang1 在 https://linux.do/t/topic/3124169/1 【求助】:中转模型测试 中发帖</a></li><li><a href="https://t.me/linux_do_channel/555928" target="_blank" rel="noopener">jamesenha 在 https://linux.do/t/topic/3124186/1 Moss-image是个什么样的模型？ 中发帖</a></li><li><a href="https://t.me/linux_do_channel/555929" target="_blank" rel="noopener">LX (https://t.me/LX1211 @LX1211) 在 https://linux.do/t/topic/3124205/1 佬们，你们有dsh如</a></li><li><a href="https://t.me/linux_do_channel/555930" target="_blank" rel="noopener">谢同学 (https://t.me/txdys @txdys) 在 https://linux.do/t/topic/3124204/1 用Claude 的cl</a></li><li><a href="https://t.me/linux_do_channel/555931" target="_blank" rel="noopener">林奈 (https://t.me/kelan @kelan) 在 https://linux.do/t/topic/3124203/1 Pro 100算出来的6</a></li><li><a href="https://t.me/linux_do_channel/555932" target="_blank" rel="noopener">@MingHu 在 https://linux.do/t/topic/3124206/1 被GLM逮捕了 中发帖</a></li><li><a href="https://t.me/linux_do_channel/555933" target="_blank" rel="noopener">@cyber_one 在 https://linux.do/t/topic/3124211/1 Google新账号也太难申请了 中发帖</a></li><li><a href="https://t.me/linux_do_channel/555934" target="_blank" rel="noopener">Suny (https://t.me/Caozhenhan @Caozhenhan) 在 https://linux.do/t/topic/3124213/1 </a></li><li class="more">…还有 20 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·科技资讯 <b>（30）</b></h4><ul><li><a href="https://jike.info/topic/59604/招商银行买100元朝朝宝可得5元奖励" target="_blank" rel="noopener">招商银行买100元朝朝宝可得5元奖励</a></li><li><a href="https://www.nodeseek.com/post-1032493-1" target="_blank" rel="noopener">原 Claude Code 产品经理跳槽 OpenAI，负责 Core Products 的产品管理</a></li><li><a href="https://www.nodeseek.com/post-1032486-1" target="_blank" rel="noopener">【9折出绿云日本软银】JP10GbpsStorage-1 (Softbank)</a></li><li><a href="https://www.nodeloc.com/t/topic/116590" target="_blank" rel="noopener">白嫖 Report｜学长免费香港 i-Cable 家宽小鸡评测：IP 纯净度天花板</a></li><li><a href="https://www.nodeloc.com/t/topic/116537" target="_blank" rel="noopener">【GSVPS测评】PanstarCloud 英国家宽 VPS 测评：伦敦三网线路、IP 质量与流媒体解锁实测</a></li><li><a href="https://www.ithome.com/1/022/504.htm" target="_blank" rel="noopener">苹果 Apple TV 官宣下周五全球首播《史努比特辑：史努比的 12 天》圣诞特辑</a></li><li><a href="https://www.ithome.com/1/022/500.htm" target="_blank" rel="noopener">单日大涨 5.31%：苹果股价昨日再创历史新高，报收 349.51 美元</a></li><li><a href="https://www.ithome.com/1/022/494.htm" target="_blank" rel="noopener">苹果 macOS 27.3 开发者预览版将“实时活动”带入菜单栏，无灵动岛 Mac 也能用</a></li><li><a href="https://www.ithome.com/1/022/491.htm" target="_blank" rel="noopener">苹果 MacBook Neo 卖爆：消息称第二代订单量翻倍备货，2027 年瞄准 1600 万台</a></li><li><a href="https://www.ithome.com/1/022/490.htm" target="_blank" rel="noopener">月之暗面 2.8 万亿参数 Kimi K3.1 Pro 开放权重，登顶 Agent Arena 开源模型榜</a></li><li><a href="https://www.ithome.com/1/022/488.htm" target="_blank" rel="noopener">iOS 27.3 新规：“任何人可见”分享 iCloud 链接会触发苹果有害内容审查</a></li><li><a href="https://www.ithome.com/1/022/487.htm" target="_blank" rel="noopener">英特尔 Nova Lake-S 处理器被曝新增 90℃ 温控机制：撞墙锁频 5.1GHz，用户无法手动调整</a></li><li class="more">…还有 18 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>软件羊毛 <b>（26）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/116549" target="_blank" rel="noopener">Hy-MT2 本地离线翻译（PotPlayer字幕/沉浸式插件翻译）</a></li><li><a href="https://www.ithome.com/1/022/497.htm" target="_blank" rel="noopener">暴雪《魔兽世界：无限》全球上线：等级永久锁定 60 级，12 月 10 日开放首个团本</a></li><li><a href="https://www.ithome.com/1/022/496.htm" target="_blank" rel="noopener">私钥竟是数字 4：印度 eMudhra 证书翻车，苹果 macOS 27.3 开发者测试版强制拉黑</a></li><li><a href="https://www.ithome.com/1/022/470.htm" target="_blank" rel="noopener">微信鸿蒙版 App 推 8.0.23.34 正式版更新，更多用户灰度合并发图功能</a></li><li><a href="https://www.ithome.com/1/022/429.htm" target="_blank" rel="noopener">《影之刃零》发售后首个补丁更新上线：优化流畅度，调整部分战斗表现</a></li><li><a href="https://t.me/zzzdm/393158" target="_blank" rel="noopener">依视路 钻晶膜致+1.6-1.67折射率 2片装+任选框 原厂加工</a></li><li><a href="https://t.me/zzzdm/393161" target="_blank" rel="noopener">今日必买：福临门 美味麦香小麦粉10斤</a></li><li><a href="https://t.me/zzzdm/393171" target="_blank" rel="noopener">好丽友 好友趣 薯片 韩式泡菜味 70g</a></li><li><a href="https://t.me/zzzdm/393172" target="_blank" rel="noopener">君羽 800蓬羽绒95白鹅绒 排骨鹅绒服 内外两穿 52021 男款—黑色</a></li><li><a href="https://t.me/zzzdm/393176" target="_blank" rel="noopener">88VIP、今日必买：汾酒 山西杏花村53度青花20清香型白酒500ml*4瓶赠礼袋</a></li><li><a href="https://www.landian.news/archives/128048.html" target="_blank" rel="noopener">OpenAI称ChatGPT搜索类查询已经达到谷歌的20% 周活跃用户增长至12亿</a></li><li><a href="https://www.landian.news/archives/128047.html" target="_blank" rel="noopener">消息称字节跳动限制员工外部AI工具访问内部资料 涉及Claude Code和Codex等</a></li><li class="more">…还有 14 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>新闻 <b>（23）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1032489-1" target="_blank" rel="noopener">测评｜👌线路良好 👍解锁全面 晚高峰家宽三网七百上下 · DataWave 洛杉矶 LAX A1 Premium IDC 测评报告</a></li><li><a href="https://www.ithome.com/1/022/503.htm" target="_blank" rel="noopener">微星推出商用迷你主机 Cubi NUC WCG，基于英特尔第 3 代酷睿处理器</a></li><li><a href="https://www.ithome.com/1/022/502.htm" target="_blank" rel="noopener">华为宣布昇腾 0 Day 支持 Kimi K3.1 Pro 推理部署，2.8 万亿级 MoE 模型能力再进阶</a></li><li><a href="https://www.ithome.com/1/022/501.htm" target="_blank" rel="noopener">Anthropic 绘制出全球首个包含 96 个蛋白质副本的 3D 细菌库：Claude 辅助加速研究，纯化时间从 3 天缩短至 90 分钟</a></li><li><a href="https://www.ithome.com/1/022/493.htm" target="_blank" rel="noopener">国内航线燃油附加费今日起上调：800 公里及以下上涨 30 元，800 公里以上涨 50 元</a></li><li><a href="https://www.ithome.com/1/022/492.htm" target="_blank" rel="noopener">索尼《战神：劳菲》宣布延期至 2027 年 5 月 20 日发售，圣莫尼卡工作室称需要进一步打磨</a></li><li><a href="https://www.ithome.com/1/022/489.htm" target="_blank" rel="noopener">时隔七年回归：游改电影《愤怒的小鸟 3》发布正式预告，12 月 23 日北美上映</a></li><li><a href="https://www.ithome.com/1/022/485.htm" target="_blank" rel="noopener">由 SK 海力士提供：苹果 HomePod mini 2 智能音箱确认配 2GB 内存</a></li><li><a href="https://www.ithome.com/1/022/476.htm" target="_blank" rel="noopener">OpenAI 扫描 Linux 内核发现 948 个可提权漏洞，2308 个候选问题中有 1724 个成功复现</a></li><li><a href="https://www.ithome.com/1/022/461.htm" target="_blank" rel="noopener">法国血液中心确认受 11 月 2 日黑客升温攻击波及，幸无实际影响</a></li><li><a href="https://www.ithome.com/1/022/438.htm" target="_blank" rel="noopener">英伟达发布 Game Ready 621.14 驱动：优化《魔兽世界：无限》，修复视频黑屏问题</a></li><li><a href="https://www.ithome.com/1/022/424.htm" target="_blank" rel="noopener">魔芯科技发布基于华为昇腾原生的 4D 世界模型 MoWorld 2.0，场景可互动、编辑、调用</a></li><li class="more">…还有 11 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>往期未选 <b>（21）</b><small> · 今日之前展示过、未发帖（最早沉到 2026-11-02）。今天的候选仍在榜上</small></h4><ul><li><a href="https://51.ruyo.net/19772.html" target="_blank" rel="noopener">免费虚拟主机！Dewlance 提供 1GB存储，50G流量，无广告</a></li><li><a href="https://jike.info/topic/59650/有-muse-的朋友-抓紧用它注册甲骨文" target="_blank" rel="noopener">有 Muse 的朋友，抓紧用它注册甲骨文</a></li><li><a href="https://jike.info/topic/59617/dewlance-免费虚拟主机服务" target="_blank" rel="noopener">Dewlance 免费虚拟主机服务</a></li><li><a href="https://jike.info/topic/59594/免费网易云会员领取" target="_blank" rel="noopener">免费网易云会员领取</a></li><li><a href="https://www.v2ex.com/t/1254084" target="_blank" rel="noopener">[虚拟主机]分享个免费的虚拟主机</a></li><li><a href="https://t.me/sliverkiss_blog/1019" target="_blank" rel="noopener">注册exa.ai输入兑换码EXA50API，白嫖$50 API额度。</a></li><li><a href="https://t.me/sliverkiss_blog/1020" target="_blank" rel="noopener">B站白嫖Index-Translate翻译API，任意key可用。支持150种语言及多模态，兼容OpenAI接口规范。</a></li><li><a href="https://t.me/sliverkiss_blog/1021" target="_blank" rel="noopener">Heygen Voice Turbo API白嫖至11.30。每百万次调用0元，支持语音生成。</a></li><li><a href="https://t.me/sliverkiss_blog/1022" target="_blank" rel="noopener">深圳青年人才补贴送两个月workbuddy标准订阅。</a></li><li><a href="https://t.me/sliverkiss_blog/1023" target="_blank" rel="noopener">workbuddy白嫖hy4模型直到11月15日。</a></li><li><a href="https://t.me/sliverkiss_blog/1025" target="_blank" rel="noopener">zcode每晚0点送3亿token，半夜可以用，限制3并发。</a></li><li><a href="https://t.me/sliverkiss_blog/1026" target="_blank" rel="noopener">sensenova上线glm-5.3模型白嫖。</a></li><li class="more">…还有 9 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>非科技·购物券 <b>（16）</b></h4><ul><li><a href="https://jike.info/topic/59616/京东充话费满100减5-需用工行信用卡支付" target="_blank" rel="noopener">京东充话费满100减5，需用工行信用卡支付</a></li><li><a href="https://jike.info/topic/59609/京东白条笔笔拆红包-每用一次可拆一次" target="_blank" rel="noopener">京东白条笔笔拆红包，每用一次可拆一次</a></li><li><a href="https://jike.info/topic/59608/11月03日中国移动灵犀口令是-福利好惊喜" target="_blank" rel="noopener">11月03日中国移动灵犀口令是：福利好惊喜</a></li><li><a href="https://jike.info/topic/59607/农业银行信用卡可领15元微信刷卡金" target="_blank" rel="noopener">农业银行信用卡可领15元微信刷卡金</a></li><li><a href="https://jike.info/topic/59592/南京银行话费充值满100减10-券自动到账" target="_blank" rel="noopener">南京银行话费充值满100减10，券自动到账</a></li><li><a href="https://jike.info/topic/59588/支付宝充话费满5减0.5-平安农行卡实测可享多次" target="_blank" rel="noopener">支付宝充话费满5减0.5，平安农行卡实测可享多次</a></li><li><a href="https://25xianbao.com/archives/29471" target="_blank" rel="noopener">湖北联通 3.9 元拿下 30GB 全国流量</a></li><li><a href="https://www.nodeseek.com/post-1032485-1" target="_blank" rel="noopener">今年dmit双11会有特价机吗</a></li><li><a href="https://t.me/erqing/42189" target="_blank" rel="noopener">🚦 【0点】超市抽兔単</a></li><li><a href="https://www.ithome.com/1/022/483.htm" target="_blank" rel="noopener">机械革命旷世 16 游戏本开售：英特尔酷睿 5 205H + RTX 3050 4GB，国补后 5099.15 元</a></li><li><a href="https://www.ithome.com/1/022/366.htm" target="_blank" rel="noopener">3299 → 688 元再三降价：石头 A30 Max 智能洗地机 25000Pa 大吸力 + 180° 躺平</a></li><li><a href="https://t.me/sakurako0818/37115" target="_blank" rel="noopener">京东超市刮卡有水</a></li><li class="more">…还有 4 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>抽奖/概率性 <b>（14）</b></h4><ul><li><a href="https://jike.info/topic/59640/农业银行加企微抽奖得好礼" target="_blank" rel="noopener">农业银行加企微抽奖得好礼</a></li><li><a href="https://jike.info/topic/59632/嘉立创铝合金壳-免费铝合金壳子又来了-疯狂星期三-壳体免费打样" target="_blank" rel="noopener">嘉立创铝合金壳 免费铝合金壳子又来了-【疯狂星期三-壳体免费打样】</a></li><li><a href="https://jike.info/topic/59605/京东现金抽奖可中3.88元-无需下app直接提现到借记卡" target="_blank" rel="noopener">京东现金抽奖可中3.88元，无需下APP直接提现到借记卡</a></li><li><a href="https://www.v2ex.com/t/1253682" target="_blank" rel="noopener">「网易云音乐」11 月领免费会员，随机 7 天 左右 ，共 128 天</a></li><li><a href="https://www.nodeseek.com/post-1032490-1" target="_blank" rel="noopener">明天凌晨上线gpt-6.2-astra，gpt-6.2-sol，A社将于下周发布fable5.5</a></li><li><a href="https://www.nodeloc.com/t/topic/116544" target="_blank" rel="noopener">[已流抽]🎁 抽一个 48team 减一席位优惠码！</a></li><li><a href="https://www.nodeloc.com/t/topic/116497" target="_blank" rel="noopener">升级黄金会员啦！发 500 能量庆祝一下🎉</a></li><li><a href="https://www.v2ex.com/t/1253648" target="_blank" rel="noopener">11 月份网易云音乐黑胶会员领取，天数随机</a></li><li><a href="https://t.me/erqing/42196" target="_blank" rel="noopener">羊毛活动 zfb搜nfc  横幅进</a></li><li><a href="https://t.me/sakurako0818/37113" target="_blank" rel="noopener">京东超市抽兔单   闯关过11关的抽1亓购</a></li><li><a href="https://t.me/sakurako0818/37121" target="_blank" rel="noopener">京东抽3次能开出大</a></li><li><a href="https://t.me/zzzdm/393163" target="_blank" rel="noopener">心相印 抽纸经典系列整箱 3层 100抽*72包</a></li><li class="more">…还有 2 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>低分 <b>（14）</b></h4><ul><li><a href="https://t.me/erqing/42186" target="_blank" rel="noopener">🚦 0.01💰红花籽油250ml</a></li><li><a href="https://t.me/erqing/42190" target="_blank" rel="noopener">🚦 0点留意补东哥外卖</a></li><li><a href="https://t.me/erqing/42195" target="_blank" rel="noopener">🚦 许翠花宠物清洁湿巾10片</a></li><li><a href="https://www.v2ex.com/t/1254154" target="_blank" rel="noopener">Ubuntu 也太草台班子了， CVE-2026-98432 内核补丁还没推送吗，有装了 proposed 源的大佬吗，有问题吗</a></li><li><a href="https://lowendtalk.com/discussion/222883/deluxhost-net-pre-black-friday-x-series-back-from-6-yr-storage-vps-storage-boxes-nl" target="_blank" rel="noopener">DeluxHost.net | Pre-Black Friday | X Series back from €6/yr | Storage VPS &amp; Storage Boxes! | NL</a></li><li><a href="https://lowendtalk.com/discussion/222926/d4-networks-dedicated-deals-dallas-2x-platinum-8173m-128-gb-10-gbps-175-usd-mo-no-setup" target="_blank" rel="noopener">D4 Networks Dedicated Deals | Dallas 2x Platinum 8173M, 128 GB, 10 Gbps | 175 USD/mo, no setup</a></li><li><a href="https://lowendtalk.com/discussion/222859/clusterhosting-frankfurt-kvm-6gb-3-25-8gb-4-99-nvme-ipv4" target="_blank" rel="noopener">[ClusterHosting] Frankfurt KVM | 6GB €3.25 | 8GB €4.99 | NVMe + IPv4</a></li><li><a href="https://lowendspirit.com/discussion/11559/low-end-dedicated-server-share-vint-hill-virginia-usa" target="_blank" rel="noopener">Low End Dedicated Server Share, Vint Hill, Virginia, USA</a></li><li><a href="https://lowendspirit.com/discussion/11570/meet-reliablesite-at-cloudfest-next-week-booth-300-dedicated-servers-in-six-locations" target="_blank" rel="noopener">Meet ReliableSite at CloudFest Next Week | Booth #300 | Dedicated Servers in Six Locations</a></li><li><a href="https://lowendspirit.com/discussion/11569/introducing-kbilling-a-self-hosted-whmcs-alternative-for-hosting-providers" target="_blank" rel="noopener">Introducing KBilling — a self-hosted WHMCS alternative for hosting providers</a></li><li><a href="https://lowendspirit.com/discussion/11561/cpguard-compromised" target="_blank" rel="noopener">CPGuard Compromised</a></li><li><a href="https://lowendspirit.com/discussion/11563/i-wrote-a-tool-that-pings-392-cloud-regions-from-your-vps-in-about-a-minute" target="_blank" rel="noopener">I wrote a tool that pings 392 cloud regions from your VPS in about a minute</a></li><li class="more">…还有 2 条，完整清单见 data/2026-11-05.json 的 excluded 段</li></ul></div><div class="exc-g"><h4>交易帖 <b>（12）</b></h4><ul><li><a href="https://jike.info/topic/59629/amd-推出了官方的免费大模型api" target="_blank" rel="noopener">AMD 推出了官方的免费大模型API</a></li><li><a href="https://www.nodeseek.com/post-1032500-1" target="_blank" rel="noopener">9.9出个全年自动薅24个月geminipro激活码</a></li><li><a href="https://www.nodeseek.com/post-1032495-1" target="_blank" rel="noopener">【收】溢价+500 收HostDZire 中奖款 2*E5-2630 v4 (40核心) 64G内存杜甫</a></li><li><a href="https://www.nodeseek.com/post-1032492-1" target="_blank" rel="noopener">[出u]币安内出U 30U 6.65</a></li><li><a href="https://www.nodeseek.com/post-1032488-1" target="_blank" rel="noopener">【出】uzum德国家宽，$1.3/月</a></li><li><a href="https://www.nodeseek.com/post-1032487-1" target="_blank" rel="noopener">9折代购nobrand新站小鸡</a></li><li><a href="https://www.nodeseek.com/post-1032484-1" target="_blank" rel="noopener">【交易中】ppf Glide S（创始人套餐）--22.22cny</a></li><li><a href="https://www.nodeseek.com/post-1032481-1" target="_blank" rel="noopener">瓦工出来了</a></li><li><a href="https://www.nodeloc.com/t/topic/116584" target="_blank" rel="noopener">200出个自用菲区老号pro200的独享网页端，指纹浏览器包ip打包出，下个月3号到期</a></li><li><a href="https://www.ithome.com/1/022/434.htm" target="_blank" rel="noopener">高通史上最大 5G 交易：联合 SpaceX 建设星链移动全美国 5G 网络</a></li><li><a href="https://t.me/linux_do_channel/555927" target="_blank" rel="noopener">@MaxYang 在 https://linux.do/t/topic/3124183/1 出一个48减席位优惠码 中发帖</a></li><li><a href="https://t.me/linux_do_channel/555941" target="_blank" rel="noopener">知予 qwq (https://t.me/Zhiyuqwq @Zhiyuqwq) 在 https://linux.do/t/topic/3124246/1 求上</a></li></ul></div><div class="exc-g"><h4>非科技·吃的 <b>（11）</b></h4><ul><li><a href="https://jike.info/topic/59666/京东京鲜生-脆柿3斤3.9元" target="_blank" rel="noopener">京东京鲜生：脆柿3斤3.9元</a></li><li><a href="https://jike.info/topic/59660/建行生活茶咖节-领8-15元奶茶券" target="_blank" rel="noopener">建行生活茶咖节：领8+15元奶茶券</a></li><li><a href="https://jike.info/topic/59654/京鲜生plus年终福利-0.01元抢6元券" target="_blank" rel="noopener">京鲜生PLUS年终福利：0.01元抢6元券</a></li><li><a href="https://t.me/erqing/42185" target="_blank" rel="noopener">饿了么外卖内部优惠券，点外卖先领取！🍜</a></li><li><a href="https://t.me/zzzdm/393159" target="_blank" rel="noopener">淘金币775.63元：洋河 梦之蓝M6 40.8度 浓香型白酒 500ml*2瓶</a></li><li><a href="https://t.me/zzzdm/393162" target="_blank" rel="noopener">88VIP：多力 尚选压榨一级特香花生油6.38L*2桶食用油压榨零反式脂肪酸</a></li><li><a href="https://t.me/zzzdm/393166" target="_blank" rel="noopener">德和 云腿午餐肉罐头 午餐肉罐头340g*5罐 百年老品牌 火锅必备</a></li><li><a href="https://t.me/zzzdm/393167" target="_blank" rel="noopener">1号牧场 真味风干牛肉 原味350g*2包</a></li><li><a href="https://t.me/zzzdm/393173" target="_blank" rel="noopener">必品阁 王水饺 玉米猪肉 1.2kg</a></li><li><a href="https://t.me/zzzdm/393175" target="_blank" rel="noopener">88VIP、今日必买：福临门 猫超臻选福临门自然香特等五常大米5kg*2袋箱装稻花香2号</a></li><li><a href="https://t.me/zzzdm/393177" target="_blank" rel="noopener">淘金币2242.53元、今日必买：郎酒 青花郎 五代 酱香型白酒 53度 500ml*4瓶整箱+赠陶瓷餐盘*2</a></li></ul></div><div class="exc-g"><h4>新闻源·标题无发放动作 <b>（7）</b></h4><ul><li><a href="https://www.ithome.com/1/022/498.htm" target="_blank" rel="noopener">IT早报 1105：调查显示近七成中国受访者今年不换手机；苹果就多地天气突现-32℃ 致歉；曝华为子品牌星芒英文名 OSTA；传字节将限制员工自费使用 Claude...</a></li><li><a href="https://www.ithome.com/1/022/486.htm" target="_blank" rel="noopener">OpenAI 升级 ChatGPT 图片能力，支持直接生成和编辑 GIF 动画</a></li><li><a href="https://www.ithome.com/1/022/480.htm" target="_blank" rel="noopener">任天堂《塞尔达传说：时之笛 重制版》今日登陆 Switch 2：港区售价 449 港币</a></li><li><a href="https://www.ithome.com/1/022/469.htm" target="_blank" rel="noopener">华硕正式带来 ROG XG Station 3 显卡坞：提供 GC-HPWR 接口，支持雷电 5</a></li><li><a href="https://www.ithome.com/1/022/459.htm" target="_blank" rel="noopener">真 · 互通：国行 Apple 智能创作内容、问询结果会同步至千问 App</a></li><li><a href="https://www.ithome.com/1/022/447.htm" target="_blank" rel="noopener">华为 MatePad Mini 小平板获 HarmonyOS 7.0.0.111 SP16 升级，互助通信共享功能下放</a></li><li><a href="https://www.landian.news/archives/128037.html" target="_blank" rel="noopener">英伟达AI开发平台发生数据泄露事件 客户虚拟机SSH密钥可能已经被黑客窃取</a></li></ul></div><div class="exc-g"><h4>影视资源 <b>（5）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/116580" target="_blank" rel="noopener">扑克脸(两季合集)【4K.HDR】【高码率】【内封简繁英双语字幕】【悬疑/犯罪】</a></li><li><a href="https://www.nodeloc.com/t/topic/116577" target="_blank" rel="noopener">怒呛人生 1-2季(2026)【4K.HDR】【高码率】【内封简繁英】【杜比全景声】</a></li><li><a href="https://www.nodeloc.com/t/topic/116570" target="_blank" rel="noopener">为了你的母亲 (2026) [WEB-4K] [DV&amp;HDR] [外挂中文字幕]</a></li><li><a href="https://www.nodeloc.com/t/topic/116569" target="_blank" rel="noopener">黄金时段 Primetime (2026) [WEB-4K] [DV&amp;HDR] [外挂中文字幕]</a></li><li><a href="https://www.nodeloc.com/t/topic/116567" target="_blank" rel="noopener">无间兄弟情 Brothers (2026) [WEB-4K] [DV&amp;HDR] [内封多国字幕] [全8集]</a></li></ul></div><div class="exc-g"><h4>梯子/机场 <b>（5）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/116578" target="_blank" rel="noopener">最近国内网络刷论坛，时常转圈圈</a></li><li><a href="https://www.nodeloc.com/t/topic/116574" target="_blank" rel="noopener">宽带访问nodeloc故障</a></li><li><a href="https://www.v2ex.com/t/1254317" target="_blank" rel="noopener">codex 最近白天很慢，晚上速度很快</a></li><li><a href="https://www.v2ex.com/t/1254040" target="_blank" rel="noopener">Claude 确保 IP 纯净+网络隔离的一个方法</a></li><li><a href="https://lowendspirit.com/discussion/11567/provider-request-natboxio" target="_blank" rel="noopener">Provider request: natboxio</a></li></ul></div><div class="exc-g"><h4>非科技·服饰美妆 <b>（5）</b></h4><ul><li><a href="https://t.me/erqing/42200" target="_blank" rel="noopener">🚦 11.05~猜价格答案，更新</a></li><li><a href="https://t.me/erqing/42201" target="_blank" rel="noopener">🚦 jd五折服饰券防身</a></li><li><a href="https://t.me/zzzdm/393160" target="_blank" rel="noopener">伯希和 Primaloft金标P棉户外棉服男女保暖冬季外套11340303黑XL</a></li><li><a href="https://t.me/zzzdm/393165" target="_blank" rel="noopener">美津浓 户外三防连帽梭织冲锋衣外套A2CE3112</a></li><li><a href="https://t.me/zzzdm/393170" target="_blank" rel="noopener">蕉下 男士外套白绒外套 中暖 锁温≈800蓬羽绒（补贴好价！）漫暮黑 XL</a></li></ul></div><div class="exc-g"><h4>已结束 <b>（4）</b></h4><ul><li><a href="https://www.nodeloc.com/t/topic/116366" target="_blank" rel="noopener">[已开奖]抽几个癫影邀请</a></li><li><a href="https://www.nodeloc.com/t/topic/116300" target="_blank" rel="noopener">[已开奖]抽自建池百亿Token</a></li><li><a href="https://www.ithome.com/1/022/423.htm" target="_blank" rel="noopener">蔚来李斌：现在出货量最多的具身智能体就是智能电动汽车</a></li><li><a href="https://t.me/sliverkiss_blog/1018" target="_blank" rel="noopener">TRAE 宝限时全功能不扣积分，写代码、修 bug、审 PR 随便造，截止到本周日 11.08。</a></li></ul></div><div class="exc-g"><h4>非科技·影音会员 <b>（3）</b></h4><ul><li><a href="https://jike.info/topic/59603/11月网易云音乐" target="_blank" rel="noopener">11月网易云音乐</a></li><li><a href="https://www.v2ex.com/t/1254395" target="_blank" rel="noopener">「网易云音乐」，领免费会员] 黑胶邀请官 一***i 送你网易云音乐 11 月黑胶会员卡，领取享 20+会员权益。</a></li><li><a href="https://www.ithome.com/1/022/426.htm" target="_blank" rel="noopener">网易云音乐官宣鸿蒙版适配碰一碰、隔空传送等华为鸿蒙专属特色功能</a></li></ul></div><div class="exc-g"><h4>非科技·生活用品 <b>（3）</b></h4><ul><li><a href="https://t.me/erqing/42198" target="_blank" rel="noopener">🚦 拍3件全fan</a></li><li><a href="https://www.ithome.com/1/022/418.htm" target="_blank" rel="noopener">国补后 5881 → 4036 元：小米米家智能净烟机 3 Pro 燃气灶套装探新低</a></li><li><a href="https://t.me/sakurako0818/37120" target="_blank" rel="noopener">京东自营1元包邮</a></li></ul></div><div class="exc-g"><h4>AI中转站 <b>（1）</b></h4><ul><li><a href="https://www.nodeseek.com/post-1032496-1" target="_blank" rel="noopener">ppflight的LIFT S2补货了</a></li></ul></div><div class="exc-g"><h4>非科技·购物帖 <b>（1）</b></h4><ul><li><a href="https://t.me/erqing/42182" target="_blank" rel="noopener">♾  送收纳箱！自由点卫生巾组合</a></li></ul></div><div class="exc-g"><h4>非科技·家电 <b>（1）</b></h4><ul><li><a href="https://www.ithome.com/1/022/495.htm" target="_blank" rel="noopener">德国 10 月纯电动车注册量同比增长 79.5%：占新车市场 37%，进口车占一半</a></li></ul></div>
+  </details>
+
+  <footer class="footer">
+    来源：如有乐享、即刻·实时羊毛、V2EX free、爱吾线报、爱吾ii、NodeSeek、NodeLoc、NodeLoc福利、V2EX deals、挖站否、TG·二庆薅羊毛、IT之家、TG·SaKurako线报、TG·真正值得买、TG·Sliverkiss、TG·LINUX DO、linux.do 福利、蓝点网、V2EX 技术、VPS侦探、LowEndBox、LowEndTalk 报价、LowEndSpirit<br>
+    只聚合公开信息，不保证福利仍有效；请自行甄别，勿泄露账号与人脸等敏感信息。<br>
+    本期生成于 2026-11-05 09:00:49（每日 9/15/21 点各更新一次，以页面时间为准）。
+  </footer>
+</div>
+<button class="fab" id="fab" type="button" title="返回顶部" aria-label="返回顶部" hidden>↑</button>
+<script>
+(() => {
+  const root = document.documentElement;
+  const tbtn = document.getElementById('theme');
+  // file:// 下部分浏览器会禁用 localStorage（opaque origin），直接访问会抛异常并
+  // 让后面的筛选/排序脚本一起挂掉。所以统一包一层容错，读不到就当没保存过。
+  const store = {
+    get() { try { return localStorage.getItem('wool-theme'); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem('wool-theme', v); } catch (e) {} }
+  };
+  const saved = store.get();
+  const apply = d => {
+    root.dataset.theme = d ? 'dark' : 'light';
+    tbtn.textContent = d ? '☀ 日间' : '☾ 夜间';
+  };
+  apply(saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
+  tbtn.addEventListener('click', () => {
+    const d = root.dataset.theme !== 'dark';
+    apply(d); store.set(d ? 'dark' : 'light');
+  });
+
+  const cards = [...document.querySelectorAll('.card')];
+  const groups = [...document.querySelectorAll('.group')];
+  const q = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const cats = [...document.querySelectorAll('.chip[data-cat]')];
+  const sorts = [...document.querySelectorAll('.chip[data-sort]')];
+  const scopes = [...document.querySelectorAll('.chip[data-scope]')];
+  // 默认范围 = 本轮新增（2026-11-04 用户口径：本次更新只含本次）。
+  // 本轮真·无新增时退回「全部」，否则页面会空得像坏了。
+  let cat = 'all', sort = 'score', scope = 'new';
+  const hasNew = cards.some(c => c.dataset.scope === 'new');
+  if (!hasNew) {
+    scope = 'all';
+    scopes.forEach(x => x.classList.toggle('active', x.dataset.scope === 'all'));
+  }
+
+  const refresh = () => {
+    const term = q.value.trim().toLowerCase();
+    cards.forEach(c => {
+      const okScope = scope === 'all' || c.dataset.scope === scope;
+      const okCat = cat === 'all' || c.dataset.cat === cat;
+      const okText = !term || c.dataset.text.includes(term);
+      c.hidden = !(okScope && okCat && okText);
+    });
+    groups.forEach(g => {
+      g.hidden = ![...g.querySelectorAll('.card')].some(c => !c.hidden);
+    });
+    countEl.textContent = `显示 ${cards.filter(c => !c.hidden).length} / ${cards.length} 条`;
+  };
+  scopes.forEach(ch => ch.addEventListener('click', () => {
+    scopes.forEach(x => x.classList.toggle('active', x === ch));
+    scope = ch.dataset.scope; refresh();
+  }));
+  q.addEventListener('input', refresh);
+  cats.forEach(ch => ch.addEventListener('click', () => {
+    cats.forEach(x => x.classList.toggle('active', x === ch));
+    cat = ch.dataset.cat; refresh();
+  }));
+  sorts.forEach(ch => ch.addEventListener('click', () => {
+    sorts.forEach(x => x.classList.toggle('active', x === ch));
+    sort = ch.dataset.sort;
+    document.querySelectorAll('.cards').forEach(box => {
+      [...box.children].sort((a, b) => sort === 'time'
+        ? String(b.dataset.ts || '').localeCompare(String(a.dataset.ts || ''))
+        : (Number(b.dataset.score) || 0) - (Number(a.dataset.score) || 0)
+      ).forEach(n => box.appendChild(n));
+    });
+  }));
+
+  // —— 编号复制：点卡片左上角的数字，复制「羊毛日报 日期 #编号 标题 + 链接」 ——
+  // navigator.clipboard 在 file:// 下可能被禁用（需安全上下文/用户手势），失败时
+  // 自动退回临时 textarea + execCommand；两条路都不通才提示，绝不弹阻塞对话框。
+  const legacyCopy = txt => new Promise((ok, bad) => {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, txt.length);
+    try { document.execCommand('copy') ? ok() : bad(new Error('copy failed')); }
+    catch (err) { bad(err); }
+    finally { ta.remove(); }
+  });
+  const copyText = txt => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(txt).catch(() => legacyCopy(txt));
+    }
+    return legacyCopy(txt);
+  };
+  const issueDay = document.body.dataset.day || '';
+  document.querySelectorAll('.card-no').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const card = btn.closest('.card');
+      const pid = btn.dataset.pid || '';
+      const titleEl = card.querySelector('.title');
+      const title = titleEl ? titleEl.textContent.trim() : '';
+      const link = card.querySelector('.title a');
+      const txt = `羊毛日报 ${issueDay} #${pid} ${title}
+${link ? link.href : ''}`;
+      copyText(txt).then(() => {
+        const old = btn.textContent;
+        btn.textContent = '✓';
+        btn.classList.add('copied');
+        btn.title = '已复制：' + txt;
+        setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1400);
+      }).catch(() => {
+        btn.title = '复制失败，请手动选中复制：' + txt;
+      });
+    });
+  });
+
+  const fab = document.getElementById('fab');
+  fab.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+  addEventListener('scroll', () => { fab.hidden = scrollY < 500; }, { passive: true });
+
+  refresh();   // 首屏按默认范围（本轮新增）过滤一次，计数才对
+})();
+</script>
+</body></html>
