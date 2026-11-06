@@ -762,16 +762,158 @@ def reasons_html(it: dict) -> str:
     return f'<div class="why">{"".join(parts)}</div>' if parts else ""
 
 
+# ------------------------------------------------------------------ 中文翻译
+ZH_CACHE = CACHE / "zh.json"
+ZH_CACHE_MAX = 8000
+
+
+def _needs_zh(s: str) -> bool:
+    """英文为主（完全不含 CJK）才翻；已含中文的标题/摘要保持原样。"""
+    letters = [c for c in s if c.isalpha()]
+    if len(letters) < 4:
+        return False
+    if any("\u4e00" <= c <= "\u9fff" for c in letters):
+        return False
+    return sum(1 for c in letters if ord(c) < 128) / len(letters) > 0.8
+
+
+def _polish_zh(zh: str) -> str:
+    """机翻的常见毛病修正：金额符号错位、VPS 高频术语。"""
+    zh = re.sub(r"\$\s+(?=\d)", "$", zh)
+    zh = re.sub(r"(\d[\d.,]*)\s*\$", r"$\1", zh)
+    for a, b in (("经常性折扣", "续费折扣"), ("循环折扣", "续费折扣"),
+                 ("未计量", "不限流量"), ("无限流量", "不限流量")):
+        zh = zh.replace(a, b)
+    return zh
+
+
+class ZhTranslator:
+    """英文 → 中文：Bing 网页翻译（cn.bing.com，无需 key），MyMemory 兜底。
+
+    结果按原文整串缓存到 data/cache/zh.json，同一篇英文帖跨轮不会重复请求。
+    任何一步失败都只返回空串，调用方保留原文，不影响出页。
+    """
+
+    def __init__(self) -> None:
+        self.cache: dict[str, str] = {}
+        try:
+            self.cache = json.loads(ZH_CACHE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+        self.session = None
+        self.ig = self.iid = self.token = self.key = ""
+        self._prime_at = 0.0
+
+    def _prime(self) -> bool:
+        try:
+            self.session = requests.Session()
+            self.session.headers.update({"User-Agent": UA})
+            r = self.session.get("https://cn.bing.com/translator?from=en&to=zh-Hans", timeout=20)
+            m = re.search(r'IG:"([A-F0-9]+)"', r.text)
+            i = re.search(r'data-iid="([^"]+)"', r.text)
+            a = re.search(r'params_AbusePreventionHelper\s*=\s*\[(\d+),"([^"]+)"', r.text)
+            if not (m and a):
+                return False
+            self.ig = m.group(1)
+            self.iid = i.group(1) if i else "translator.5028"
+            self.key, self.token = a.group(1), a.group(2)
+            self._prime_at = time.time()
+            return True
+        except Exception:
+            return False
+
+    def _bing(self, text: str) -> str:
+        if not self.token or time.time() - self._prime_at > 600:
+            if not self._prime():
+                return ""
+        try:
+            r = self.session.post(
+                f"https://cn.bing.com/ttranslatev3?isVertical=1&&IG={self.ig}&IID={self.iid}",
+                data={"fromLang": "en", "to": "zh-Hans", "text": text,
+                      "token": self.token, "key": self.key}, timeout=20)
+            if r.status_code != 200:
+                self.token = ""
+                return ""
+            arr = r.json()
+            return ((arr[0].get("translations") or [{}])[0].get("text") or "").strip()
+        except Exception:
+            self.token = ""
+            return ""
+
+    def _mymemory(self, text: str) -> str:
+        try:
+            r = requests.get("https://api.mymemory.translated.net/get",
+                             params={"q": text[:480], "langpair": "en|zh-CN"}, timeout=20)
+            d = r.json()
+            t = ((d.get("responseData") or {}).get("translatedText") or "").strip()
+            if not t or "QUERY LENGTH LIMIT" in t.upper() or d.get("quotaFinished"):
+                return ""
+            if "MYMEMORY WARNING" in t.upper():
+                self.quota_out = True
+                return ""
+            return t
+        except Exception:
+            return ""
+
+    def get(self, text: str) -> str:
+        if not text:
+            return ""
+        if text in self.cache:
+            return _polish_zh(self.cache[text])
+        zh = self._bing(text)
+        if not zh and not getattr(self, "quota_out", False):
+            zh = self._mymemory(text)
+        zh = _polish_zh(zh) if zh else ""
+        if zh and zh != text:
+            self.cache[text] = zh
+        time.sleep(0.15)  # 免费接口别打太快
+        return zh
+
+    def save(self) -> None:
+        if len(self.cache) > ZH_CACHE_MAX:  # 只留最近用到的，避免文件无限增长
+            self.cache = dict(list(self.cache.items())[-ZH_CACHE_MAX:])
+        try:
+            CACHE.mkdir(parents=True, exist_ok=True)
+            ZH_CACHE.write_text(json.dumps(self.cache, ensure_ascii=False), encoding="utf-8")
+        except Exception as exc:
+            print(f"[warn] 翻译缓存写入失败：{exc!r}", file=sys.stderr)
+
+
+def translate_items(items: list[dict]) -> None:
+    """给英文条目补 title_zh / summary_zh；失败保留原文，不影响出页。"""
+    todo = [it for it in items if _needs_zh((it.get("title") or "").strip())]
+    if not todo:
+        return
+    tr = ZhTranslator()
+    n = 0
+    for it in todo:
+        zh = tr.get((it.get("title") or "").strip())
+        if zh:
+            it["title_zh"] = zh
+            n += 1
+        summary = (it.get("summary") or "").strip()
+        if summary and len(summary) <= 600 and _needs_zh(summary):
+            szh = tr.get(summary)
+            if szh:
+                it["summary_zh"] = szh
+    tr.save()
+    print(f"[zh] 英文条目翻译 {n} 条", file=sys.stderr)
+
+
 def card_html(it: dict, pick: bool = False) -> str:
     """一张卡片，结构固定五层（等高对齐的前提）：
 
     顶行(类目+确定性+分数) / 标题 / 标签 / 摘要(3行截断) / 底部信息(来源·时间·按钮+明文URL)。
     明文 URL 是用户明确要的：手机上按钮可点，URL 可复制，两边都不丢。
     """
-    summary = (it.get("summary") or "").strip()
+    title_orig = (it.get("title") or "").strip()
+    title_zh = (it.get("title_zh") or "").strip()
+    title = title_zh or title_orig
+    summary = (it.get("summary_zh") or it.get("summary") or "").strip()
     url = it["url"]
     short = url if len(url) <= 64 else url[:61] + "…"
-    text = f"{it['title']} {summary} {it['category']} {it['source_label']} " \
+    text = f"{title_orig} {title_zh} {it.get('summary') or ''} {summary} " \
+           f"{it['category']} {it['source_label']} " \
            f"{' '.join(it.get('reasons') or [])}".lower()
     tags = chips_html(it)
     icon = GROUP_ICONS.get(it["category"], "📦")
@@ -782,6 +924,7 @@ def card_html(it: dict, pick: bool = False) -> str:
     pid_html = (f'<button class="card-no" type="button" data-pid="{esc(pid)}" '
                 f'title="点击复制帖子编号、标题和链接">#{esc(pid)}</button>') if pid else ""
     kind = it.get("round_tag_kind") or "keep"
+    orig_tip = f' title="{esc(title_orig)}"' if title_zh else ""
     return f"""
       <article class="card{' pick-card' if pick else ''}{' is-new' if kind == 'new' else ''}"
                data-pid="{esc(pid)}" data-cat="{esc(it['category'])}" data-score="{it['score']}"
@@ -792,7 +935,7 @@ def card_html(it: dict, pick: bool = False) -> str:
           <span class="conf {conf_cls}">{esc(it['confidence'])}</span>
           <span class="score">{it['score']}</span>
         </div>
-        <h3 class="title"><a href="{esc(url)}" target="_blank" rel="noopener">{esc(it['title'])}</a></h3>
+        <h3 class="title"><a href="{esc(url)}"{orig_tip} target="_blank" rel="noopener">{esc(title)}</a></h3>
         {f'<div class="tags">{tags}</div>' if tags else ''}
         {f'<p class="desc">{esc(summary)}</p>' if summary else ''}
         {reasons_html(it)}
@@ -1239,6 +1382,9 @@ def main() -> int:
                               x["age_label"] != "今日",
                               x["title"]))
 
+    # 英文条目补中文（title_zh / summary_zh）；失败只保留原文，不阻断
+    translate_items(items)
+
     # 台账：按「日」记账。first_seen_day=首次展示日期（「往期未选」的判据，永不变），
     # shown=累计展示次数，last_day=最近展示日期。同一天内多轮展示不重复计次。
     # 旧字段兼容：老记录没有 first_seen_day 时用 first（老台账的首次日期）回填。
@@ -1315,7 +1461,7 @@ def main() -> int:
     print("")
     print("TOP:")
     for it in items[: args.top]:
-        print(f"- [{it['score']}] {it['title']} | {it['category']} | {it['age_label']} | {it['source_label']}")
+        print(f"- [{it['score']}] {it.get('title_zh') or it['title']} | {it['category']} | {it['age_label']} | {it['source_label']}")
     return 0
 
 
